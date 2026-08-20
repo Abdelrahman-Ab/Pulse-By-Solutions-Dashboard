@@ -1,0 +1,15 @@
+{
+  "functions": {
+    "api/core.py": { "maxDuration": 120 },
+    "api/purchase_orders.py": { "maxDuration": 120 },
+    "api/source_check.py": { "maxDuration": 60 }
+  },
+  "headers": [
+    {
+      "source": "/index.html",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+      ]
+    }
+  ]
+}
