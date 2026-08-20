@@ -1,0 +1,2264 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=1920" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <title>Partners & Alliances Dashboard</title>
+  <style>
+
+:root{
+  --purple:#4f008c;
+  --purple-2:#6d20a8;
+  --purple-3:#8d5abf;
+  --purple-soft:#f2ecfb;
+  --purple-soft-2:#faf7ff;
+  --pink:#ff375e;
+  --ink:#22152f;
+  --muted:#736780;
+  --line:#e8e1ef;
+  --bg:#f7f7fb;
+  --white:#fff;
+  --shadow:0 8px 24px rgba(63,26,98,.10);
+  --radius:20px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,"Segoe UI",Arial,sans-serif;font-size:16px;line-height:1.35}
+button,select,input{font:inherit}
+button{cursor:pointer}
+.app-header{height:112px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:14px 32px;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50}
+.brand-wrap{display:flex;align-items:center;gap:24px;min-width:0}
+.brand-logo{width:205px;height:78px;object-fit:contain;object-position:left center}
+.brand-copy{padding-left:20px;border-left:1px solid var(--line)}
+.brand-kicker,.section-label{font-size:13px;font-weight:800;letter-spacing:.13em;color:var(--purple);text-transform:uppercase}
+h1{font-size:30px;line-height:1.05;margin:3px 0 0;font-weight:800;color:#2a1637}
+.header-actions{display:flex;align-items:center;gap:14px}
+.data-status{display:flex;align-items:center;gap:9px;padding:10px 14px;border:1px solid var(--line);border-radius:999px;background:#fff;font-size:14px;font-weight:700;color:var(--muted);white-space:nowrap}
+.status-dot{width:10px;height:10px;border-radius:50%;background:#32bf75;box-shadow:0 0 0 4px rgba(50,191,117,.12)}
+.outline-btn,.text-btn{border:1px solid var(--purple);background:#fff;color:var(--purple);font-weight:800;border-radius:12px;padding:10px 15px}
+.outline-btn:hover,.text-btn:hover{background:var(--purple-soft)}
+.main-tabs{height:62px;background:#fff;display:flex;justify-content:center;gap:10px;padding:8px 24px;border-bottom:1px solid var(--line);position:sticky;top:112px;z-index:45}
+.tab-btn{min-width:210px;border:none;background:transparent;color:#5f526b;font-size:17px;font-weight:800;border-radius:12px;padding:10px 24px;transition:.18s ease}
+.tab-btn:hover{background:var(--purple-soft)}
+.tab-btn.active{background:var(--purple);color:#fff;box-shadow:0 7px 16px rgba(79,0,153,.18)}
+.filter-shell{background:#fff;padding:15px 28px 12px;border-bottom:1px solid var(--line);position:sticky;top:174px;z-index:40;box-shadow:0 7px 14px rgba(53,34,73,.04)}
+.filter-topline{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+.filter-context{margin-left:12px;color:var(--muted);font-size:14px;font-weight:700}
+.text-btn{padding:7px 12px;font-size:14px}
+.filter-grid{display:grid;grid-template-columns:repeat(6,minmax(140px,1fr));gap:10px}
+.filter-control{min-width:0}
+.filter-control label{display:block;font-size:13px;font-weight:800;color:#655873;margin:0 0 5px}
+.filter-control select{width:100%;height:39px;border:1px solid #dcd3e6;border-radius:10px;background:#fff;padding:0 34px 0 11px;color:#31223d;font-size:14px;font-weight:700;outline:none}
+.filter-control select:focus{border-color:var(--purple-2);box-shadow:0 0 0 3px rgba(111,47,232,.10)}
+.filter-foot{min-height:25px;display:flex;align-items:center;gap:16px;margin-top:9px;font-size:13px;color:var(--muted);font-weight:700}
+.filter-note{color:#8a7a98}
+.dashboard-main{padding:24px 26px 42px;max-width:1900px;margin:0 auto}
+.tab-view{display:none}
+.tab-view.active{display:block}
+.section-header{display:flex;align-items:flex-end;justify-content:space-between;margin:5px 2px 16px;min-height:56px}
+.section-header h2{font-size:27px;margin:3px 0 0;line-height:1.1;color:#281637}
+.subtle-pill{font-size:14px;color:var(--purple);font-weight:800;background:var(--purple-soft);border:1px solid #e1d2f3;border-radius:999px;padding:9px 13px}
+.toolbar-toggle{display:flex;align-items:center;gap:11px;color:#594968;font-size:14px;font-weight:800}
+.toggle,.small-toggle{display:inline-flex;background:#eee7f7;border-radius:10px;padding:3px}
+.toggle button,.small-toggle button{border:0;background:transparent;color:#6d5e79;border-radius:8px;font-weight:800;padding:7px 12px;font-size:14px}
+.toggle button.active,.small-toggle button.active{background:var(--purple);color:#fff;box-shadow:0 3px 10px rgba(79,0,153,.18)}
+.kpi-grid{display:grid;grid-template-columns:repeat(8,minmax(120px,1fr));gap:12px;margin-bottom:16px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:16px;padding:15px 15px 14px;min-height:111px;box-shadow:0 4px 14px rgba(63,26,98,.06);position:relative;overflow:hidden}
+.kpi:before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:linear-gradient(90deg,var(--purple),var(--purple-2))}
+.kpi.accent:before{background:linear-gradient(90deg,var(--pink),#ff7895)}
+.kpi-label{font-size:13px;font-weight:800;color:#786c82;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px}
+.kpi-value{font-size:27px;line-height:1;font-weight:900;color:#2c173d;white-space:nowrap}
+.kpi-sub{font-size:12px;font-weight:700;color:#8f8199;margin-top:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.grid-2,.grid-3{display:grid;gap:16px;margin-bottom:16px;align-items:stretch}
+.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.panel{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:16px;display:flex;flex-direction:column;min-width:0}
+.grid-2>.panel,.grid-3>.panel{margin-bottom:0}
+.panel-titlebar{height:52px;min-height:52px;background:var(--purple);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 18px;font-size:17px;font-weight:900;letter-spacing:.01em}
+.panel-hint{font-size:12px;font-weight:700;opacity:.85;white-space:nowrap}
+.panel-titlebar .small-toggle{background:rgba(255,255,255,.16)}
+.panel-titlebar .small-toggle button{color:#fff}
+.panel-titlebar .small-toggle button.active{background:#fff;color:var(--purple)}
+.panel-body{padding:17px 18px;flex:1;min-height:0}
+.chart-area{overflow:auto}
+.fixed-h-360{height:360px;min-height:360px}
+.fixed-h-420{height:420px;min-height:420px}
+.fixed-h-430{height:430px;min-height:430px}
+.fixed-h-440{height:440px;min-height:440px}
+.fixed-h-470{height:470px;min-height:470px}
+.fixed-h-500{height:500px;min-height:500px}
+.target-panel{margin-bottom:16px}
+.target-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;height:100%}
+.target-card{border:1px solid #e7dff0;background:linear-gradient(180deg,#fff,#fbf8ff);border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;justify-content:space-between;min-width:0}
+.target-name{font-size:17px;font-weight:900;color:var(--purple)}
+.target-numbers{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
+.target-number span{display:block;font-size:11px;font-weight:800;color:#897b95;text-transform:uppercase}
+.target-number strong{display:block;font-size:18px;color:#2d1b39;margin-top:3px}
+.progress-track{height:13px;border-radius:999px;background:#eee8f4;overflow:hidden;position:relative}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--purple-2));border-radius:999px;min-width:0}
+.target-foot{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:#766783;font-weight:800;margin-top:8px}
+.hbar-list{min-height:100%;padding:0 2px}
+.hbar-row{display:grid;grid-template-columns:minmax(110px,31%) 1fr minmax(78px,auto);gap:10px;align-items:center;min-height:34px;padding:4px 0;cursor:pointer;border-radius:8px}
+.hbar-row:hover{background:#faf7fe}
+.hbar-label{font-size:14px;font-weight:750;color:#40314c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:right}
+.hbar-track{height:18px;background:#f0ebf5;border-radius:5px;overflow:hidden;position:relative}
+.hbar-fill{height:100%;min-width:2px;border-radius:5px;background:linear-gradient(90deg,var(--purple-2),#8151f0)}
+.hbar-fill.alt{background:linear-gradient(90deg,#ff375e,#ff819c)}
+.hbar-value{font-size:13px;font-weight:800;color:#62536f;background:#f5f2f7;border-radius:6px;padding:4px 6px;white-space:nowrap}
+.stack-list{display:flex;flex-direction:column;gap:13px;min-height:100%}
+.stack-row{display:grid;grid-template-columns:110px 1fr 64px;gap:10px;align-items:center;min-height:35px}
+.stack-label{font-size:14px;font-weight:850;color:#4a3a55;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:right}
+.stack-track{display:flex;height:23px;background:#f0ebf5;border-radius:6px;overflow:hidden;min-width:0}
+.stack-seg{height:100%;min-width:0;position:relative;cursor:pointer;transition:filter .15s}
+.stack-seg:hover{filter:brightness(.92)}
+.stack-total{font-size:13px;font-weight:900;color:#5b4a68;text-align:right}
+.legend{display:flex;gap:15px;flex-wrap:wrap;margin-bottom:13px;font-size:12px;color:#62546c;font-weight:800}
+.legend-item{display:flex;align-items:center;gap:6px}
+.legend-dot{width:10px;height:10px;border-radius:3px}
+.empty-state{height:100%;min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#8c7d98;font-size:15px;font-weight:700;padding:20px}
+.empty-state strong{font-size:19px;color:#5f4d6d;margin-bottom:6px}
+.line-wrap{height:100%;display:flex;flex-direction:column}
+.line-legend{display:flex;gap:18px;margin-bottom:8px;font-size:12px;font-weight:800;color:#65556f}
+.line-legend span{display:flex;align-items:center;gap:6px}.line-legend i{width:20px;height:4px;border-radius:999px;background:var(--purple-2)}.line-legend .secondary i{background:var(--pink)}
+.line-svg{width:100%;height:310px;display:block;overflow:visible}
+.axis-label{font-size:12px;fill:#7e7188;font-weight:700}.point-label{font-size:11px;fill:#564661;font-weight:800}
+.small-multiples{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;overflow:hidden}
+.mini-chart{border:1px solid #e9e1f0;border-radius:14px;overflow:hidden;min-width:0;height:100%;display:flex;flex-direction:column}
+.mini-head{height:39px;min-height:39px;background:#f3edfa;color:var(--purple);font-size:14px;font-weight:900;display:flex;align-items:center;justify-content:center;border-bottom:1px solid #e5d9f1}
+.mini-body{padding:10px 11px;overflow:auto;flex:1}
+.donut-wrap{height:100%;display:grid;grid-template-columns:minmax(180px,1fr) minmax(170px,.8fr);align-items:center;gap:12px}
+.donut{width:185px;height:185px;border-radius:50%;margin:auto;position:relative;background:conic-gradient(var(--purple-2) 0 65%,#2bc4b6 65% 100%)}
+.donut:after{content:"";position:absolute;inset:39px;border-radius:50%;background:#fff}
+.donut-center{position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center}.donut-center strong{font-size:25px;color:#2e1d39}.donut-center span{font-size:12px;color:#7f7089;font-weight:800}
+.donut-legend{display:flex;flex-direction:column;gap:12px}.donut-legend-row{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:800;color:#4f4059}.donut-legend-row i{width:12px;height:12px;border-radius:3px}
+.ranking-controls{background:#fff;border:1px solid var(--line);border-radius:14px;padding:11px 16px;margin:0 0 16px;box-shadow:0 4px 12px rgba(63,26,98,.05);display:flex;align-items:center;gap:28px;justify-content:flex-end;min-height:59px}
+.ranking-controls>div{display:flex;align-items:center;gap:9px}.control-label{font-size:13px;font-weight:900;color:#65556f}.ranking-controls select{height:36px;border:1px solid #d9d0e4;border-radius:9px;padding:0 30px 0 10px;color:#34243e;font-weight:800;background:#fff}
+.attention-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;height:100%}
+.attention-card{border:1px solid #eadff3;border-radius:14px;padding:14px;background:#fff;overflow:auto}.attention-card h4{font-size:15px;margin:0 0 9px;color:var(--purple)}.attention-list{display:flex;flex-direction:column;gap:8px}.attention-item{border-top:1px solid #eee7f3;padding-top:8px}.attention-item:first-child{border-top:0;padding-top:0}.attention-item strong{display:block;font-size:13px;color:#3b2b46;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.attention-item span{display:block;font-size:12px;color:#806f8b;margin-top:2px}
+.tooltip{position:fixed;pointer-events:none;z-index:1000;background:#2a153a;color:#fff;padding:12px 14px;border-radius:11px;font-size:13px;font-weight:700;max-width:340px;min-width:180px;box-shadow:0 12px 32px rgba(0,0,0,.22);display:none;line-height:1.35}
+.tooltip .tt-title{font-size:14px;font-weight:900;margin-bottom:7px;color:#fff}
+.tooltip .tt-row{display:flex;justify-content:space-between;gap:18px;padding:3px 0;border-top:1px solid rgba(255,255,255,.10)}
+.tooltip .tt-row:first-of-type{border-top:0}
+.tooltip .tt-label{color:#d9cae8;font-weight:700}
+.tooltip .tt-value{color:#fff;font-weight:900;text-align:right}
+.tooltip .tt-swatch{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:6px;vertical-align:1px}
+.tooltip .tt-note{margin-top:7px;color:#c9bbd7;font-size:11px;font-weight:700}
+.line-svg{cursor:crosshair}
+.line-hover-guide{stroke:#7b54a5;stroke-width:1.5;stroke-dasharray:5 5;pointer-events:none}
+.line-hover-dot{stroke:#fff;stroke-width:3;pointer-events:none}
+.gauge-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-bottom:18px}
+.gauge-card{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden;min-height:300px;display:flex;flex-direction:column}
+.gauge-head{height:54px;min-height:54px;background:var(--purple);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:0 18px;font-size:17px;font-weight:900}
+.gauge-hint{font-size:12px;opacity:.9;font-weight:700;text-align:right;white-space:nowrap}
+.gauge-body{flex:1;display:flex;align-items:center;justify-content:center;padding:10px 18px 14px}
+.gauge-wrap{width:100%;height:226px;position:relative}
+.gauge-svg{width:100%;height:164px;display:block;overflow:visible}
+.gauge-value{position:absolute;left:0;right:0;top:82px;text-align:center;font-size:34px;line-height:1;font-weight:900;color:#2c173d}
+.gauge-label{position:absolute;left:16%;right:16%;top:121px;text-align:center;font-size:12px;line-height:1.25;font-weight:800;color:#736780}
+.gauge-scale{position:absolute;left:9%;right:9%;top:153px;display:flex;justify-content:space-between;font-size:11px;font-weight:800;color:#8b7d96}
+.gauge-note{position:absolute;left:4%;right:4%;top:186px;text-align:center;font-size:12px;line-height:1.35;font-weight:750;color:#6f617b}
+.gauge-card:hover{box-shadow:0 11px 28px rgba(79,0,153,.14)}
+@media(max-width:1100px){.gauge-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:780px){.gauge-grid{grid-template-columns:1fr}}
+.footer{height:48px;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;padding:0 28px;color:#776a82;font-size:12px;font-weight:700}
+@media(max-width:1450px){.kpi-grid{grid-template-columns:repeat(4,1fr)}.filter-grid{grid-template-columns:repeat(5,1fr)}}
+@media(max-width:1100px){.app-header{padding:12px 18px}.brand-logo{width:165px}.brand-copy{display:none}.main-tabs{top:112px}.filter-grid{grid-template-columns:repeat(3,1fr)}.grid-3{grid-template-columns:1fr 1fr}.kpi-grid{grid-template-columns:repeat(4,1fr)}.small-multiples{grid-template-columns:1fr}.fixed-h-500{height:auto;min-height:500px}.attention-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:780px){.app-header{height:auto;min-height:92px;position:relative}.header-actions{display:none}.main-tabs{position:relative;top:auto;height:auto;overflow:auto;justify-content:flex-start}.tab-btn{min-width:165px}.filter-shell{position:relative;top:auto}.filter-grid{grid-template-columns:repeat(2,1fr)}.dashboard-main{padding:16px 12px}.grid-2,.grid-3{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(2,1fr)}.target-grid{grid-template-columns:1fr;overflow:auto}.fixed-h-360{height:700px}.small-multiples{grid-template-columns:1fr}.attention-grid{grid-template-columns:1fr}.section-header{align-items:flex-start;gap:12px;flex-direction:column}.toolbar-toggle{align-self:flex-end}}
+
+/* ===== 2026-08-14 repaired Pulse layout overrides ===== */
+:root{
+  --bg:#ffffff;
+  --purple:#4f008c;
+  --purple-2:#6b23d6;
+  --purple-3:#8a55e8;
+  --purple-soft:#f4eefb;
+  --purple-soft-2:#fbf9fe;
+  --ink:#24152f;
+  --muted:#6e6377;
+  --line:#e8e0ef;
+  --shadow:0 8px 22px rgba(78,29,111,.09);
+}
+html{background:#fff}
+body{background:#fff;color:var(--ink);font-size:17px;min-width:320px}
+.app-header{
+  height:96px;position:relative;top:auto;z-index:10;padding:10px 30px;
+  background:#fff;border-bottom:1px solid var(--line);
+}
+.brand-wrap{gap:20px;height:100%}
+.brand-logo{width:166px;height:74px;max-width:166px;max-height:74px;object-fit:contain;display:block;flex:0 0 auto}
+.brand-copy{padding-left:20px}
+.brand-kicker{font-size:13px;letter-spacing:.11em}
+h1{font-size:29px;margin-top:5px;white-space:nowrap}
+.header-actions{gap:12px}
+.data-status{font-size:14px;padding:9px 13px;background:#fbf9fd}
+.status-dot[data-mode="loading"]{background:#e1a928;box-shadow:0 0 0 4px rgba(225,169,40,.14)}
+.status-dot[data-mode="warn"]{background:#e07b2e;box-shadow:0 0 0 4px rgba(224,123,46,.14)}
+.status-dot[data-mode="error"]{background:#d64151;box-shadow:0 0 0 4px rgba(214,65,81,.14)}
+.outline-btn{font-size:15px;padding:10px 15px}
+.main-tabs{
+  position:sticky;top:0;z-index:35;height:64px;padding:8px 28px;background:#fff;
+  box-shadow:0 4px 13px rgba(68,24,95,.06);border-bottom:1px solid var(--line)
+}
+.tab-btn{min-width:220px;font-size:18px;padding:11px 28px}
+.filter-shell{
+  position:relative;top:auto;z-index:5;background:#fff;padding:18px 28px 16px;
+  border-bottom:1px solid var(--line);box-shadow:none
+}
+.filter-topline{margin-bottom:12px}
+.section-label{font-size:14px}
+.filter-context{font-size:15px}
+.text-btn{font-size:14px;padding:8px 13px}
+.filter-grid{grid-template-columns:repeat(7,minmax(135px,1fr));gap:12px}
+.filter-control label{font-size:14px;margin-bottom:6px}
+.filter-control select{height:43px;font-size:15px;border-radius:10px;padding-left:12px}
+.filter-foot{font-size:14px;min-height:29px;margin-top:11px}
+.dashboard-main{max-width:1880px;padding:26px 28px 46px;background:#fff}
+.section-header{min-height:62px;margin-bottom:18px}
+.section-header h2{font-size:30px}
+.subtle-pill,.toolbar-toggle{font-size:15px}
+.toggle button,.small-toggle button{font-size:15px;padding:8px 13px}
+.kpi-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin-bottom:18px}
+.kpi{min-height:128px;padding:18px 18px 15px;border-radius:17px}
+.kpi-label{font-size:14px;margin-bottom:10px}
+.kpi-value{font-size:31px;line-height:1.05}
+.kpi-sub{font-size:14px;margin-top:10px}
+.grid-2,.grid-3{gap:18px;margin-bottom:18px}
+.panel{margin-bottom:18px;border-radius:18px;box-shadow:var(--shadow)}
+.grid-2>.panel,.grid-3>.panel{margin-bottom:0}
+.panel-titlebar{height:58px;min-height:58px;padding:0 20px;font-size:19px}
+.panel-hint{font-size:14px}
+.panel-body{padding:19px 20px}
+.fixed-h-360{height:390px;min-height:390px}
+.fixed-h-420{height:450px;min-height:450px}
+.fixed-h-430{height:465px;min-height:465px}
+.fixed-h-440{height:475px;min-height:475px}
+.fixed-h-470{height:500px;min-height:500px}
+.fixed-h-500{height:530px;min-height:530px}
+.target-grid{gap:16px}
+.target-card{padding:17px 18px;border-radius:15px}
+.target-name{font-size:20px}
+.target-scope{font-size:12px;color:#8b7c96;font-weight:800;margin-top:3px}
+.target-number span{font-size:12px}
+.target-number strong{font-size:21px}
+.target-foot{font-size:13px;margin-top:9px}
+.progress-track{height:15px}
+.hbar-row{grid-template-columns:minmax(125px,33%) 1fr minmax(92px,auto);gap:12px;min-height:39px;padding:5px 0;cursor:default}
+.hbar-row.is-clickable{cursor:pointer}
+.hbar-row.is-clickable:hover{background:#f7f1fc}
+.hbar-label{font-size:15.5px;font-weight:750}
+.hbar-track{height:21px;border-radius:6px}
+.hbar-fill{border-radius:6px}
+.hbar-value{font-size:14.5px;padding:5px 7px}
+.stack-list{gap:15px}
+.stack-row{grid-template-columns:125px 1fr 78px;gap:12px;min-height:39px}
+.stack-label{font-size:15.5px}
+.stack-track{height:27px;border-radius:7px}
+.stack-total{font-size:14.5px}
+.legend{gap:17px;margin-bottom:16px;font-size:14px}
+.legend-dot{width:11px;height:11px}
+.line-legend{font-size:14px;margin-bottom:9px;gap:20px}
+.line-svg{height:330px}
+.axis-label{font-size:14px;font-weight:700}
+.point-label{font-size:13px}
+.small-multiples{gap:16px}
+.mini-head{height:46px;min-height:46px;font-size:16px}
+.mini-body{padding:12px}
+.donut-wrap{grid-template-columns:minmax(200px,1fr) minmax(190px,.9fr)}
+.donut{width:205px;height:205px}.donut:after{inset:43px}
+.donut-center strong{font-size:28px}.donut-center span{font-size:14px}
+.donut-legend-row{font-size:15px}
+.ranking-controls{min-height:66px;padding:13px 17px}
+.control-label{font-size:15px}.ranking-controls select{height:40px;font-size:15px}
+.attention-grid{gap:15px}
+.attention-card{padding:16px}
+.attention-card h4{font-size:17px}
+.attention-item strong{font-size:14.5px}.attention-item span{font-size:13.5px}
+.footer{height:52px;font-size:13px;padding:0 28px}
+
+.loading-overlay{
+  position:fixed;inset:0;z-index:5000;background:rgba(255,255,255,.82);backdrop-filter:blur(3px);
+  display:none;align-items:center;justify-content:center;padding:20px
+}
+.loading-overlay.show{display:flex}
+.loading-card{min-width:330px;max-width:520px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 50px rgba(79,0,153,.16);padding:24px;text-align:center}
+.loading-spinner{width:42px;height:42px;border:4px solid #eadff4;border-top-color:var(--purple);border-radius:50%;margin:0 auto 14px;animation:pulseSpin .8s linear infinite}
+.loading-card strong{display:block;font-size:18px;color:var(--purple);margin-bottom:5px}
+.loading-card span{display:block;font-size:14px;color:var(--muted)}
+@keyframes pulseSpin{to{transform:rotate(360deg)}}
+
+@media(max-width:1500px){
+  .filter-grid{grid-template-columns:repeat(5,1fr)}
+  .kpi-grid{grid-template-columns:repeat(4,1fr)}
+  .brand-logo{width:155px;height:68px}.brand-copy{padding-left:16px}h1{font-size:27px}
+}
+@media(max-width:1150px){
+  .app-header{padding:10px 18px}.brand-copy{display:block}.brand-logo{width:135px;height:60px}h1{font-size:24px}
+  .filter-grid{grid-template-columns:repeat(3,1fr)}
+  .grid-3{grid-template-columns:1fr 1fr}.kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .small-multiples{grid-template-columns:1fr}.fixed-h-500{height:auto;min-height:530px}.attention-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:800px){
+  .app-header{height:auto;min-height:88px;padding:10px 14px}.brand-logo{width:120px;height:54px}.brand-copy{padding-left:12px}.brand-kicker{font-size:11px}h1{font-size:20px;white-space:normal}.header-actions{display:none}
+  .main-tabs{height:auto;overflow-x:auto;justify-content:flex-start;padding:7px 10px}.tab-btn{min-width:165px;font-size:16px}
+  .filter-shell{padding:14px 12px}.filter-grid{grid-template-columns:repeat(2,1fr)}
+  .dashboard-main{padding:18px 12px}.grid-2,.grid-3{grid-template-columns:1fr}.kpi-grid{grid-template-columns:1fr 1fr}
+  .target-grid{grid-template-columns:1fr;overflow:auto}.fixed-h-360{height:760px}.small-multiples{grid-template-columns:1fr}.attention-grid{grid-template-columns:1fr}.section-header{align-items:flex-start;gap:12px;flex-direction:column}.toolbar-toggle{align-self:flex-start}
+}
+
+  
+/* ===== Opportunity filters + List of Opportunities update ===== */
+.main-tabs{gap:8px}
+.tab-btn{min-width:205px}
+.opp-filter-grid{grid-template-columns:repeat(7,minmax(125px,1fr));align-items:start}
+.multi-filter{position:relative;z-index:1}
+.multi-filter.open{z-index:120}
+.multi-trigger{width:100%;height:43px;border:1px solid #dcd3e6;border-radius:10px;background:#fff;color:#31223d;padding:0 10px 0 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:15px;font-weight:750;text-align:left;outline:none}
+.multi-trigger:hover,.multi-filter.open .multi-trigger{border-color:var(--purple-2);box-shadow:0 0 0 3px rgba(111,47,232,.09)}
+.multi-trigger span{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.multi-trigger i{font-style:normal;color:var(--purple);font-size:15px;flex:0 0 auto}
+.multi-popover{display:none;position:absolute;top:calc(100% + 7px);left:0;width:max(285px,100%);max-width:390px;background:#fff;border:1px solid #ddd2e7;border-radius:13px;box-shadow:0 18px 42px rgba(61,25,90,.19);padding:10px;z-index:500}
+.multi-filter.open .multi-popover{display:block}
+.opp-filter-grid .multi-filter:nth-child(7n) .multi-popover{left:auto;right:0}
+.filter-search-wrap{padding:1px 1px 8px}
+.filter-search-wrap input{width:100%;height:38px;border:1px solid #ddd3e6;border-radius:9px;background:#fbf9fd;color:#2e2138;padding:0 11px;font-size:14px;font-weight:650;outline:none}
+.filter-search-wrap input:focus{background:#fff;border-color:var(--purple-2);box-shadow:0 0 0 3px rgba(111,47,232,.08)}
+.filter-actions{display:flex;justify-content:space-between;gap:8px;padding:0 2px 8px;border-bottom:1px solid #eee8f3}
+.filter-actions button{border:0;background:transparent;color:var(--purple);font-size:12.5px;font-weight:850;padding:4px 3px}
+.filter-actions button:hover{text-decoration:underline}
+.multi-options{max-height:285px;overflow:auto;padding:6px 2px 2px;scrollbar-width:thin}
+.multi-option,.date-month{display:flex;align-items:center;gap:8px;min-height:32px;border-radius:7px;padding:5px 7px;color:#44344f;font-size:14px;font-weight:700;cursor:pointer}
+.multi-option:hover,.date-month:hover,.date-node-row:hover{background:#f8f3fc}
+.multi-option input,.date-node input{accent-color:var(--purple);width:16px;height:16px;flex:0 0 auto}
+.filter-no-results{padding:22px 10px;text-align:center;color:#8b7b96;font-size:13px;font-weight:700}
+.date-tree{padding-top:5px}
+.date-node{font-size:14px;color:#41314d}
+.date-node-row{display:flex;align-items:center;gap:3px;min-height:33px;border-radius:7px;padding:2px 5px}
+.date-node-row label{display:flex;align-items:center;gap:8px;margin:0;cursor:pointer;font-size:14px;color:#41314d}
+.date-expand{width:24px;height:26px;display:flex;align-items:center;justify-content:center;border:0;background:transparent;color:var(--purple);font-weight:900;padding:0;border-radius:6px}
+.date-expand:hover{background:#eee5f6}
+.date-children{margin-left:25px;border-left:1px solid #e8deef;padding-left:6px}
+.month-children{margin-left:27px}
+.date-month{min-height:30px;padding-left:7px}
+.date-node input:disabled{opacity:.55}
+.kpi-grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.kpi-grid-3{grid-template-columns:repeat(3,minmax(0,1fr));max-width:calc(75% - 4px)}
+
+.list-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 0 16px;background:#fff;border:1px solid var(--line);border-radius:15px;padding:12px 14px;box-shadow:0 4px 15px rgba(72,28,102,.06)}
+.table-search-box{height:43px;min-width:360px;max-width:720px;flex:1;display:flex;align-items:center;gap:9px;border:1px solid #ddd3e6;border-radius:10px;background:#fbf9fd;padding:0 12px;color:var(--purple)}
+.table-search-box span{font-size:23px;font-weight:900;line-height:1}
+.table-search-box input{border:0;outline:none;background:transparent;flex:1;min-width:0;font-size:15px;color:#2e2138;font-weight:650}
+.list-toolbar-meta{display:flex;align-items:center;gap:18px;color:#665671;font-size:14px}
+.list-toolbar-meta strong{color:var(--purple);font-size:15px}
+.list-toolbar-meta label{display:flex;align-items:center;gap:8px;font-weight:750}
+.list-toolbar-meta select{height:38px;border:1px solid #ddd3e6;border-radius:9px;background:#fff;color:#3b2c46;padding:0 28px 0 10px;font-weight:750}
+.opportunity-table-panel{min-height:620px}
+.opportunity-table-scroll{overflow:auto;max-height:690px;min-height:560px;background:#fff}
+.opportunity-table{border-collapse:separate;border-spacing:0;width:max-content;min-width:100%;font-size:14px;color:#33243e}
+.opportunity-table th{position:sticky;top:0;z-index:4;background:var(--purple);color:#fff;text-align:left;white-space:nowrap;padding:13px 12px;border-right:1px solid rgba(255,255,255,.16);font-size:13.5px;font-weight:850;cursor:pointer}
+.opportunity-table th:hover{background:#6010aa}
+.opportunity-table td{padding:11px 12px;border-right:1px solid #eee8f2;border-bottom:1px solid #eee8f2;vertical-align:middle;white-space:nowrap;background:#fff;max-width:310px;overflow:hidden;text-overflow:ellipsis}
+.opportunity-table tbody tr:nth-child(even) td{background:#fcfafe}
+.opportunity-table tbody tr:hover td{background:#f5eefb}
+.opportunity-table .wide-cell{max-width:280px}
+.opportunity-table .topic-cell{min-width:330px;max-width:470px}
+.opportunity-table .money-cell{text-align:right;font-variant-numeric:tabular-nums;font-weight:800;color:#4b3658}
+.sort-mark{font-size:10px;margin-left:4px;opacity:.9}
+.roadmap-badge,.status-badge{display:inline-flex;align-items:center;min-height:25px;border-radius:999px;padding:4px 9px;font-size:12px;font-weight:850;background:#eee8f4;color:#563d68}
+.roadmap-won{background:#eadcf7;color:#4f008c}.roadmap-committed{background:#efe3fa;color:#6720aa}.roadmap-upside{background:#f4eafa;color:#7b38b9}.roadmap-prospect{background:#f7f0fc;color:#815ca0}.roadmap-early-stage{background:#f3f0f5;color:#75677e}
+.status-badge{background:#f2eef5;color:#5f5268}
+.table-pagination{min-height:58px;display:flex;align-items:center;justify-content:center;gap:18px;padding:10px 15px;border-top:1px solid var(--line);background:#fff;color:#6f607a;font-size:14px;font-weight:750}
+.table-pagination button{border:1px solid #d9cce4;background:#fff;color:var(--purple);border-radius:9px;padding:8px 12px;font-weight:850}
+.table-pagination button:hover:not(:disabled){background:var(--purple-soft)}
+.table-pagination button:disabled{opacity:.35;cursor:not-allowed}
+
+@media(max-width:1550px){
+  .opp-filter-grid{grid-template-columns:repeat(7,minmax(108px,1fr));gap:9px}
+  .multi-trigger{font-size:13.5px;padding-left:9px}.filter-control label{font-size:13px}
+  .tab-btn{min-width:185px}
+}
+@media(max-width:1250px){
+  .opp-filter-grid{grid-template-columns:repeat(4,1fr)}
+  .kpi-grid-3{max-width:none}
+  .main-tabs{justify-content:flex-start;overflow-x:auto}
+}
+@media(max-width:800px){
+  .opp-filter-grid{grid-template-columns:repeat(2,1fr)}
+  .multi-popover{position:fixed;left:12px!important;right:12px!important;top:165px;width:auto;max-width:none}
+  .list-toolbar{align-items:stretch;flex-direction:column}.table-search-box{min-width:0;width:100%}.list-toolbar-meta{justify-content:space-between;flex-wrap:wrap}
+  .kpi-grid-4,.kpi-grid-3{grid-template-columns:1fr 1fr;max-width:none}
+}
+
+/* ===== 2026-08 Opportunities redesign ===== */
+:root{
+  --purple:#4f008c;
+  --purple-2:#6d20a8;
+  --purple-3:#8d5abf;
+  --pink:#ff375e;
+  --purple-soft:#f2e9f8;
+  --purple-soft-2:#fbf8fd;
+}
+.tab-btn{min-width:220px}
+.kpi-grid-5{grid-template-columns:repeat(5,minmax(0,1fr));gap:11px}
+.kpi-grid-5 .kpi{min-height:102px;padding:13px 13px 12px}
+.kpi-grid-5 .kpi-label{font-size:12.5px;padding-right:30px}
+.kpi-grid-5 .kpi-value{font-size:23px}
+.kpi-grid-5 .kpi-sub{font-size:11.5px}
+.kpi-icon{position:absolute;right:11px;top:13px;width:27px;height:27px;border-radius:9px;background:#f1e7f7;color:var(--purple);display:flex;align-items:center;justify-content:center}
+.kpi-icon-svg{width:18px;height:18px}
+.kpi.accent .kpi-icon{background:#ffe8ed;color:var(--pink)}
+.panel-topn{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:850}
+.panel-topn label{opacity:.9}
+.panel-topn input{width:72px;height:32px;border:1px solid rgba(255,255,255,.42);border-radius:8px;background:#fff;color:var(--purple);font-weight:900;text-align:center;outline:none;padding:0 6px}
+.panel-topn input:focus{box-shadow:0 0 0 3px rgba(255,255,255,.18)}
+
+.target-panel{height:auto!important;min-height:0!important}
+.target-benchmark-body{padding:16px 16px 18px}
+.target-grid-gauges{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;height:auto}
+.target-card-gauges{padding:14px 14px 12px;display:block;min-height:420px;background:#fff}
+.target-card-controls{display:grid;grid-template-columns:minmax(105px,.8fr) auto minmax(220px,1.55fr);gap:10px;align-items:start;margin-bottom:6px;min-height:56px}
+.target-card-controls .target-name{font-size:19px;align-self:center}
+.target-weight-area{display:flex;justify-content:center;align-items:center}
+.target-weight-toggle{display:inline-flex;gap:3px;padding:3px;background:#f1e8f7;border:1px solid #e2d3eb;border-radius:10px}
+.target-weight-toggle button{border:0;border-radius:7px;min-width:39px;height:31px;background:transparent;color:#6d567d;font-size:13px;font-weight:900}
+.target-weight-toggle button.active{background:var(--purple);color:#fff;box-shadow:0 3px 9px rgba(79,0,140,.18)}
+.target-checks{display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:5px 8px}
+.target-check{display:flex;align-items:center;gap:4px;color:#5f4c6c;font-size:11.5px;font-weight:850;white-space:nowrap;cursor:pointer}
+.target-check input{accent-color:var(--purple);width:15px;height:15px;margin:0}
+.target-gauge-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-items:start}
+.benchmark-gauge{position:relative;min-width:0;padding:0 1px 2px;cursor:help}
+.benchmark-gauge-title{text-align:center;height:31px;display:flex;align-items:center;justify-content:center;color:#4a3358;font-size:12.5px;line-height:1.15;font-weight:900;white-space:normal;overflow:hidden}
+.benchmark-svg-wrap{position:relative;height:220px;max-width:360px;margin:0 auto}
+.benchmark-svg{width:100%;height:220px;overflow:visible}
+.benchmark-center{position:absolute;left:50%;top:111px;transform:translateX(-50%);width:150px;text-align:center;pointer-events:none}
+.benchmark-center strong{display:block;color:#2b1737;font-size:20px;line-height:1.05;font-weight:950;white-space:nowrap}
+.benchmark-center span{display:block;margin-top:5px;color:#74627e;font-size:11.5px;font-weight:850;white-space:nowrap}
+.benchmark-current-label{font-size:11px;font-weight:900;fill:#4f008c;paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}
+.benchmark-target-label,.benchmark-zero-label{font-size:10.5px;font-weight:850;fill:#74627e}
+.benchmark-metric{text-align:center;margin-top:-4px;color:var(--purple);font-size:15px;font-weight:950;letter-spacing:.08em}
+.all-market-target-row{margin-top:14px}
+.all-market-target-card{border:1px solid #e2d7e9;border-radius:16px;background:linear-gradient(180deg,#fff,#fcf9fd);padding:14px 18px 10px}
+.all-target-controls{display:grid;grid-template-columns:1fr auto 1.4fr;gap:16px;align-items:center;min-height:58px}
+.all-target-controls .target-checks{justify-content:flex-end}
+.all-target-gauges{display:grid;grid-template-columns:repeat(2,minmax(0,470px));justify-content:center;gap:40px}
+.benchmark-gauge-large .benchmark-svg-wrap{max-width:430px;height:250px}
+.benchmark-gauge-large .benchmark-svg{height:240px}
+.benchmark-gauge-large .benchmark-center{top:120px}
+.benchmark-gauge-large .benchmark-center strong{font-size:25px}
+.benchmark-gauge-large .benchmark-center span{font-size:13px}
+.benchmark-gauge-large .benchmark-gauge-title{font-size:14px}
+
+.opportunity-table-panel{height:720px;min-height:720px;max-height:720px;overflow:hidden}
+.opportunity-table-scroll{height:100%;max-height:none;min-height:0;overflow:auto;background:#fff;position:relative}
+.opportunity-table{font-size:13.5px;padding-bottom:0}
+.opportunity-table thead th{top:0;z-index:8}
+.opportunity-table tfoot td{position:sticky;bottom:0;z-index:9;background:#f1e7f7!important;border-top:2px solid var(--purple);border-bottom:0;color:#351c45;font-weight:900;padding:12px 12px;box-shadow:0 -5px 12px rgba(79,0,140,.08)}
+.opportunity-table tfoot .money-cell{color:var(--purple);font-size:13px}
+.opportunity-table .totals-label{position:static;z-index:9;text-align:right;color:var(--purple);min-width:260px;padding-right:18px!important}
+.list-toolbar-meta span{color:#7b6a86;font-weight:750}
+
+@media(max-width:1500px){
+  .kpi-grid-5{grid-template-columns:repeat(5,minmax(0,1fr))}
+  .kpi-grid-5 .kpi-value{font-size:20px}
+  .target-card-controls{grid-template-columns:1fr auto;grid-template-areas:"name weight" "checks checks"}
+  .target-card-controls .target-name{grid-area:name}.target-weight-area{grid-area:weight;justify-content:flex-end}.target-card-controls .target-checks{grid-area:checks;justify-content:flex-start}
+}
+@media(max-width:1180px){
+  .kpi-grid-5{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .target-grid-gauges{grid-template-columns:1fr}
+  .target-card-gauges{min-height:400px}
+  .target-gauge-pair{grid-template-columns:repeat(2,minmax(260px,1fr))}
+}
+@media(max-width:780px){
+  .kpi-grid-5{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .target-gauge-pair,.all-target-gauges{grid-template-columns:1fr}
+  .all-target-controls{grid-template-columns:1fr;gap:8px}.all-target-controls .target-checks{justify-content:flex-start}
+  .target-card-controls{display:flex;flex-wrap:wrap}.target-card-controls .target-checks{width:100%}
+  .opportunity-table-panel{height:640px;min-height:640px;max-height:640px}
+}
+
+
+/* ===== v3 gauge, hover precision & probability layout ===== */
+.fixed-h-390{height:390px;min-height:390px}
+.probability-panel{width:min(100%,1040px);max-width:1040px;margin:0 auto 18px}
+.probability-panel .panel-body{padding-left:34px;padding-right:34px}
+
+/* Bigger target gauges, styled after the reference semicircular dial */
+.target-card-gauges{height:438px;min-height:438px;padding:12px 12px 10px}
+.target-card-heading{min-height:38px;margin-bottom:3px}
+.target-card-heading .target-name{font-size:20px}
+.target-scenario-title{font-size:17px;max-width:74%}
+.target-checks-singleline{gap:12px;min-height:30px;margin-bottom:1px}
+.target-checks-singleline .target-check{font-size:13px}
+.target-checks-singleline .target-check input{width:18px;height:18px}
+.target-gauge-pair{gap:24px;align-items:start}
+.benchmark-gauge{cursor:default;padding:0;overflow:visible}
+.benchmark-svg-wrap{height:285px;max-width:420px;margin:0 auto}
+.benchmark-svg{height:285px;width:100%;overflow:visible}
+.benchmark-center{top:166px;width:190px}
+.benchmark-center strong{font-size:28px;line-height:1;color:#30143e}
+.benchmark-center span{font-size:25px;line-height:1.05;margin-top:8px;color:#4f008c;font-weight:950}
+.benchmark-center em{display:block;font-style:normal;font-size:13.5px;line-height:1.1;margin-top:4px;color:#77657f;font-weight:900;letter-spacing:.03em}
+.benchmark-current-label{font-size:15px;font-weight:950;paint-order:stroke;stroke:#fff;stroke-width:6px;stroke-linejoin:round}
+.benchmark-target-label{font-size:14px;font-weight:950;fill:#5b4966}
+.benchmark-tick{stroke:#5a4766;stroke-width:1.3}
+.benchmark-tick-label{font-size:13px;font-weight:850;fill:#5b4966}
+.benchmark-metric{font-size:21px;margin-top:-8px;letter-spacing:.12em}
+.benchmark-hover-arc,.gauge-hover-arc{cursor:help}
+.target-weight-bottom{margin-top:-4px}
+.target-weight-toggle button{min-width:54px;height:36px;font-size:15px}
+
+/* All-market pair: more separation and enough room for larger dials */
+.all-market-target-row{max-width:1120px}
+.all-market-target-card{min-height:500px;padding:12px 28px 12px}
+.all-target-gauges{grid-template-columns:repeat(2,minmax(0,460px));gap:70px}
+.benchmark-gauge-large .benchmark-svg-wrap{max-width:460px;height:310px}
+.benchmark-gauge-large .benchmark-svg{height:310px}
+.benchmark-gauge-large .benchmark-center{top:181px;width:230px}
+.benchmark-gauge-large .benchmark-center strong{font-size:33px}
+.benchmark-gauge-large .benchmark-center span{font-size:29px}
+.benchmark-gauge-large .benchmark-center em{font-size:15px}
+.benchmark-gauge-large .benchmark-current-label{font-size:16px}
+.benchmark-gauge-large .benchmark-target-label{font-size:15px}
+.benchmark-gauge-large .benchmark-tick-label{font-size:14px}
+.benchmark-gauge-large .benchmark-metric{font-size:23px}
+
+/* Tooltip is triggered only by the actual plotted mark/arc, never by the surrounding card. */
+.gauge-card:hover{box-shadow:var(--shadow)}
+.hbar-fill{cursor:help}
+
+@media(max-width:1500px){
+  .target-card-gauges{height:425px;min-height:425px}
+  .target-gauge-pair{gap:16px}
+  .benchmark-center strong{font-size:25px}
+  .benchmark-center span{font-size:22px}
+  .benchmark-tick-label{font-size:12px}
+}
+@media(max-width:1180px){
+  .target-card-gauges{height:auto;min-height:440px}
+  .target-gauge-pair{gap:28px}
+  .probability-panel{width:100%;max-width:none}
+}
+
+
+/* ===== v4 centered chart contents + 2x2 target benchmark layout ===== */
+#oppProbability.chart-area,
+#oppEngagement.chart-area{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+#oppProbability .hbar-list{
+  width:min(100%,780px);
+  min-height:0;
+  margin:auto;
+}
+#oppEngagement .hbar-list{
+  width:min(100%,520px);
+  min-height:0;
+  margin:auto;
+}
+.probability-panel{width:min(100%,1100px);max-width:1100px;margin-left:auto;margin-right:auto}
+.probability-panel .panel-body{padding-left:38px;padding-right:38px}
+.engagement-panel .panel-body{padding-left:30px;padding-right:30px}
+
+.target-grid-gauges{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:20px;
+}
+.target-card-gauges,
+.all-market-target-card{
+  height:535px;
+  min-height:535px;
+  padding:14px 18px 12px;
+  display:flex;
+  flex-direction:column;
+  border:1px solid #e7dff0;
+  border-radius:16px;
+  background:linear-gradient(180deg,#fff,#fbf8ff);
+}
+.target-card-heading{
+  min-height:40px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:4px;
+}
+.target-card-heading .target-name{font-size:22px;font-weight:950}
+.target-card-heading .target-scope{font-size:12.5px;font-weight:850;color:#786882;text-align:right}
+.target-checks-singleline{
+  display:flex;
+  flex-wrap:nowrap;
+  justify-content:center;
+  align-items:center;
+  gap:18px;
+  min-height:36px;
+  margin:0 0 3px;
+  overflow:visible;
+}
+.target-checks-singleline .target-check{font-size:14px;font-weight:900}
+.target-checks-singleline .target-check input{width:19px;height:19px}
+.target-scenario-title{
+  max-width:none;
+  width:100%;
+  min-height:30px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  font-size:18px;
+  line-height:1.1;
+  font-weight:950;
+  color:#3e2650;
+  margin:0 0 2px;
+}
+.target-gauge-pair,
+.all-target-gauges{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:38px;
+  align-items:start;
+  justify-content:center;
+  flex:1;
+}
+.benchmark-svg-wrap,
+.benchmark-gauge-large .benchmark-svg-wrap{
+  height:310px;
+  max-width:450px;
+  margin:0 auto;
+}
+.benchmark-svg,
+.benchmark-gauge-large .benchmark-svg{height:310px;width:100%;overflow:visible}
+.benchmark-center,
+.benchmark-gauge-large .benchmark-center{top:178px;width:220px}
+.benchmark-center strong,
+.benchmark-gauge-large .benchmark-center strong{font-size:32px;line-height:1}
+.benchmark-center span,
+.benchmark-gauge-large .benchmark-center span{font-size:29px;line-height:1.05}
+.benchmark-center em,
+.benchmark-gauge-large .benchmark-center em{font-size:14.5px}
+.benchmark-current-label,
+.benchmark-gauge-large .benchmark-current-label{font-size:16px}
+.benchmark-target-label,
+.benchmark-gauge-large .benchmark-target-label{font-size:15px}
+.benchmark-tick-label,
+.benchmark-gauge-large .benchmark-tick-label{font-size:14px}
+.benchmark-metric,
+.benchmark-gauge-large .benchmark-metric{font-size:22px;margin-top:-10px;letter-spacing:.12em}
+.target-weight-bottom{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  margin-top:0;
+  min-height:43px;
+}
+.target-weight-toggle button{min-width:64px;height:39px;font-size:16px}
+.all-market-target-row{display:none}
+
+@media(max-width:1320px){
+  .target-checks-singleline{gap:10px}
+  .target-checks-singleline .target-check{font-size:12.5px}
+  .target-gauge-pair,.all-target-gauges{gap:20px}
+  .benchmark-center strong,.benchmark-gauge-large .benchmark-center strong{font-size:28px}
+  .benchmark-center span,.benchmark-gauge-large .benchmark-center span{font-size:25px}
+}
+@media(max-width:980px){
+  .target-grid-gauges{grid-template-columns:1fr}
+  .target-card-gauges,.all-market-target-card{height:auto;min-height:535px}
+  .target-checks-singleline{flex-wrap:wrap}
+}
+
+
+/* v5 — make numeric column totals explicit and prevent SUM cell overlap */
+.opportunity-table tfoot .total-money{
+  min-width:185px;
+  max-width:none;
+  overflow:visible;
+  text-overflow:clip;
+  white-space:nowrap;
+  font-size:15px!important;
+  font-weight:950!important;
+  color:#4f008c!important;
+  text-align:right;
+}
+.opportunity-table tfoot .totals-label{
+  position:static!important;
+  left:auto!important;
+  box-shadow:none;
+}
+
+
+/* ===== v6 final visibility/alignment fixes ===== */
+/* Benchmark headings: one clean title only. */
+.target-card-heading{
+  justify-content:center!important;
+  min-height:38px!important;
+  margin:0 0 2px!important;
+}
+.target-card-heading .target-name{
+  width:100%;
+  text-align:center;
+  font-size:22px!important;
+  line-height:1.1;
+}
+.target-card-heading .target-scope{display:none!important}
+
+/* Gauge center: keep only the achievement percentage in the dial. */
+.benchmark-center,
+.benchmark-gauge-large .benchmark-center{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  top:188px!important;
+  width:180px!important;
+  text-align:center;
+  pointer-events:none;
+}
+.benchmark-center .benchmark-achievement,
+.benchmark-gauge-large .benchmark-center .benchmark-achievement{
+  display:block;
+  color:#2f173d;
+  font-size:27px!important;
+  line-height:1!important;
+  font-weight:950;
+  letter-spacing:-.02em;
+  white-space:nowrap;
+}
+.benchmark-center em,
+.benchmark-gauge-large .benchmark-center em{
+  display:block;
+  margin-top:6px!important;
+  color:#74627e!important;
+  font-size:13px!important;
+  line-height:1!important;
+  font-style:normal;
+  font-weight:900!important;
+  letter-spacing:.02em;
+}
+.benchmark-current-label,
+.benchmark-gauge-large .benchmark-current-label{
+  font-size:15px!important;
+  font-weight:950!important;
+}
+.benchmark-target-label,
+.benchmark-gauge-large .benchmark-target-label{
+  font-size:13.5px!important;
+  font-weight:900!important;
+}
+.benchmark-metric,
+.benchmark-gauge-large .benchmark-metric{
+  font-size:19px!important;
+  margin-top:-10px!important;
+}
+
+/* Truly center chart contents on both axes. */
+#oppProbability.chart-area,
+#oppEngagement.chart-area{
+  display:grid!important;
+  place-items:center!important;
+  align-content:center!important;
+  justify-content:center!important;
+  overflow:hidden!important;
+  padding-top:20px!important;
+  padding-bottom:20px!important;
+}
+#oppProbability > .hbar-list{
+  width:min(100%,760px)!important;
+  height:max-content!important;
+  min-height:0!important;
+  margin:0 auto!important;
+  align-self:center!important;
+}
+#oppEngagement > .hbar-list{
+  width:min(100%,500px)!important;
+  height:max-content!important;
+  min-height:0!important;
+  margin:0 auto!important;
+  align-self:center!important;
+}
+.probability-panel .panel-body,
+.engagement-panel .panel-body{
+  min-height:0!important;
+}
+
+/* Always-visible filtered financial sums beneath the scrollable table. */
+.opportunity-table-panel{
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+.opportunity-table-scroll{
+  flex:1;
+  min-height:0;
+  max-height:none!important;
+}
+.opportunity-table tfoot{display:none!important}
+.list-opportunity-totals-bar{
+  flex:0 0 auto;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(190px,1fr));
+  gap:0;
+  min-height:78px;
+  border-top:3px solid #4f008c;
+  background:#f3eafa;
+  box-shadow:0 -7px 18px rgba(79,0,140,.10);
+  position:relative;
+  z-index:12;
+}
+.total-summary-item{
+  min-width:0;
+  padding:11px 16px 10px;
+  border-right:1px solid #dac8e7;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  text-align:center;
+}
+.total-summary-item:last-child{border-right:0}
+.total-summary-item span{
+  display:block;
+  color:#634c72;
+  font-size:13px;
+  line-height:1.15;
+  font-weight:850;
+  white-space:normal;
+}
+.total-summary-item strong{
+  display:block;
+  margin-top:5px;
+  color:#4f008c;
+  font-size:17px;
+  line-height:1.05;
+  font-weight:950;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+}
+.opportunity-table .prob-cell{
+  text-align:center;
+  font-weight:850;
+  color:#4f008c;
+}
+@media(max-width:950px){
+  .list-opportunity-totals-bar{grid-template-columns:repeat(2,minmax(180px,1fr))}
+  .total-summary-item:nth-child(2){border-right:0}
+  .total-summary-item:nth-child(-n+2){border-bottom:1px solid #dac8e7}
+}
+
+
+/* ===== v7 precise centering for Probability Distribution + Engagement Motion ===== */
+#oppProbability.chart-area,
+#oppEngagement.chart-area{
+  position:relative!important;
+  display:block!important;
+  overflow:hidden!important;
+  padding:0!important;
+}
+#oppProbability > .hbar-list,
+#oppEngagement > .hbar-list{
+  position:absolute!important;
+  top:50%!important;
+  left:50%!important;
+  transform:translate(-50%,-50%)!important;
+  height:auto!important;
+  min-height:0!important;
+  max-height:calc(100% - 28px)!important;
+  margin:0!important;
+  padding:0!important;
+}
+#oppProbability > .hbar-list{width:min(760px,calc(100% - 72px))!important;}
+#oppEngagement > .hbar-list{width:min(500px,calc(100% - 72px))!important;}
+
+/* ===== v8 requested opportunity intelligence adjustments ===== */
+/* Keep opportunity multi-select dropdowns above the List of Opportunities sheet. */
+.filter-shell{z-index:220!important;overflow:visible!important}
+#filters,.opp-filter-grid,.multi-filter{overflow:visible!important}
+.multi-filter.open{z-index:520!important}
+.multi-popover{z-index:650!important}
+.dashboard-main{position:relative;z-index:1}
+
+/* Second KPI row uses the Pulse secondary colour. */
+.kpi.secondary:before{background:linear-gradient(90deg,var(--pink),#ff7895)!important}
+.kpi.secondary .kpi-icon{background:#ffe8ed!important;color:var(--pink)!important}
+.kpi.secondary .kpi-value{color:var(--pink)}
+
+/* Gauge center: current amount above achievement; no current amount on the arc. */
+.benchmark-center,
+.benchmark-gauge-large .benchmark-center{
+  top:158px!important;
+  width:190px!important;
+}
+.benchmark-current-center,
+.benchmark-gauge-large .benchmark-current-center{
+  display:block;
+  font-size:27px!important;
+  line-height:1!important;
+  font-weight:950;
+  white-space:nowrap;
+  letter-spacing:-.02em;
+  margin-bottom:7px;
+}
+.benchmark-center .benchmark-achievement,
+.benchmark-gauge-large .benchmark-center .benchmark-achievement{
+  font-size:24.5px!important;
+  line-height:1!important;
+}
+.benchmark-center em,
+.benchmark-gauge-large .benchmark-center em{
+  margin-top:5px!important;
+  font-size:12.5px!important;
+}
+.benchmark-current-label{display:none!important}
+.benchmark-target-label,
+.benchmark-gauge-large .benchmark-target-label{font-size:14px!important}
+
+/* Benchmark layout: Egypt/KSA, Growing Markets/Sector Mix, then wide All Market Units. */
+.target-grid-gauges{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:20px!important}
+.target-sector-pie-card{height:535px;min-height:535px}
+.target-insight-subtitle{
+  min-height:62px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  color:#74627e;
+  font-size:13px;
+  font-weight:850;
+  letter-spacing:.02em;
+}
+.target-pie-area{flex:1;min-height:0;overflow:hidden;padding:5px 8px 3px}
+.all-market-target-card{
+  grid-column:1 / -1!important;
+  width:100%;
+  height:590px!important;
+  min-height:590px!important;
+  padding-left:24px!important;
+  padding-right:24px!important;
+}
+.all-market-content{
+  flex:1;
+  min-height:0;
+  display:grid;
+  grid-template-columns:minmax(0,2.05fr) minmax(300px,.85fr);
+  gap:24px;
+  align-items:stretch;
+}
+.all-market-content .all-target-gauges{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:28px;
+  align-items:start;
+  min-width:0;
+}
+.all-market-pie-block{
+  min-width:0;
+  border-left:1px solid #eadff1;
+  padding-left:20px;
+  display:flex;
+  flex-direction:column;
+}
+.target-mini-title{
+  text-align:center;
+  color:#4b3359;
+  font-size:16px;
+  line-height:1.1;
+  font-weight:950;
+  margin:4px 0 2px;
+}
+.all-market-pie-area{flex:1;padding:0}
+
+/* Reusable pie chart presentation. */
+.pie-chart-area{overflow:hidden!important}
+.pie-chart-wrap{
+  width:100%;
+  height:100%;
+  display:grid;
+  grid-template-columns:minmax(220px,.95fr) minmax(190px,.8fr);
+  gap:16px;
+  align-items:center;
+  justify-content:center;
+}
+.pie-visual{display:flex;align-items:center;justify-content:center;min-width:0;min-height:0;height:100%}
+.pie-svg{width:min(100%,270px);height:min(100%,270px);display:block;overflow:visible}
+.pie-slice{cursor:help;stroke:#fff;stroke-width:2;transition:opacity .12s ease,transform .12s ease;transform-origin:center}
+.pie-slice:hover{opacity:.88}
+.pie-legend{display:flex;flex-direction:column;gap:7px;max-height:260px;overflow:auto;padding-right:4px;scrollbar-width:thin}
+.pie-legend-row{display:grid;grid-template-columns:12px minmax(0,1fr) auto;align-items:center;gap:7px;min-height:27px;color:#584765;font-size:12.5px;font-weight:800;border-bottom:1px solid #f0eaf4;padding:3px 0}
+.pie-legend-row:last-child{border-bottom:0}
+.pie-legend-row i{width:11px;height:11px;border-radius:3px}
+.pie-legend-row span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pie-legend-row strong{color:#392646;font-size:12.5px;white-space:nowrap}
+.pie-legend-row[data-pie-filter]{cursor:pointer}
+.pie-legend-row[data-pie-filter]:hover{color:var(--purple)}
+.pie-chart-wrap.compact{grid-template-columns:minmax(180px,.95fr) minmax(155px,.8fr);gap:10px}
+.pie-chart-wrap.compact .pie-svg{width:min(100%,235px);height:min(100%,235px)}
+.pie-chart-wrap.compact .pie-legend{max-height:225px;gap:5px}
+.pie-chart-wrap.compact .pie-legend-row{font-size:11.5px;min-height:24px}
+.pie-chart-wrap.compact .pie-legend-row strong{font-size:11.5px}
+
+/* Probability + Opportunity Types share one row equally. */
+.probability-pie-row{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.probability-pie-row .probability-panel{
+  width:auto!important;
+  max-width:none!important;
+  margin:0!important;
+}
+.opportunity-type-pie-panel{margin-bottom:0!important}
+
+/* Header controls for W/NW + Top N combinations. */
+.panel-title-actions{display:flex;align-items:center;gap:9px;min-width:0}
+.panel-titlebar .small-toggle button{min-width:38px}
+
+@media(max-width:1320px){
+  .all-market-content{grid-template-columns:minmax(0,1.8fr) minmax(270px,.9fr);gap:16px}
+  .all-market-pie-block{padding-left:14px}
+  .pie-chart-wrap{grid-template-columns:minmax(185px,.9fr) minmax(160px,.8fr);gap:10px}
+  .pie-legend-row{font-size:11.5px}.pie-legend-row strong{font-size:11.5px}
+}
+
+
+
+/* ===== v9 pie callouts + gauge target refinements ===== */
+/* Pie charts now stand alone: larger chart, thin white separators, and in-chart callout labels. */
+.pie-chart-wrap,
+.pie-chart-wrap.compact{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  gap:0!important;
+  grid-template-columns:none!important;
+  padding:0!important;
+}
+.pie-visual{
+  width:100%!important;
+  height:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  overflow:visible!important;
+}
+.pie-svg,
+.pie-chart-wrap.compact .pie-svg{
+  width:min(100%,500px)!important;
+  height:min(100%,360px)!important;
+  max-width:100%!important;
+  display:block!important;
+  overflow:visible!important;
+}
+.pie-slice{
+  stroke:#fff!important;
+  stroke-width:.8!important;
+  stroke-linejoin:round;
+  cursor:help;
+}
+.pie-callout-line{
+  fill:none;
+  stroke:#9a8ca5;
+  stroke-width:1.15;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  pointer-events:none;
+}
+.pie-callout-dot{pointer-events:none}
+.pie-callout-label{
+  fill:#473653;
+  font-size:11.8px;
+  font-weight:900;
+  pointer-events:none;
+}
+.pie-callout-value{
+  fill:#74627e;
+  font-size:10.8px;
+  font-weight:800;
+  pointer-events:none;
+}
+.pie-callout-hit{cursor:help;fill:transparent}
+.pie-legend{display:none!important}
+
+/* There is intentionally no separate Market Unit Mix heading. */
+.all-market-pie-block .target-mini-title{display:none!important}
+.all-market-pie-block{padding-top:0!important}
+
+/* Make the target number at the end of every benchmark gauge more prominent. */
+.benchmark-target-label,
+.benchmark-gauge-large .benchmark-target-label{
+  font-size:17.5px!important;
+  font-weight:950!important;
+  letter-spacing:-.01em;
+}
+
+
+
+/* ===== Background refresh v12: non-blocking refresh indicator ===== */
+.refresh-inline-loader{
+  display:inline-block;width:15px;height:15px;flex:0 0 15px;border-radius:50%;
+  border:2px solid #e2d8e9;border-top-color:var(--purple);
+  animation:refreshInlineSpin .8s linear infinite;
+  visibility:hidden;opacity:0;
+}
+.refresh-inline-loader.show{visibility:visible;opacity:1}
+#refreshBtn:disabled{opacity:.68;cursor:default}
+@keyframes refreshInlineSpin{to{transform:rotate(360deg)}}
+
+/* ===== Manual-refresh v11: subtle footer import manager ===== */
+.footer-import-btn{
+  border:1px solid #e3dce9;background:#fff;color:#8a7d92;border-radius:8px;
+  padding:5px 9px;font-size:11px;font-weight:800;line-height:1;box-shadow:none;
+  opacity:.72;margin-left:10px;
+}
+.footer-import-btn:hover{opacity:1;color:var(--purple);border-color:#cdbbdd;background:#fbf8fd}
+.footer-right{display:flex;align-items:center;gap:10px;min-width:0}
+.manual-import-modal{position:fixed;inset:0;background:rgba(31,12,44,.45);backdrop-filter:blur(4px);z-index:5000;display:none;align-items:center;justify-content:center;padding:24px}
+.manual-import-modal.show{display:flex}
+.manual-import-dialog{width:min(930px,95vw);max-height:90vh;background:#fff;border-radius:22px;box-shadow:0 26px 86px rgba(42,18,58,.27);overflow:hidden;display:flex;flex-direction:column;border:1px solid #e8deef}
+.manual-import-head{background:var(--purple);color:#fff;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.manual-import-head h3{margin:0;font-size:22px}.manual-import-head p{margin:4px 0 0;font-size:12px;opacity:.86;font-weight:700}
+.manual-import-close{width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.32);background:rgba(255,255,255,.11);color:#fff;font-size:20px;font-weight:900}
+.manual-import-body{padding:18px 20px 20px;overflow:auto;background:#fbf9fd}
+.manual-import-note{font-size:12px;font-weight:750;color:#705f7d;background:#f1eafb;border-radius:11px;padding:10px 12px;margin-bottom:12px;line-height:1.45}
+.manual-import-list{display:grid;gap:10px}
+.manual-import-row{display:grid;grid-template-columns:minmax(220px,1fr) minmax(260px,1.25fr) auto;gap:12px;align-items:center;background:#fff;border:1px solid #e6deed;border-radius:13px;padding:12px 13px}
+.manual-import-title{font-size:14px;font-weight:900;color:#2d1b39}
+.manual-import-row input[type=file]{font-size:12px;min-width:0;width:100%;color:#665772}
+.manual-import-go{border:0;background:var(--purple);color:#fff;border-radius:9px;padding:8px 11px;font-size:12px;font-weight:900;white-space:nowrap}
+.manual-import-go:disabled{opacity:.45;cursor:not-allowed}
+.manual-import-status{grid-column:1/-1;font-size:11px;font-weight:800;color:#82718c;min-height:14px}.manual-import-status.ok{color:#067647}.manual-import-status.error{color:#b42318}.manual-import-status.loading{color:var(--purple)}
+@media(max-width:800px){.manual-import-row{grid-template-columns:1fr}.footer-import-btn{font-size:10px;padding:4px 7px}}
+
+/* ===== v12 mobile = exact desktop canvas =====
+   Mobile devices use the same 1920px desktop layout and let the browser
+   scale it down. This intentionally prevents responsive rearrangement. */
+@media screen and (max-device-width: 900px){
+  html,body{
+    min-width:1920px!important;
+    width:1920px!important;
+  }
+}
+</style>
+</head>
+<body>
+  <div id="manualImportModal" class="manual-import-modal" role="dialog" aria-modal="true" aria-labelledby="manualImportTitle">
+    <div class="manual-import-dialog">
+      <div class="manual-import-head">
+        <div><h3 id="manualImportTitle">Import Dashboard Data</h3><p>Backup/manual override. Normal live updates come from Dropbox only when Refresh Data is pressed.</p></div>
+        <button id="manualImportClose" class="manual-import-close" aria-label="Close">×</button>
+      </div>
+      <div class="manual-import-body">
+        <div class="manual-import-note">The selected workbook is validated and processed, then the temporary Excel source is deleted. Companion workbooks required for processing are fetched from the configured Dropbox links.</div>
+        <div class="manual-import-list">
+          <div class="manual-import-row" data-dataset="opportunities"><div class="manual-import-title">List of Opportunities</div><input type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"><button class="manual-import-go">Import</button><div class="manual-import-status"></div></div>
+          <div class="manual-import-row" data-dataset="orderbook"><div class="manual-import-title">Order Book Values per Market Unit</div><input type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"><button class="manual-import-go">Import</button><div class="manual-import-status"></div></div>
+          <div class="manual-import-row" data-dataset="targets"><div class="manual-import-title">Targets</div><input type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"><button class="manual-import-go">Import</button><div class="manual-import-status"></div></div>
+          <div class="manual-import-row" data-dataset="po"><div class="manual-import-title">Purchase Order Summary</div><input type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"><button class="manual-import-go">Import</button><div class="manual-import-status"></div></div>
+          <div class="manual-import-row" data-dataset="podates"><div class="manual-import-title">Purchase Order Details</div><input type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"><button class="manual-import-go">Import</button><div class="manual-import-status"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="loadingOverlay" class="loading-overlay show" aria-live="polite" aria-busy="true">
+    <div class="loading-card"><div class="loading-spinner"></div><strong>Partners &amp; Alliances Dashboard</strong><span id="loadingText">Loading dashboard data…</span></div>
+  </div>
+
+  <header class="app-header">
+    <div class="brand-wrap">
+      <img src="data:image/png;base64,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" class="brand-logo" alt="Pulse by Solutions" />
+      <div class="brand-copy">
+        <div class="brand-kicker">PULSE BY SOLUTIONS</div>
+        <h1>Partners &amp; Alliances Dashboard</h1>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div class="data-status"><span class="status-dot"></span><span id="dataStatus">Loading current data…</span></div>
+      <button id="refreshBtn" class="outline-btn">↻ Refresh Data</button>
+      <span id="refreshSpinner" class="refresh-inline-loader" aria-hidden="true" title="Refreshing latest Dropbox data"></span>
+    </div>
+  </header>
+
+  <nav class="main-tabs" aria-label="Dashboard sections">
+    <button class="tab-btn active" data-tab="opportunities">Opportunities Analysis</button>
+    <button class="tab-btn" data-tab="listOpportunities">List of Opportunities</button>
+    <button class="tab-btn" data-tab="orderbook">Order Book Analysis</button>
+    <button class="tab-btn" data-tab="purchaseOrders">Business with Partners</button>
+  </nav>
+
+  <section class="filter-shell">
+    <div class="filter-topline">
+      <div>
+        <span class="section-label">GLOBAL FILTERS</span>
+        <span class="filter-context" id="filterContext">Opportunities filters</span>
+      </div>
+      <button id="resetFilters" class="text-btn">Reset Filters</button>
+    </div>
+    <div id="filters" class="filter-grid"></div>
+    <div class="filter-foot">
+      <span id="filterSummary">Loading…</span>
+      <span class="filter-note" id="filterNote"></span>
+    </div>
+  </section>
+
+  <main class="dashboard-main">
+    <!-- OPPORTUNITIES -->
+    <section id="tab-opportunities" class="tab-view active">
+      <div class="section-header">
+        <div><span class="section-label">OPPORTUNITIES ANALYSIS</span><h2>Pipeline, Roadmap &amp; Opportunity Intelligence</h2></div>
+        <div class="subtle-pill">Dropbox live data · Awarded sourced directly from 2026 Order Book</div>
+      </div>
+
+      <div id="oppKpisTop" class="kpi-grid kpi-grid-5"></div>
+      <div id="oppKpisBottom" class="kpi-grid kpi-grid-5"></div>
+
+      <article class="panel target-panel">
+        <div class="panel-titlebar"><span>2026 Target Benchmark — Target → Awarded → Remaining → Pipeline</span><span class="panel-hint">Independent 2026 scenario controls</span></div>
+        <div id="targetBenchmark" class="panel-body target-benchmark-body"></div>
+      </article>
+
+      <div class="grid-2">
+        <article class="panel fixed-h-470"><div class="panel-titlebar"><span>Legal Entity by Roadmap</span><div class="small-toggle" id="oppEntityMetric"><button class="active" data-mode="count">Jobs</button><button data-mode="value">SAR Value</button></div></div><div id="entityRoadmap" class="panel-body chart-area"></div></article>
+        <article class="panel fixed-h-470"><div class="panel-titlebar"><span>Market Unit by Roadmap</span><div class="small-toggle" id="oppMarketMetric"><button class="active" data-mode="count">Jobs</button><button data-mode="value">SAR Value</button></div></div><div id="marketRoadmap" class="panel-body chart-area"></div></article>
+      </div>
+
+      <div class="grid-3">
+        <article class="panel fixed-h-430"><div class="panel-titlebar"><span>Active Pipeline by Country</span><div class="small-toggle" id="oppCountryWeight"><button data-mode="W">W</button><button class="active" data-mode="NW">NW</button></div></div><div id="oppCountry" class="panel-body chart-area"></div></article>
+        <article class="panel fixed-h-430"><div class="panel-titlebar"><span>Active Pipeline by Sector</span><div class="small-toggle" id="oppSectorWeight"><button data-mode="W">W</button><button class="active" data-mode="NW">NW</button></div></div><div id="oppSector" class="panel-body chart-area"></div></article>
+        <article class="panel fixed-h-430"><div class="panel-titlebar"><span>Top Customers</span><div class="panel-title-actions"><div class="small-toggle" id="oppCustomerWeight"><button data-mode="W">W</button><button class="active" data-mode="NW">NW</button></div><div class="panel-topn"><label>Top N</label><input id="oppCustomerTopN" type="number" min="1" value="10" inputmode="numeric"></div></div></div><div id="oppCustomers" class="panel-body chart-area"></div></article>
+      </div>
+
+      <div class="grid-2 probability-pie-row">
+        <article class="panel fixed-h-390 probability-panel"><div class="panel-titlebar"><span>Probability Distribution</span><span class="panel-hint">Current active portfolio</span></div><div id="oppProbability" class="panel-body chart-area"></div></article>
+        <article class="panel fixed-h-390 opportunity-type-pie-panel"><div class="panel-titlebar"><span>Opportunity Types</span><div class="small-toggle" id="oppTypePieWeight"><button data-mode="W">W</button><button class="active" data-mode="NW">NW</button></div></div><div id="oppTypePie" class="panel-body chart-area pie-chart-area"></div></article>
+      </div>
+
+      <div class="grid-3">
+        <article class="panel fixed-h-420"><div class="panel-titlebar"><span>Top Account Managers</span><div class="panel-topn"><label>Top N</label><input id="oppOwnerTopN" type="number" min="1" value="10" inputmode="numeric"></div></div><div id="oppOwners" class="panel-body chart-area"></div></article>
+        <article class="panel fixed-h-420"><div class="panel-titlebar"><span>Opportunity Type</span><div class="small-toggle" id="oppTypeMetric"><button class="active" data-mode="count">Jobs</button><button data-mode="value">SAR</button></div></div><div id="oppTypes" class="panel-body chart-area"></div></article>
+        <article class="panel fixed-h-420 engagement-panel"><div class="panel-titlebar"><span>Engagement Motion</span><span class="panel-hint">Pro-active vs Re-active</span></div><div id="oppEngagement" class="panel-body chart-area"></div></article>
+      </div>
+
+      <article class="panel fixed-h-560 management-oddities-panel"><div class="panel-titlebar"><span>Management Reporting — Data Quality &amp; Oddities</span><span class="panel-hint">Financial anomalies, lifecycle inconsistencies &amp; ownership gaps</span></div><div id="oppAttention" class="panel-body"></div></article>
+    </section>
+
+    <!-- LIST OF OPPORTUNITIES -->
+    <section id="tab-listOpportunities" class="tab-view">
+      <div class="section-header">
+        <div><span class="section-label">LIST OF OPPORTUNITIES</span><h2>Detailed Opportunity Register</h2></div>
+        <div class="subtle-pill">Filtered static test view · all rows in one scrollable register</div>
+      </div>
+
+      <div class="list-toolbar">
+        <div class="table-search-box"><span>⌕</span><input id="listOppSearch" type="search" placeholder="Search customer, topic, OPP ID, owner, status…" autocomplete="off"></div>
+        <div class="list-toolbar-meta"><strong id="listOppCount">0 opportunities</strong><span>All filtered rows · scroll inside the table</span></div>
+      </div>
+
+      <article class="panel opportunity-table-panel">
+        <div class="opportunity-table-scroll">
+          <table id="listOppTable" class="opportunity-table">
+            <thead><tr>
+              <th data-sort="legalEntity">Legal Entity<span class="sort-mark"></span></th>
+              <th data-sort="market">MKU<span class="sort-mark"></span></th>
+              <th data-sort="customer">Potential Customer<span class="sort-mark"></span></th>
+              <th data-sort="topic">Topic<span class="sort-mark"></span></th>
+              <th data-sort="d365Id">D365 OPP ID<span class="sort-mark"></span></th>
+              <th data-sort="id">OPP ID<span class="sort-mark"></span></th>
+              <th data-sort="owner">Owner<span class="sort-mark"></span></th>
+              <th data-sort="roadmap">Roadmap<span class="sort-mark"></span></th>
+              <th data-sort="stage">Stage<span class="sort-mark"></span></th>
+              <th data-sort="status">Status<span class="sort-mark"></span></th>
+              <th data-sort="channel">Channel<span class="sort-mark"></span></th>
+              <th data-sort="actualOppValue">Actual Opp Value<span class="sort-mark"></span></th>
+              <th data-sort="actualOppMargin">Actual Opp Value Margin<span class="sort-mark"></span></th>
+              <th data-sort="probability">Probability<span class="sort-mark"></span></th>
+              <th data-sort="weightedValueSAR">Weighted Opportunity Value<span class="sort-mark"></span></th>
+              <th data-sort="weightedMarginSAR">Weighted Opportunity Margin<span class="sort-mark"></span></th>
+              <th data-sort="closeMonth">Month<span class="sort-mark"></span></th>
+              <th data-sort="closeQuarter">Quarter<span class="sort-mark"></span></th>
+              <th data-sort="closeYear">Year<span class="sort-mark"></span></th>
+            </tr></thead>
+            <tbody id="listOppBody"></tbody>
+            <tfoot id="listOppTotals"></tfoot>
+          </table>
+        </div>
+        <div id="listOppTotalsBar" class="list-opportunity-totals-bar" aria-label="Filtered opportunity financial totals"></div>
+      </article>
+    </section>
+
+    <!-- ORDER BOOK -->
+    <section id="tab-orderbook" class="tab-view">
+      <div class="section-header">
+        <div><span class="section-label">ORDER BOOK ANALYSIS</span><h2>Secured Business, Margin &amp; Contract Intelligence</h2></div>
+        <div class="toolbar-toggle"><span>Margin Basis</span><div id="obMarginToggle" class="toggle"><button class="active" data-margin="GM">GM</button><button data-margin="CM">CM</button></div></div>
+      </div>
+
+      <div id="obKpis" class="kpi-grid"></div>
+
+      <div class="gauge-grid">
+        <article class="gauge-card"><div class="gauge-head"><span id="obMarginGaugeTitle">GM Margin Rate</span><span class="gauge-hint">Selected margin / OB</span></div><div id="obMarginGauge" class="gauge-body"></div></article>
+        <article class="gauge-card"><div class="gauge-head"><span>Top Market Concentration</span><span class="gauge-hint">Largest market share of OB</span></div><div id="obMarketGauge" class="gauge-body"></div></article>
+        <article class="gauge-card"><div class="gauge-head"><span>Top 5 Customer Concentration</span><span class="gauge-hint">Share of secured value</span></div><div id="obCustomerGauge" class="gauge-body"></div></article>
+      </div>
+
+      <div class="grid-2">
+        <article class="panel fixed-h-470"><div class="panel-titlebar"><span>OB SAR &amp; Margin Across Years</span><span id="obTrendHint" class="panel-hint">GM view</span></div><div id="obTrend" class="panel-body chart-area"></div></article>
+        <article class="panel fixed-h-470"><div class="panel-titlebar"><span>OB SAR by Market Unit</span><span class="panel-hint">Secured value</span></div><div id="obMarket" class="panel-body chart-area"></div></article>
+      </div>
+
+      <div class="grid-3">
+        <article class="panel fixed-h-440"><div class="panel-titlebar"><span>OB SAR by Country</span><span class="panel-hint">Top countries</span></div><div id="obCountry" class="panel-body chart-area"></div></article>
+        <article class="panel fixed-h-440"><div class="panel-titlebar"><span>OB SAR by Vertical</span><span class="panel-hint">Business mix</span></div><div id="obVertical" class="panel-body chart-area"></div></article>
+        <article class="panel fixed-h-440"><div class="panel-titlebar"><span>OB SAR by Legal Entity</span><span class="panel-hint">Company view</span></div><div id="obEntity" class="panel-body chart-area"></div></article>
+      </div>
+
+      <div class="grid-2">
+        <article class="panel fixed-h-470"><div class="panel-titlebar"><span>Top 10 OB Contracts</span><span class="panel-hint">By OB SAR</span></div><div id="obContracts" class="panel-body chart-area"></div></article>
+        <article class="panel fixed-h-470"><div class="panel-titlebar"><span>Top Customers in Order Book</span><span class="panel-hint">By OB SAR</span></div><div id="obCustomers" class="panel-body chart-area"></div></article>
+      </div>
+
+      <article class="panel fixed-h-500"><div class="panel-titlebar"><span>Market Verticals — Egypt / KSA / GM</span><span class="panel-hint">Comparable small multiples</span></div><div id="obMarketVerticals" class="panel-body small-multiples"></div></article>
+
+      <div class="grid-2">
+        <article class="panel fixed-h-470"><div class="panel-titlebar"><span id="obMarginByVerticalTitle">GM SAR by Vertical</span><span class="panel-hint">Profitability amount</span></div><div id="obMarginByVertical" class="panel-body chart-area"></div></article>
+        <article class="panel fixed-h-470"><div class="panel-titlebar"><span id="obMarginPctTitle">GM% by Vertical</span><span class="panel-hint">Profitability rate</span></div><div id="obMarginPct" class="panel-body chart-area"></div></article>
+      </div>
+    </section>
+
+    <!-- PURCHASE ORDERS -->
+    <section id="tab-purchaseOrders" class="tab-view">
+      <div class="section-header">
+        <div><span class="section-label">BUSINESS WITH PARTNERS</span><h2>PO Spend, Vendors, Partners &amp; Timing Intelligence</h2></div>
+        <div class="toolbar-toggle"><span>PO Value</span><div id="poValueToggle" class="toggle"><button class="active" data-value="NET">Net SAR</button><button data-value="GROSS">Gross SAR</button></div></div>
+      </div>
+
+      <div id="poKpis" class="kpi-grid"></div>
+
+      <div class="gauge-grid">
+        <article class="gauge-card"><div class="gauge-head"><span>Partner-Tagged Share</span><span class="gauge-hint">Share of selected PO SAR</span></div><div id="poPartnerGauge" class="gauge-body"></div></article>
+        <article class="gauge-card"><div class="gauge-head"><span>Top Market Concentration</span><span class="gauge-hint">Largest market share of PO SAR</span></div><div id="poMarketGauge" class="gauge-body"></div></article>
+        <article class="gauge-card"><div class="gauge-head"><span>Top 10 Vendor Concentration</span><span class="gauge-hint">Share of selected PO SAR</span></div><div id="poVendorGauge" class="gauge-body"></div></article>
+      </div>
+
+      <div class="grid-2">
+        <article class="panel fixed-h-470"><div class="panel-titlebar"><span>Purchase Orders SAR Across Years</span><span class="panel-hint">Accounting Date from PO Dates table</span></div><div id="poTrend" class="panel-body chart-area"></div></article>
+        <article class="panel fixed-h-470"><div class="panel-titlebar"><span>PO SAR by Market Unit</span><span class="panel-hint">Current filter scope</span></div><div id="poMarket" class="panel-body chart-area"></div></article>
+      </div>
+
+      <div class="grid-3">
+        <article class="panel fixed-h-440"><div class="panel-titlebar"><span>PO SAR by Country</span><span class="panel-hint">Horizontal ranking</span></div><div id="poCountry" class="panel-body chart-area"></div></article>
+        <article class="panel fixed-h-440"><div class="panel-titlebar"><span>PO SAR by Vertical</span><span class="panel-hint">Business spend</span></div><div id="poVertical" class="panel-body chart-area"></div></article>
+        <article class="panel fixed-h-440"><div class="panel-titlebar"><span>Partner vs Non-Partner</span><span class="panel-hint">Share of selected PO value</span></div><div id="poPartnerShare" class="panel-body chart-area"></div></article>
+      </div>
+
+      <div class="ranking-controls">
+        <div><span class="control-label">Top N</span><select id="poTopN"><option>5</option><option selected>10</option><option>15</option><option>20</option></select></div>
+        <div><span class="control-label">Rank By</span><div id="poRankToggle" class="toggle"><button class="active" data-rank="value">PO Value</button><button data-rank="count">PO Count</button></div></div>
+      </div>
+
+      <div class="grid-2">
+        <article class="panel fixed-h-470"><div class="panel-titlebar"><span>Top Vendors</span><span class="panel-hint">Dynamic Top N</span></div><div id="poVendors" class="panel-body chart-area"></div></article>
+        <article class="panel fixed-h-470"><div class="panel-titlebar"><span>Top Partners</span><span class="panel-hint">Dynamic Top N</span></div><div id="poPartners" class="panel-body chart-area"></div></article>
+      </div>
+
+      <article class="panel fixed-h-500"><div class="panel-titlebar"><span>PO SAR per Vertical — Egypt / KSA / GM</span><span class="panel-hint">Comparable market panels</span></div><div id="poMarketVerticals" class="panel-body small-multiples"></div></article>
+
+      <div class="grid-2">
+        <article class="panel fixed-h-470"><div class="panel-titlebar"><span>Top Customers by PO SAR</span><span class="panel-hint">Current scope</span></div><div id="poCustomers" class="panel-body chart-area"></div></article>
+        <article class="panel fixed-h-470"><div class="panel-titlebar"><span>Project Manager Portfolio</span><span class="panel-hint">PO SAR</span></div><div id="poProjectManagers" class="panel-body chart-area"></div></article>
+      </div>
+    </section>
+  </main>
+
+  <div id="tooltip" class="tooltip"></div>
+  <footer class="footer"><span>Pulse by Solutions · Partners &amp; Alliances Dashboard</span><div class="footer-right"><span id="footerMeta">Shared dashboard</span><button id="importDataBtn" class="footer-import-btn" title="Manual data import">⇧ Import Data</button></div></footer>
+  <script>
+
+const COLORS = {
+  purple: '#4f008c', purple2: '#6d20a8', purple3: '#8d5abf', pink: '#ff375e', teal: '#2bc4b6', gold: '#e1a928', grey: '#c9bfd4'
+};
+const ROADMAP = ['Early Stage','Prospect','Upside','Committed','Won'];
+const ROADMAP_COLORS = {
+  'Early Stage':'#d8c4e8','Prospect':'#b98ed2','Upside':'#8c55b6','Committed':'#6a229b','Won':'#4f008c'
+};
+const TAB_LABELS = {opportunities:'Opportunities Analysis', listOpportunities:'List of Opportunities', orderbook:'Order Book Analysis', purchaseOrders:'Business with Partners'};
+const OPPORTUNITY_FILTER_DEFS = [
+  ['market','Market Unit'],['legalEntity','Legal Entity'],['country','Country'],['lob','Vertical'],['sector','Sector'],['owner','Account Manager'],['customer','Customer'],
+  ['roadmap','Roadmap'],['stage','Stage'],['status','Status'],['channel','Channel'],['opportunityType','Opportunity Type'],['engagement','Engagement'],['closureDate','Expected Closure Date']
+];
+const FILTER_DEFS = {
+  opportunities: OPPORTUNITY_FILTER_DEFS,
+  listOpportunities: OPPORTUNITY_FILTER_DEFS,
+  orderbook:[
+    ['awardingYear','Awarding Year'],['market','Market Unit'],['country','Country'],['legalEntity','Legal Entity'],['vertical','Vertical'],['sector','Sector'],['lob','LoB'],['customer','Customer'],['accountManager','Account Manager'],['projectManager','Project Manager'],['obType','OB Type']
+  ],
+  purchaseOrders:[
+    ['year','Year'],['quarter','Quarter'],['month','Month'],['market','Market Unit'],['country','Country'],['vertical','Vertical'],['vendor','Vendor'],['partnerName','Partner'],['customer','Customer'],['projectManager','Project Manager']
+  ]
+};
+const OPPORTUNITY_SHARED_AWARD_FIELDS = {
+  market:'market', legalEntity:'legalEntity', country:'country', lob:'lob', sector:'sector', owner:'accountManager', customer:'customer'
+};
+
+const state = {
+  data:null,
+  tab:'opportunities',
+  filters:{opportunities:{},orderbook:{},purchaseOrders:{year:'2026'}},
+  oppEntityMetric:'count',
+  oppMarketMetric:'count',
+  oppCountryWeight:'NW',
+  oppSectorWeight:'NW',
+  oppCustomerWeight:'NW',
+  oppTypePieWeight:'NW',
+  targetSectorWeight:'NW',
+  oppTypeMetric:'count',
+  oppCustomerTopN:10,
+  oppOwnerTopN:10,
+  targetGauge:{
+    Egypt:{weight:'NW',roadmaps:['Won']},
+    KSA:{weight:'NW',roadmaps:['Won']},
+    GM:{weight:'NW',roadmaps:['Won']},
+    Total:{weight:'NW',roadmaps:['Won']}
+  },
+  obMargin:'GM',
+  poValue:'NET',
+  poTopN:10,
+  poRank:'value',
+  listSearch:'',
+  listSort:{field:'id',dir:'asc'},
+  ui:{openFilter:null,filterSearch:{},expandedDates:{}}
+};
+
+const $ = (id)=>document.getElementById(id);
+function showLoading(text='Loading dashboard data…'){
+  const el=$('loadingOverlay'); if(!el) return;
+  const t=$('loadingText'); if(t) t.textContent=text;
+  el.classList.add('show');
+}
+function hideLoading(){const el=$('loadingOverlay'); if(el) el.classList.remove('show');}
+function setStatus(text,mode='ok'){
+  const el=$('dataStatus'); if(el) el.textContent=text;
+  const dot=document.querySelector('.status-dot'); if(dot) dot.dataset.mode=mode;
+}
+
+const sum = (arr, fn)=>arr.reduce((a,r)=>a+(Number(fn(r))||0),0);
+const uniq = (arr)=>[...new Set(arr)];
+const safe = (v)=> (v===null||v===undefined||v==='') ? 'Unassigned' : String(v);
+const fmtNum = (v,d=0)=>new Intl.NumberFormat('en-US',{maximumFractionDigits:d,minimumFractionDigits:d}).format(Number(v)||0);
+const fmtFull = (v)=>new Intl.NumberFormat('en-US',{maximumFractionDigits:2}).format(Number(v)||0);
+function fmtSAR(v){
+  const n=Number(v)||0, a=Math.abs(n);
+  if(a>=1e6) return `${fmtNum(n/1e6,a>=1e9?0:2)}M`;
+  if(a>=1e3) return `${fmtNum(n/1e3,1)}K`;
+  return fmtNum(n,0);
+}
+function fmtMillions(v,d=1){return `${fmtNum((Number(v)||0)/1e6,d)}M`;}
+function fmtPct(v){return `${fmtNum((Number(v)||0)*100,1)}%`;}
+function escapeHtml(s){return safe(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
+function shortText(s,n=38){s=safe(s); return s.length>n ? s.slice(0,n-1)+'…' : s;}
+function normalizeMarket(m){ const s=safe(m).trim(); if(/^gwm$/i.test(s)||/^growing/i.test(s)) return 'GM'; return s; }
+function isOpportunityTab(tab=state.tab){return tab==='opportunities'||tab==='listOpportunities';}
+function filterScope(tab=state.tab){return isOpportunityTab(tab)?'opportunities':tab;}
+function defsForTab(tab=state.tab){return FILTER_DEFS[tab]||[];}
+function filtersForTab(tab=state.tab){return state.filters[filterScope(tab)]||{};}
+
+function recordsForTab(tab){
+  if(isOpportunityTab(tab)) return state.data.opportunities||[];
+  if(tab==='orderbook') return state.data.orderbook||[];
+  return state.data.purchaseOrders||[];
+}
+function quarterNo(v){
+  const m=String(v||'').match(/([1-4])/); return m?Number(m[1]):null;
+}
+function monthNo(v){
+  const names=['january','february','march','april','may','june','july','august','september','october','november','december'];
+  const s=String(v||'').trim().toLowerCase(); const i=names.findIndex(x=>x===s||x.startsWith(s.slice(0,3)));
+  return i>=0?i+1:null;
+}
+function closureTokenMatch(r,token){
+  const p=String(token).split('|'),year=Number(r.closeYear),q=quarterNo(r.closeQuarter),m=safe(r.closeMonth).toLowerCase();
+  if(p[0]==='Y') return year===Number(p[1]);
+  if(p[0]==='Q') return year===Number(p[1])&&q===Number(p[2]);
+  if(p[0]==='M') return year===Number(p[1])&&q===Number(p[2])&&m===String(p.slice(3).join('|')).toLowerCase();
+  return true;
+}
+function recordMatchesOpportunityFilters(r,filters,exceptField=null,sharedOnly=false){
+  for(const [k,raw] of Object.entries(filters)){
+    if(k===exceptField) continue;
+    if(sharedOnly && !(k in OPPORTUNITY_SHARED_AWARD_FIELDS)) continue;
+    const selected=Array.isArray(raw)?raw:(raw?[String(raw)]:[]); if(!selected.length) continue;
+    if(k==='closureDate'){
+      if(!selected.some(t=>closureTokenMatch(r,t))) return false;
+    }else if(!selected.includes(safe(r[k]))) return false;
+  }
+  return true;
+}
+function applyFilters(records,tab,exceptField=null){
+  if(isOpportunityTab(tab)){
+    const filters=state.filters.opportunities;
+    return records.filter(r=>recordMatchesOpportunityFilters(r,filters,exceptField,false));
+  }
+  const filters=state.filters[tab]||{};
+  return records.filter(r=>Object.entries(filters).every(([k,v])=>{
+    if(!v||k===exceptField) return true;
+    return safe(r[k])===String(v);
+  }));
+}
+function sortOptions(field,vals){
+  const x=[...vals];
+  if(['closeYear','awardingYear','year'].includes(field)) return x.sort((a,b)=>(Number(b)||0)-(Number(a)||0));
+  if(['quarter','closeQuarter'].includes(field)) return x.sort((a,b)=>String(a).localeCompare(String(b),undefined,{numeric:true}));
+  if(field==='roadmap') return x.sort((a,b)=>ROADMAP.indexOf(a)-ROADMAP.indexOf(b));
+  return x.sort((a,b)=>String(a).localeCompare(String(b),undefined,{numeric:true,sensitivity:'base'}));
+}
+function closureStructure(records){
+  const years=new Map();
+  records.forEach(r=>{
+    const y=Number(r.closeYear); if(!y) return;
+    const q=quarterNo(r.closeQuarter) || (monthNo(r.closeMonth)?Math.ceil(monthNo(r.closeMonth)/3):null); if(!q) return;
+    if(!years.has(y)) years.set(y,new Map()); const qs=years.get(y); if(!qs.has(q)) qs.set(q,new Set());
+    const mn=safe(r.closeMonth); if(mn&&mn!=='Unassigned') qs.get(q).add(mn);
+  });
+  return [...years.entries()].sort((a,b)=>a[0]-b[0]).map(([year,qs])=>({year,quarters:[...qs.entries()].sort((a,b)=>a[0]-b[0]).map(([q,months])=>({q,months:[...months].sort((a,b)=>(monthNo(a)||99)-(monthNo(b)||99))}))}));
+}
+function availableClosureTokens(records){
+  const set=new Set(); closureStructure(records).forEach(y=>{set.add(`Y|${y.year}`);y.quarters.forEach(q=>{set.add(`Q|${y.year}|${q.q}`);q.months.forEach(m=>set.add(`M|${y.year}|${q.q}|${m}`));});}); return set;
+}
+function sanitizeOpportunityFilters(){
+  const records=state.data.opportunities||[], filters=state.filters.opportunities;
+  let changed=true,guard=0;
+  while(changed&&guard++<8){
+    changed=false;
+    for(const [field] of OPPORTUNITY_FILTER_DEFS){
+      const cur=Array.isArray(filters[field])?filters[field]:[]; if(!cur.length) continue;
+      if(field==='closureDate'){
+        const allowed=availableClosureTokens(applyFilters(records,'opportunities','closureDate'));
+        const next=cur.filter(v=>allowed.has(v)); if(next.length!==cur.length){if(next.length)filters[field]=next;else delete filters[field];changed=true;}
+      }else{
+        const options=new Set(applyFilters(records,'opportunities',field).map(r=>safe(r[field])));
+        const next=cur.filter(v=>options.has(String(v))); if(next.length!==cur.length){if(next.length)filters[field]=next;else delete filters[field];changed=true;}
+      }
+    }
+  }
+}
+function sanitizeFilters(){
+  if(isOpportunityTab()) return sanitizeOpportunityFilters();
+  const tab=state.tab,defs=FILTER_DEFS[tab],records=recordsForTab(tab),filters=state.filters[tab];
+  let changed=true,guard=0;
+  while(changed&&guard++<8){changed=false;for(const [field] of defs){const current=filters[field];if(!current)continue;const options=new Set(applyFilters(records,tab,field).map(r=>safe(r[field])));if(!options.has(String(current))){delete filters[field];changed=true;}}}
+}
+function selectedLabel(field,selected){
+  if(!selected||!selected.length) return 'All';
+  if(field==='closureDate'){
+    const pretty=selected.map(t=>{const p=t.split('|');if(p[0]==='Y')return p[1];if(p[0]==='Q')return `${p[1]} Q${p[2]}`;return `${p[1]} Q${p[2]} ${p.slice(3).join('|')}`;});
+    return pretty.length<=2?pretty.join(', '):`${pretty.length} selected`;
+  }
+  return selected.length<=2?selected.join(', '):`${selected.length} selected`;
+}
+function renderStandardMultiOptions(field,options,selected,search=''){
+  const q=search.trim().toLowerCase(),visible=options.filter(v=>!q||String(v).toLowerCase().includes(q));
+  if(!visible.length) return `<div class="filter-no-results">No matching options</div>`;
+  return visible.map(v=>`<label class="multi-option"><input type="checkbox" data-option-value="${escapeHtml(v)}" ${selected.includes(String(v))?'checked':''}><span>${escapeHtml(v)}</span></label>`).join('');
+}
+function dateNodeMatches(y,q,m,search){
+  if(!search) return true; const s=search.toLowerCase(); return String(y).includes(s)||`q${q}`.includes(s)||`quarter ${q}`.includes(s)||(m&&String(m).toLowerCase().includes(s));
+}
+function renderClosureOptions(records,selected,search=''){
+  const selectedSet=new Set(selected),tree=closureStructure(records),q=search.trim().toLowerCase(); let html='';
+  tree.forEach(y=>{
+    const yearTok=`Y|${y.year}`,yearSelected=selectedSet.has(yearTok),yearMatch=!q||String(y.year).includes(q)||y.quarters.some(qq=>dateNodeMatches(y.year,qq.q,null,q)||qq.months.some(m=>dateNodeMatches(y.year,qq.q,m,q)));
+    if(!yearMatch)return;
+    const yKey=`Y:${y.year}`,yOpen=q||state.ui.expandedDates[yKey];
+    html+=`<div class="date-node year-node"><div class="date-node-row"><button class="date-expand" data-date-expand="${yKey}">${yOpen?'▾':'▸'}</button><label><input type="checkbox" data-date-token="${yearTok}" ${yearSelected?'checked':''}><strong>${y.year}</strong></label></div>`;
+    if(yOpen){html+='<div class="date-children">';y.quarters.forEach(qq=>{
+      const qTok=`Q|${y.year}|${qq.q}`,qSelected=selectedSet.has(qTok),qMatch=!q||dateNodeMatches(y.year,qq.q,null,q)||qq.months.some(m=>dateNodeMatches(y.year,qq.q,m,q));if(!qMatch)return;
+      const qKey=`Q:${y.year}:${qq.q}`,qOpen=q||state.ui.expandedDates[qKey],ancestor=yearSelected;
+      html+=`<div class="date-node quarter-node"><div class="date-node-row"><button class="date-expand" data-date-expand="${qKey}">${qOpen?'▾':'▸'}</button><label><input type="checkbox" data-date-token="${qTok}" ${qSelected||ancestor?'checked':''} ${ancestor?'disabled':''}><span>Q${qq.q}</span></label></div>`;
+      if(qOpen){html+='<div class="date-children month-children">';qq.months.forEach(m=>{if(q&&!dateNodeMatches(y.year,qq.q,m,q))return;const mTok=`M|${y.year}|${qq.q}|${m}`,disabled=ancestor||qSelected;html+=`<label class="date-month"><input type="checkbox" data-date-token="${escapeHtml(mTok)}" ${selectedSet.has(mTok)||disabled?'checked':''} ${disabled?'disabled':''}><span>${escapeHtml(m)}</span></label>`;});html+='</div>';} html+='</div>';
+    });html+='</div>';} html+='</div>';
+  });
+  return html||`<div class="filter-no-results">No matching dates</div>`;
+}
+function optionValuesForField(field){
+  const records=applyFilters(state.data.opportunities||[],'opportunities',field);
+  if(field==='closureDate') return {records,options:[]};
+  return {records,options:sortOptions(field,uniq(records.map(r=>safe(r[field]))).filter(Boolean))};
+}
+function renderOpportunityFilters(){
+  sanitizeOpportunityFilters();
+  const filters=state.filters.opportunities,defs=OPPORTUNITY_FILTER_DEFS;
+  $('filters').className='filter-grid opp-filter-grid';
+  $('filters').innerHTML=defs.map(([field,label])=>{
+    const selected=Array.isArray(filters[field])?filters[field]:[],search=state.ui.filterSearch[field]||'',open=state.ui.openFilter===field,{records,options}=optionValuesForField(field);
+    const optionHtml=field==='closureDate'?renderClosureOptions(records,selected,search):renderStandardMultiOptions(field,options,selected,search);
+    return `<div class="filter-control multi-filter ${open?'open':''}" data-filter-control="${field}"><label>${label}</label><button type="button" class="multi-trigger" data-filter-trigger="${field}" aria-expanded="${open?'true':'false'}"><span>${escapeHtml(selectedLabel(field,selected))}</span><i>⌄</i></button><div class="multi-popover"><div class="filter-search-wrap"><input type="text" data-filter-search="${field}" value="${escapeHtml(search)}" placeholder="Search ${escapeHtml(label)}…" autocomplete="off"></div><div class="filter-actions"><button type="button" data-filter-action="select-visible" data-field="${field}">Select shown</button><button type="button" data-filter-action="clear" data-field="${field}">Clear</button></div><div class="multi-options ${field==='closureDate'?'date-tree':''}">${optionHtml}</div></div></div>`;
+  }).join('');
+  bindOpportunityFilterControls();
+}
+function bindOpportunityFilterControls(){
+  const root=$('filters');
+  root.querySelectorAll('[data-filter-trigger]').forEach(btn=>btn.addEventListener('click',e=>{e.stopPropagation();const field=btn.dataset.filterTrigger;const opening=state.ui.openFilter!==field;state.ui.openFilter=opening?field:null;if(opening)state.ui.filterSearch[field]='';renderFilters();if(state.ui.openFilter){const input=root.querySelector(`[data-filter-search="${field}"]`);if(input)setTimeout(()=>{input.value='';input.focus();},0);}}));
+  root.querySelectorAll('[data-filter-search]').forEach(input=>input.addEventListener('input',e=>{const field=input.dataset.filterSearch;state.ui.filterSearch[field]=e.target.value;const control=input.closest('.filter-control'),{records,options}=optionValuesForField(field),selected=state.filters.opportunities[field]||[];control.querySelector('.multi-options').innerHTML=field==='closureDate'?renderClosureOptions(records,selected,e.target.value):renderStandardMultiOptions(field,options,selected,e.target.value);bindOpportunityFilterOptionEvents(control,field);}));
+  root.querySelectorAll('[data-filter-action]').forEach(btn=>btn.addEventListener('click',e=>{e.stopPropagation();const field=btn.dataset.field,action=btn.dataset.filterAction;if(action==='clear'){delete state.filters.opportunities[field];renderAll();return;} const {records,options}=optionValuesForField(field),search=state.ui.filterSearch[field]||''; if(field==='closureDate'){const toks=[...availableClosureTokens(records)].filter(t=>{if(!search)return t.startsWith('Y|');const p=t.split('|'),txt=p[0]==='Y'?p[1]:p[0]==='Q'?`${p[1]} Q${p[2]}`:`${p[1]} Q${p[2]} ${p.slice(3).join('|')}`;return txt.toLowerCase().includes(search.toLowerCase());});state.filters.opportunities[field]=toks;}else{const q=search.toLowerCase(),shown=options.filter(v=>!q||String(v).toLowerCase().includes(q));state.filters.opportunities[field]=uniq([...(state.filters.opportunities[field]||[]),...shown]);}renderAll();}));
+  root.querySelectorAll('.filter-control').forEach(c=>bindOpportunityFilterOptionEvents(c,c.dataset.filterControl));
+}
+function setClosureToken(token,checked){
+  const cur=new Set(state.filters.opportunities.closureDate||[]),p=token.split('|');
+  if(checked){
+    if(p[0]==='Y'){for(const t of [...cur])if(t.startsWith(`Q|${p[1]}|`)||t.startsWith(`M|${p[1]}|`))cur.delete(t);}
+    if(p[0]==='Q'){for(const t of [...cur])if(t.startsWith(`M|${p[1]}|${p[2]}|`))cur.delete(t);}
+    cur.add(token);
+  }else cur.delete(token);
+  if(cur.size)state.filters.opportunities.closureDate=[...cur];else delete state.filters.opportunities.closureDate;
+}
+function bindOpportunityFilterOptionEvents(control,field){
+  control.querySelectorAll('[data-option-value]').forEach(cb=>cb.addEventListener('change',e=>{e.stopPropagation();const cur=new Set(state.filters.opportunities[field]||[]);if(cb.checked)cur.add(cb.dataset.optionValue);else cur.delete(cb.dataset.optionValue);if(cur.size)state.filters.opportunities[field]=[...cur];else delete state.filters.opportunities[field];renderAll();}));
+  control.querySelectorAll('[data-date-token]').forEach(cb=>cb.addEventListener('change',e=>{e.stopPropagation();setClosureToken(cb.dataset.dateToken,cb.checked);renderAll();}));
+  control.querySelectorAll('[data-date-expand]').forEach(btn=>btn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();const k=btn.dataset.dateExpand;state.ui.expandedDates[k]=!state.ui.expandedDates[k];renderFilters();}));
+}
+function renderFilters(){
+  sanitizeFilters();
+  const tab=state.tab,records=recordsForTab(tab);
+  $('filterContext').textContent=`${TAB_LABELS[tab]} filters`;
+  if(isOpportunityTab(tab)) renderOpportunityFilters(); else {
+    const defs=FILTER_DEFS[tab],filters=state.filters[tab]; $('filters').className='filter-grid';
+    $('filters').innerHTML=defs.map(([field,label])=>{const filtered=applyFilters(records,tab,field),options=sortOptions(field,uniq(filtered.map(r=>safe(r[field]))).filter(Boolean)),selected=filters[field]||'',opts=options.map(v=>`<option value="${escapeHtml(v)}" ${String(v)===String(selected)?'selected':''}>${escapeHtml(v)}</option>`).join('');return `<div class="filter-control"><label>${label}</label><select data-field="${field}"><option value="">All</option>${opts}</select></div>`;}).join('');
+    $('filters').querySelectorAll('select').forEach(sel=>sel.addEventListener('change',e=>{const field=e.target.dataset.field,value=e.target.value;if(value)state.filters[tab][field]=value;else delete state.filters[tab][field];renderAll();}));
+  }
+  const visible=applyFilters(records,tab);
+  $('filterSummary').textContent=`${fmtNum(visible.length)} of ${fmtNum(records.length)} records in current scope`;
+  $('filterNote').textContent=isOpportunityTab(tab)?'Blank Roadmap drafts excluded · Blank/252 Channel = Sales · Awarded is read directly from the full 2026 Order Book':'purchaseOrders'===tab?'Accounting Date joined from Purchase Orders Dates using vue_PO[Purchase Order]':'Order Book values are authoritative OB / GM / CM';
+}
+function group(records,key,valueFn=()=>1){
+  const m=new Map();
+  records.forEach(r=>{const k=safe(r[key]); m.set(k,(m.get(k)||0)+(Number(valueFn(r))||0));});
+  return [...m.entries()].map(([label,value])=>({label,value}));
+}
+function groupByFn(records,keyFn,valueFn=()=>1){
+  const m=new Map(); records.forEach(r=>{const k=safe(keyFn(r));m.set(k,(m.get(k)||0)+(Number(valueFn(r))||0));}); return [...m].map(([label,value])=>({label,value}));
+}
+function takeTop(items,n=10){return [...items].sort((a,b)=>b.value-a.value).slice(0,n);}
+function uniqueCount(records,key){return new Set(records.map(r=>safe(r[key])).filter(v=>v&&v!=='Unassigned')).size;}
+
+function setChartFilter(field,value){
+  if(!defsForTab(state.tab).some(([f])=>f===field)) return;
+  if(isOpportunityTab()) state.filters.opportunities[field]=[String(value)];
+  else state.filters[state.tab][field]=String(value);
+  
+  window.scrollTo({top:150,behavior:'smooth'});
+  renderAll();
+}
+
+function tooltipHtml(title, rows=[], note=''){
+  return `<div class="tt-title">${escapeHtml(title)}</div>${rows.map(r=>`<div class="tt-row"><span class="tt-label">${r.color?`<i class="tt-swatch" style="background:${r.color}"></i>`:''}${escapeHtml(r.label)}</span><span class="tt-value">${escapeHtml(String(r.value))}</span></div>`).join('')}${note?`<div class="tt-note">${escapeHtml(note)}</div>`:''}`;
+}
+function showTooltip(evt, html){
+  const t=$('tooltip'); if(!t) return; t.innerHTML=html; t.style.display='block';
+  const pad=14, tw=t.offsetWidth||260, th=t.offsetHeight||100;
+  let left=evt.clientX+16, top=evt.clientY+16;
+  if(left+tw+pad>window.innerWidth) left=evt.clientX-tw-16;
+  if(top+th+pad>window.innerHeight) top=evt.clientY-th-16;
+  t.style.left=`${Math.max(pad,left)}px`; t.style.top=`${Math.max(pad,top)}px`;
+}
+function hideTooltip(){const t=$('tooltip');if(t)t.style.display='none';}
+function bindHover(el, htmlFn){if(!el)return;el.addEventListener('mousemove',e=>showTooltip(e,htmlFn(e)));el.addEventListener('mouseleave',hideTooltip);}
+function gaugeArcPath(cx,cy,r,startDeg,endDeg){const p=a=>{const rad=(a-90)*Math.PI/180;return [cx+r*Math.cos(rad),cy+r*Math.sin(rad)]};const [x1,y1]=p(startDeg),[x2,y2]=p(endDeg);return `M ${x1} ${y1} A ${r} ${r} 0 0 1 ${x2} ${y2}`;}
+function renderGauge(id,value,opts={}){
+  const el=$(id); if(!el)return;
+  const max=Number(opts.max??1)||1,min=Number(opts.min??0)||0,raw=Number(value)||0,ratio=Math.max(0,Math.min(1,(raw-min)/(max-min||1)));
+  const start=-90,end=90,activeEnd=start+ratio*(end-start),cx=180,cy=170,r=122;
+  const bg=gaugeArcPath(cx,cy,r,start,end),fg=gaugeArcPath(cx,cy,r,start,activeEnd),formatter=opts.formatter||fmtPct,display=formatter(raw);
+  el.innerHTML=`<div class="gauge-wrap"><svg class="gauge-svg" viewBox="0 0 360 205"><path d="${bg}" fill="none" stroke="#eee7f4" stroke-width="26" stroke-linecap="round"/><path d="${fg}" fill="none" stroke="${opts.color||COLORS.purple2}" stroke-width="26" stroke-linecap="round"/><path class="gauge-hover-arc" d="${bg}" fill="none" stroke="transparent" stroke-width="42" pointer-events="stroke"/></svg><div class="gauge-value">${escapeHtml(display)}</div><div class="gauge-label">${escapeHtml(opts.label||'')}</div><div class="gauge-scale"><span>${escapeHtml(opts.minLabel??formatter(min))}</span><span>${escapeHtml(opts.midLabel??formatter((min+max)/2))}</span><span>${escapeHtml(opts.maxLabel??formatter(max))}</span></div><div class="gauge-note">${escapeHtml(opts.note||'')}</div></div>`;
+  bindHover(el.querySelector('.gauge-hover-arc'),()=>tooltipHtml(opts.title||opts.label||'Gauge',[{label:opts.valueLabel||'Current value',value:display},{label:'Scale',value:`${opts.minLabel??formatter(min)} → ${opts.maxLabel??formatter(max)}`},...(opts.extraRows||[])],opts.note||''));
+}
+
+function renderKpis(id, items){
+  $(id).innerHTML=items.map((x,i)=>`<div class="kpi ${x.accent?'accent':''} ${x.secondary?'secondary':''}">${x.icon?`<div class="kpi-icon">${kpiIconSvg(x.icon)}</div>`:''}<div class="kpi-label">${x.label}</div><div class="kpi-value">${x.value}</div><div class="kpi-sub">${x.sub||' '}</div></div>`).join('');
+}
+function empty(id,title='No matching data',body='Try changing the current filters.'){
+  $(id).innerHTML=`<div class="empty-state"><strong>${title}</strong><span>${body}</span></div>`;
+}
+function renderHBar(id, items, opts={}){
+  const el=$(id); if(!items.length){empty(id);return;}
+  const n=opts.limit||10, sorted=[...items].sort((a,b)=>b.value-a.value), rows=sorted.slice(0,n), max=Math.max(...rows.map(x=>Math.abs(x.value)),1), totalAbs=items.reduce((a,x)=>a+Math.abs(Number(x.value)||0),0);
+  el.innerHTML=`<div class="hbar-list">${rows.map((x,idx)=>{const w=Math.max(0.7,Math.min(100,Math.abs(x.value)/max*100)),f=opts.formatter||fmtSAR;return `<div class="hbar-row ${opts.field?'is-clickable':''}" data-chart-label="${escapeHtml(x.label)}" data-chart-value="${x.value}" data-chart-rank="${idx+1}" ${opts.field?`data-filter-field="${opts.field}" data-filter-value="${escapeHtml(x.label)}"`:''}><div class="hbar-label" title="${escapeHtml(x.label)}">${escapeHtml(shortText(x.label,34))}</div><div class="hbar-track"><div class="hbar-fill ${opts.alt?'alt':''}" style="width:${w}%"></div></div><div class="hbar-value">${f(x.value)}</div></div>`}).join('')}</div>`;
+  el.querySelectorAll('.hbar-row').forEach(r=>{const hit=r.querySelector('.hbar-fill');bindHover(hit,()=>{const v=Number(r.dataset.chartValue)||0,share=totalAbs?Math.abs(v)/totalAbs:0,f=opts.formatter||fmtSAR;return tooltipHtml(r.dataset.chartLabel,[{label:opts.tooltipValueLabel||'Value',value:f(v)},{label:'Share of displayed total',value:fmtPct(share)},{label:'Rank',value:`#${r.dataset.chartRank}`}],opts.field?'Click to filter this category.':'')})});
+  if(opts.field) el.querySelectorAll('[data-filter-field]').forEach(r=>r.addEventListener('click',()=>setChartFilter(r.dataset.filterField,r.dataset.filterValue)));
+}
+function renderStacked(id, records, groupKey, metricFn, opts={}){
+  const el=$(id); if(!records.length){empty(id);return;}
+  const groups=[...new Set(records.map(r=>safe(r[groupKey])))];
+  const data=groups.map(g=>{const rows=records.filter(r=>safe(r[groupKey])===g),vals={};ROADMAP.forEach(rd=>vals[rd]=sum(rows.filter(r=>r.roadmap===rd),metricFn));return {g,vals,total:Object.values(vals).reduce((a,b)=>a+b,0)}}).sort((a,b)=>b.total-a.total).slice(0,opts.limit||12);
+  const legend=`<div class="legend">${ROADMAP.map(rd=>`<span class="legend-item"><i class="legend-dot" style="background:${ROADMAP_COLORS[rd]}"></i>${rd}</span>`).join('')}</div>`;
+  el.innerHTML=legend+`<div class="stack-list">${data.map(d=>{const total=d.total||1,segs=ROADMAP.map(rd=>{const v=d.vals[rd]||0,w=v/total*100;return `<span class="stack-seg" data-group="${escapeHtml(d.g)}" data-roadmap="${rd}" data-value="${v}" data-total="${d.total}" style="width:${w}%;background:${ROADMAP_COLORS[rd]}"></span>`}).join('');return `<div class="stack-row"><div class="stack-label" title="${escapeHtml(d.g)}">${escapeHtml(shortText(d.g,22))}</div><div class="stack-track">${segs}</div><div class="stack-total">${opts.formatter?opts.formatter(d.total):fmtNum(d.total)}</div></div>`}).join('')}</div>`;
+  el.querySelectorAll('.stack-seg').forEach(seg=>{bindHover(seg,()=>{const v=Number(seg.dataset.value)||0,total=Number(seg.dataset.total)||0,f=opts.formatter||fmtNum;return tooltipHtml(`${seg.dataset.group} · ${seg.dataset.roadmap}`,[{label:opts.formatter?'Value':'Jobs',value:f(v)},{label:'Share within group',value:fmtPct(total?v/total:0)},{label:'Group total',value:f(total)}],'Click to filter this group and Roadmap status.')});seg.addEventListener('click',()=>{if(defsForTab(state.tab).some(([f])=>f===groupKey)){if(isOpportunityTab())state.filters.opportunities[groupKey]=[seg.dataset.group];else state.filters[state.tab][groupKey]=seg.dataset.group;}if(defsForTab(state.tab).some(([f])=>f==='roadmap')){if(isOpportunityTab())state.filters.opportunities.roadmap=[seg.dataset.roadmap];else state.filters[state.tab].roadmap=seg.dataset.roadmap;}renderAll()})});
+}
+function renderLine(id, series, labels, opts={}){
+  if(!labels.length){empty(id);return;}
+  const all=series.flatMap(s=>s.values).filter(Number.isFinite),max=Math.max(...all,1),min=opts.startAtZero===false?Math.min(...all,0):0,W=1000,H=320,pL=86,pR=28,pT=24,pB=56,innerW=W-pL-pR,innerH=H-pT-pB;
+  const x=i=>pL+(labels.length===1?innerW/2:i*innerW/(labels.length-1)),y=v=>pT+innerH-(v-min)/(max-min||1)*innerH;
+  let grid='';for(let i=0;i<=4;i++){const val=min+(max-min)*i/4,yy=y(val);grid+=`<line x1="${pL}" y1="${yy}" x2="${W-pR}" y2="${yy}" stroke="#eee8f3" stroke-width="1"/><text x="${pL-12}" y="${yy+5}" text-anchor="end" class="axis-label">${opts.yFormatter?opts.yFormatter(val):fmtSAR(val)}</text>`}
+  const step=Math.max(1,Math.ceil(labels.length/9)),xlabels=labels.map((l,i)=>(i%step===0||i===labels.length-1)?`<text x="${x(i)}" y="${H-16}" text-anchor="middle" class="axis-label">${escapeHtml(l)}</text>`:'').join(''),colors=[COLORS.purple2,COLORS.pink,COLORS.teal,COLORS.gold];
+  let paths='';series.forEach((ser,si)=>{const c=ser.color||colors[si%colors.length],pts=ser.values.map((v,i)=>`${x(i)},${y(v)}`).join(' ');if(si===0&&ser.values.length>1){const area=`${x(0)},${y(0)} ${pts} ${x(ser.values.length-1)},${pT+innerH} ${x(0)},${pT+innerH}`;paths+=`<polygon points="${area}" fill="${c}" opacity="0.10"/>`}paths+=`<polyline fill="none" stroke="${c}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" points="${pts}"/>`;ser.values.forEach((v,i)=>paths+=`<circle cx="${x(i)}" cy="${y(v)}" r="4.5" fill="${c}" opacity=".9"/>`)});
+  const hoverDots=series.map((ser,si)=>`<circle class="line-hover-dot" data-si="${si}" cx="0" cy="0" r="7" fill="${ser.color||colors[si%colors.length]}" style="display:none"/>`).join(''),legend=`<div class="line-legend">${series.map((ser,i)=>`<span class="${i?'secondary':''}"><i style="background:${ser.color||colors[i%colors.length]}"></i>${ser.name}</span>`).join('')}</div>`;
+  $(id).innerHTML=`<div class="line-wrap">${legend}<svg class="line-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">${grid}${paths}${xlabels}<line class="line-hover-guide" x1="0" x2="0" y1="${pT}" y2="${pT+innerH}" style="display:none"/>${hoverDots}<rect class="line-hit" x="${pL}" y="${pT}" width="${innerW}" height="${innerH}" fill="transparent" style="pointer-events:all"/></svg></div>`;
+  const root=$(id),svg=root.querySelector('svg'),guide=svg.querySelector('.line-hover-guide'),dots=[...svg.querySelectorAll('.line-hover-dot')],hit=svg.querySelector('.line-hit');
+  hit.addEventListener('mousemove',e=>{const rect=svg.getBoundingClientRect(),vx=(e.clientX-rect.left)/rect.width*W,idx=labels.length===1?0:Math.max(0,Math.min(labels.length-1,Math.round((vx-pL)/innerW*(labels.length-1)))),xx=x(idx);guide.setAttribute('x1',xx);guide.setAttribute('x2',xx);guide.style.display='';dots.forEach((d,si)=>{const v=series[si].values[idx];d.setAttribute('cx',xx);d.setAttribute('cy',y(v));d.style.display=''});const f=opts.yFormatter||fmtSAR,rows=series.map((ser,si)=>{const v=ser.values[idx],prev=idx>0?ser.values[idx-1]:null;let change='';if(prev!==null&&Number.isFinite(prev)&&Math.abs(prev)>1e-9){const pct=(v-prev)/Math.abs(prev);change=` (${pct>=0?'+':''}${fmtPct(pct)})`}return {label:ser.name,value:`${f(v)}${change}`,color:ser.color||colors[si%colors.length]}});showTooltip(e,tooltipHtml(labels[idx],rows,idx>0?'Change in parentheses is versus the previous period.':'First available period.'))});
+  hit.addEventListener('mouseleave',()=>{guide.style.display='none';dots.forEach(d=>d.style.display='none');hideTooltip()});
+}
+
+function renderDonut(id,a,b,labelA,labelB){
+  const total=a+b,pctA=total?a/total:0,deg=pctA*360;if(!total){empty(id);return;}const el=$(id);
+  el.innerHTML=`<div class="donut-wrap"><div class="donut" style="background:conic-gradient(${COLORS.purple2} 0 ${deg}deg,${COLORS.teal} ${deg}deg 360deg)"><div class="donut-center"><strong>${fmtPct(pctA)}</strong><span>${escapeHtml(labelA)}</span></div></div><div class="donut-legend"><div class="donut-legend-row"><i style="background:${COLORS.purple2}"></i><div>${escapeHtml(labelA)}<br><strong>${fmtSAR(a)}</strong></div></div><div class="donut-legend-row"><i style="background:${COLORS.teal}"></i><div>${escapeHtml(labelB)}<br><strong>${fmtSAR(b)}</strong></div></div></div></div>`;
+  bindHover(el.querySelector('.donut'),()=>tooltipHtml('Composition',[{label:labelA,value:`${fmtSAR(a)} · ${fmtPct(pctA)}`,color:COLORS.purple2},{label:labelB,value:`${fmtSAR(b)} · ${fmtPct(total?b/total:0)}`,color:COLORS.teal},{label:'Total',value:fmtSAR(total)}]));
+}
+function renderPie(id,items,opts={}){
+  const el=$(id); if(!el) return;
+  let rows=(items||[]).map(x=>({label:safe(x.label),value:Number(x.value)||0})).filter(x=>x.value>0).sort((a,b)=>b.value-a.value);
+  if(!rows.length){empty(id);return;}
+  const maxSlices=Math.max(3,Number(opts.maxSlices)||7);
+  if(rows.length>maxSlices){const keep=rows.slice(0,maxSlices-1),other=rows.slice(maxSlices-1).reduce((a,x)=>a+x.value,0);rows=[...keep,{label:'Other',value:other}];}
+  const total=rows.reduce((a,x)=>a+x.value,0),palette=[COLORS.purple,COLORS.pink,COLORS.purple3,COLORS.teal,COLORS.gold,'#a96bd1','#cf7b9b','#7b6b91'];
+  const formatter=opts.formatter||fmtSAR;
+  const W=460,H=330,cx=230,cy=166,r=108,outerR=119;
+  const polar=(rad,ang)=>{const a=(ang-90)*Math.PI/180;return [cx+rad*Math.cos(a),cy+rad*Math.sin(a)]};
+  const meta=[]; let angle=0;
+  const paths=rows.map((x,i)=>{
+    const sweep=x.value/total*360,start=angle,end=angle+sweep,mid=start+sweep/2;angle=end;const color=palette[i%palette.length];
+    meta.push({x,i,color,start,end,mid,sweep,side:Math.cos((mid-90)*Math.PI/180)>=0?'right':'left'});
+    if(sweep>=359.999) return `<circle class="pie-slice" data-pie-index="${i}" data-label="${escapeHtml(x.label)}" data-value="${x.value}" cx="${cx}" cy="${cy}" r="${r}" fill="${color}"/>`;
+    const [x1,y1]=polar(r,start),[x2,y2]=polar(r,end),large=sweep>180?1:0;
+    return `<path class="pie-slice" data-pie-index="${i}" data-label="${escapeHtml(x.label)}" data-value="${x.value}" d="M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 ${large} 1 ${x2} ${y2} Z" fill="${color}"/>`;
+  }).join('');
+
+  // Arrange callouts independently on each side to avoid label collisions.
+  const placeSide=(side)=>{
+    const list=meta.filter(m=>m.side===side).map(m=>{const [,y]=polar(outerR,m.mid);return {...m,naturalY:y};}).sort((a,b)=>a.naturalY-b.naturalY);
+    const top=35,bottom=296,minGap=list.length>5?42:48;
+    list.forEach((m,j)=>{m.labelY=Math.max(m.naturalY,j?list[j-1].labelY+minGap:top);});
+    if(list.length && list[list.length-1].labelY>bottom){
+      const shift=list[list.length-1].labelY-bottom; list.forEach(m=>m.labelY-=shift);
+      for(let j=list.length-2;j>=0;j--) if(list[j+1].labelY-list[j].labelY<minGap) list[j].labelY=list[j+1].labelY-minGap;
+      if(list[0].labelY<top){const push=top-list[0].labelY;list.forEach(m=>m.labelY+=push);}
+    }
+    return list;
+  };
+  const placed=[...placeSide('left'),...placeSide('right')];
+  const labels=placed.map(m=>{
+    const [sx,sy]=polar(r+2,m.mid),[mx,my]=polar(outerR,m.mid),right=m.side==='right';
+    const endX=right?350:110,textX=right?356:104,anchor=right?'start':'end';
+    const name=shortText(m.x.label,22),share=fmtPct(total?m.x.value/total:0),val=formatter(m.x.value);
+    const line=`<polyline class="pie-callout-line" points="${sx.toFixed(1)},${sy.toFixed(1)} ${mx.toFixed(1)},${my.toFixed(1)} ${endX},${m.labelY.toFixed(1)}"/>`;
+    const dot=`<circle class="pie-callout-dot" cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="2.3" fill="${m.color}"/>`;
+    const text=`<text x="${textX}" y="${(m.labelY-3).toFixed(1)}" text-anchor="${anchor}" class="pie-callout-label">${escapeHtml(name)}</text><text x="${textX}" y="${(m.labelY+12).toFixed(1)}" text-anchor="${anchor}" class="pie-callout-value">${escapeHtml(val)} · ${escapeHtml(share)}</text>`;
+    const hitX=right?350:4,hitW=right?106:106;
+    return `${line}${dot}${text}<rect class="pie-callout-hit" data-pie-index="${m.i}" x="${hitX}" y="${(m.labelY-18).toFixed(1)}" width="${hitW}" height="38"/>`;
+  }).join('');
+
+  el.innerHTML=`<div class="pie-chart-wrap ${opts.compact?'compact':''}"><div class="pie-visual"><svg viewBox="0 0 ${W} ${H}" class="pie-svg" aria-label="${escapeHtml(opts.title||'Pie chart')}">${paths}${labels}</svg></div></div>`;
+  const tooltipFor=index=>{const x=rows[Number(index)]||rows[0],v=Number(x.value)||0;return tooltipHtml(x.label,[{label:opts.valueLabel||'Value',value:formatter(v)},{label:'Share',value:fmtPct(total?v/total:0)}],opts.note||'')};
+  el.querySelectorAll('[data-pie-index]').forEach(node=>{
+    bindHover(node,()=>tooltipFor(node.dataset.pieIndex));
+    if(opts.field) node.addEventListener('click',()=>{const x=rows[Number(node.dataset.pieIndex)];if(x&&x.label!=='Other')setChartFilter(opts.field,x.label);});
+  });
+}
+
+function currentOpps(){return applyFilters(state.data.opportunities,'opportunities');}
+function currentOB(){return applyFilters(state.data.orderbook||[],'orderbook');}
+function currentPO(){return applyFilters(state.data.purchaseOrders||[],'purchaseOrders');}
+function activeOpps(arr){return arr.filter(o=>o.roadmap!=='Won');}
+function awardedValue(o,key='obSAR'){return o.roadmap==='Won' && o.award && o.award.matched ? Number(o.award[key])||0 : 0;}
+function opportunitySharedScopeRows(){
+  const filters=state.filters.opportunities||{};
+  return (state.data.opportunities||[]).filter(r=>recordMatchesOpportunityFilters(r,filters,null,true));
+}
+function directAwardedRows(extra={}){
+  const filters=state.filters.opportunities||{},rows=state.data.orderbook||[];
+  return rows.filter(r=>{
+    if(Number(r.awardingYear)!==2026) return false;
+    for(const [oppField,obField] of Object.entries(OPPORTUNITY_SHARED_AWARD_FIELDS)){
+      const selected=Array.isArray(filters[oppField])?filters[oppField]:[]; if(!selected.length) continue;
+      const raw=safe(r[obField]),value=oppField==='market'?normalizeMarket(raw):raw;
+      const wanted=oppField==='market'?selected.map(normalizeMarket):selected;
+      if(!wanted.includes(value)) return false;
+    }
+    if(extra.market && normalizeMarket(r.market)!==normalizeMarket(extra.market)) return false;
+    return true;
+  });
+}
+function closureFilterIncludesYear(year){
+  const sel=state.filters.opportunities.closureDate||[]; if(!sel.length)return true;
+  return sel.some(t=>Number(String(t).split('|')[1])===Number(year));
+}
+
+function kpiIconSvg(type){
+  const paths={
+    pipeline:'<path d="M4 18V9m6 9V5m6 13v-7m4 7H2"/>',
+    weighted:'<path d="M4 17l5-5 4 3 7-9M15 6h5v5"/>',
+    margin:'<circle cx="12" cy="12" r="8"/><path d="M9 9.5c0-1.2 1.2-2 3-2s3 .8 3 2-1.2 2-3 2-3 .8-3 2 1.2 2 3 2 3-.8 3-2M12 5v14"/>',
+    active:'<rect x="4" y="6" width="16" height="13" rx="2"/><path d="M9 6V4h6v2M4 11h16"/>',
+    awarded:'<path d="M8 4h8v5a4 4 0 01-8 0V4zM6 6H4v2a4 4 0 004 4M18 6h2v2a4 4 0 01-4 4M12 13v4M8 20h8M9 17h6"/>',
+    committed:'<path d="M7 12l3 3 7-8"/><circle cx="12" cy="12" r="9"/>',
+    upside:'<path d="M4 17l6-6 4 4 6-8M15 7h5v5"/>',
+    prospect:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>',
+    early:'<path d="M12 20v-8M12 14c-4 0-7-2.4-7-6 4 0 7 2.4 7 6zM12 11c4 0 7-2.4 7-6-4 0-7 2.4-7 6z"/>'
+  };
+  return `<svg class="kpi-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[type]||paths.pipeline}</svg>`;
+}
+
+function renderOpportunities(){
+  const rows=currentOpps(),active=activeOpps(rows);
+  const pipeline=sum(active,o=>o.valueSAR),weighted=sum(active,o=>o.weightedValueSAR),margin=sum(active,o=>o.marginSAR),weightedMargin=sum(active,o=>o.weightedMarginSAR);
+  const awardedRows=directAwardedRows(),awardOB=sum(awardedRows,r=>r.obSAR);
+  const roadmapValue=rm=>sum(rows.filter(o=>o.roadmap===rm),o=>o.valueSAR);
+  renderKpis('oppKpisTop',[
+    {label:'Active Pipeline',value:`${fmtSAR(pipeline)} SAR`,sub:'Won excluded from pipeline',icon:'pipeline'},
+    {label:'Weighted Pipeline',value:`${fmtSAR(weighted)} SAR`,sub:'Probability-adjusted pipeline',icon:'weighted'},
+    {label:'Margin',value:`${fmtSAR(margin)} SAR`,sub:pipeline?`${fmtPct(margin/pipeline)} of active pipeline`:'',icon:'margin'},
+    {label:'Weighted Margin',value:`${fmtSAR(weightedMargin)} SAR`,sub:weighted?`${fmtPct(weightedMargin/weighted)} of weighted pipeline`:'',icon:'weighted'},
+    {label:'Active Opportunities',value:fmtNum(active.length),sub:`${fmtNum(rows.length)} valid opportunities in scope`,icon:'active'}
+  ]);
+  renderKpis('oppKpisBottom',[
+    {label:'Awarded',value:`${fmtSAR(awardOB)} SAR`,sub:`Direct 2026 Order Book · ${fmtNum(awardedRows.length)} OB rows`,icon:'awarded',secondary:true},
+    {label:'Committed',value:`${fmtSAR(roadmapValue('Committed'))} SAR`,sub:`${fmtNum(rows.filter(o=>o.roadmap==='Committed').length)} opportunities`,icon:'committed',secondary:true},
+    {label:'Upside',value:`${fmtSAR(roadmapValue('Upside'))} SAR`,sub:`${fmtNum(rows.filter(o=>o.roadmap==='Upside').length)} opportunities`,icon:'upside',secondary:true},
+    {label:'Prospect',value:`${fmtSAR(roadmapValue('Prospect'))} SAR`,sub:`${fmtNum(rows.filter(o=>o.roadmap==='Prospect').length)} opportunities`,icon:'prospect',secondary:true},
+    {label:'Early Stage',value:`${fmtSAR(roadmapValue('Early Stage'))} SAR`,sub:`${fmtNum(rows.filter(o=>o.roadmap==='Early Stage').length)} opportunities`,icon:'early',secondary:true}
+  ]);
+  renderTargets();
+  const entityMetric=state.oppEntityMetric==='count' ? ()=>1 : o=>o.roadmap==='Won'?awardedValue(o,'obSAR'):o.valueSAR;
+  const marketMetric=state.oppMarketMetric==='count' ? ()=>1 : o=>o.roadmap==='Won'?awardedValue(o,'obSAR'):o.valueSAR;
+  renderStacked('entityRoadmap',rows,'legalEntity',entityMetric,{limit:12,formatter:state.oppEntityMetric==='count'?v=>fmtNum(v):fmtSAR});
+  renderStacked('marketRoadmap',rows,'market',marketMetric,{limit:8,formatter:state.oppMarketMetric==='count'?v=>fmtNum(v):fmtSAR});
+  const countryValue=state.oppCountryWeight==='W'?o=>o.weightedValueSAR:o=>o.valueSAR;
+  const sectorValue=state.oppSectorWeight==='W'?o=>o.weightedValueSAR:o=>o.valueSAR;
+  const customerValue=state.oppCustomerWeight==='W'?o=>o.weightedValueSAR:o=>o.valueSAR;
+  renderHBar('oppCountry',group(active,'country',countryValue),{field:'country',formatter:fmtSAR,limit:14,tooltipValueLabel:state.oppCountryWeight==='W'?'Weighted SAR':'Non-Weighted SAR'});
+  renderHBar('oppSector',group(active,'sector',sectorValue),{field:'sector',formatter:fmtSAR,limit:14,tooltipValueLabel:state.oppSectorWeight==='W'?'Weighted SAR':'Non-Weighted SAR'});
+  const customerItems=group(active,'customer',customerValue);
+  renderHBar('oppCustomers',customerItems,{field:'customer',formatter:fmtSAR,limit:Math.max(1,Math.min(state.oppCustomerTopN,customerItems.length||1)),tooltipValueLabel:state.oppCustomerWeight==='W'?'Weighted SAR':'Non-Weighted SAR'});
+  renderProbability(active);
+  const typePieValue=state.oppTypePieWeight==='W'?o=>o.weightedValueSAR:o=>o.valueSAR;
+  renderPie('oppTypePie',group(active,'opportunityType',typePieValue),{field:'opportunityType',formatter:fmtSAR,valueLabel:state.oppTypePieWeight==='W'?'Weighted SAR':'Non-Weighted SAR',title:'Opportunity Types',maxSlices:7});
+  const ownerItems=group(active,'owner',o=>o.valueSAR);
+  renderHBar('oppOwners',ownerItems,{field:'owner',formatter:fmtSAR,limit:Math.max(1,Math.min(state.oppOwnerTopN,ownerItems.length||1))});
+  if(state.oppTypeMetric==='count') renderHBar('oppTypes',group(rows,'opportunityType',()=>1),{formatter:v=>`${fmtNum(v)} jobs`,field:'opportunityType',limit:20});
+  else renderHBar('oppTypes',group(rows,'opportunityType',o=>o.roadmap==='Won'?awardedValue(o,'obSAR'):o.valueSAR),{formatter:fmtSAR,field:'opportunityType',limit:20});
+  renderHBar('oppEngagement',group(rows,'engagement',()=>1),{formatter:v=>`${fmtNum(v)} jobs`,field:'engagement',limit:8});
+  renderAttention(rows);
+}
+
+const TARGET_ROADMAPS=['Won','Committed','Upside','Prospect','Early Stage'];
+const TARGET_ABBR={'Won':'Won','Committed':'Comm','Upside':'Ups','Prospect':'Pros','Early Stage':'Early'};
+function targetMarketMatch(v,key){
+  const n=normalizeMarket(v);
+  return key==='Total'?['Egypt','KSA','GM'].includes(n):n===key;
+}
+function targetScopeTitle(cfg){
+  const selected=TARGET_ROADMAPS.filter(r=>cfg.roadmaps.includes(r));
+  return selected.length?selected.map(r=>TARGET_ABBR[r]).join(' + '):'No Roadmap';
+}
+function targetScenarioValue(key,metric,cfg){
+  let total=0;
+  if(cfg.roadmaps.includes('Won')){
+    const ob=(state.data.orderbook||[]).filter(r=>Number(r.awardingYear)===2026&&targetMarketMatch(r.market,key));
+    total+=sum(ob,r=>metric==='OB'?r.obSAR:r.gmSAR);
+  }
+  const nonWon=cfg.roadmaps.filter(r=>r!=='Won');
+  if(nonWon.length){
+    const opp=(state.data.opportunities||[]).filter(o=>Number(o.closeYear)===2026&&nonWon.includes(o.roadmap)&&targetMarketMatch(o.market,key));
+    if(metric==='OB') total+=sum(opp,o=>cfg.weight==='W'?o.weightedValueSAR:o.valueSAR);
+    else total+=sum(opp,o=>cfg.weight==='W'?o.weightedMarginSAR:o.marginSAR);
+  }
+  return total;
+}
+function targetOfficial(key,metric){
+  const t=state.data.targets[key]||{obTarget:0,gmTarget:0};
+  return metric==='OB'?Number(t.obTarget)||0:Number(t.gmTarget)||0;
+}
+function benchmarkGaugeHtml(key,metric,cfg,large=false){
+  const current=targetScenarioValue(key,metric,cfg),target=targetOfficial(key,metric),achievement=target?current/target:0,ratio=Math.max(0,Math.min(1,achievement));
+  const cx=210,cy=214,r=150,start=-90,end=90,activeEnd=start+ratio*180;
+  const point=(rad,deg)=>{const a=(deg-90)*Math.PI/180;return [cx+rad*Math.cos(a),cy+rad*Math.sin(a)]};
+  const marker=point(r,activeEnd),labelPoint=point(r+37,activeEnd),color=metric==='OB'?COLORS.purple:COLORS.pink;
+  const currentLabel=fmtMillions(current,1),targetLabel=fmtMillions(target,0),title=targetScopeTitle(cfg),remaining=target-current;
+  const tickValues=[0,.2,.4,.6,.8,1];
+  const ticks=tickValues.map(v=>{
+    const deg=start+v*180,[x1,y1]=point(r+24,deg),[x2,y2]=point(r+33,deg);
+    let [tx,ty]=point(r+48,deg),anchor=v===0?'start':'middle';
+    if(v===1){tx=368;ty=207;anchor='start';}
+    return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" class="benchmark-tick"/><text x="${tx}" y="${ty+5}" text-anchor="${anchor}" class="benchmark-tick-label">${Math.round(v*100)}%</text>`;
+  }).join('');
+  const html=`<div class="benchmark-gauge ${large?'benchmark-gauge-large':''}" data-bm-key="${key}" data-bm-metric="${metric}">
+    <div class="benchmark-svg-wrap">
+      <svg viewBox="0 0 420 285" class="benchmark-svg" aria-label="${escapeHtml(metric)} target gauge">
+        <path d="${gaugeArcPath(cx,cy,r,-90,-18)}" fill="none" stroke="#ffe0e8" stroke-width="46" stroke-linecap="butt"/>
+        <path d="${gaugeArcPath(cx,cy,r,-18,54)}" fill="none" stroke="#eadcf3" stroke-width="46" stroke-linecap="butt"/>
+        <path d="${gaugeArcPath(cx,cy,r,54,90)}" fill="none" stroke="#ddc9ea" stroke-width="46" stroke-linecap="butt"/>
+        <path d="${gaugeArcPath(cx,cy,r,start,end)}" fill="none" stroke="#5a4766" stroke-width="1.5" stroke-linecap="butt"/>
+        ${ratio>0?`<path d="${gaugeArcPath(cx,cy,r,start,activeEnd)}" fill="none" stroke="${color}" stroke-width="29" stroke-linecap="butt"/>`:''}
+        ${ticks}
+        <path class="benchmark-hover-arc" d="${gaugeArcPath(cx,cy,r,start,end)}" fill="none" stroke="transparent" stroke-width="58" stroke-linecap="butt" pointer-events="stroke"/>
+        <circle cx="${marker[0]}" cy="${marker[1]}" r="6" fill="${color}" stroke="#fff" stroke-width="3" pointer-events="none"/>
+        <text x="367" y="242" text-anchor="start" class="benchmark-target-label" pointer-events="none">${escapeHtml(targetLabel)}</text>
+      </svg>
+      <div class="benchmark-center"><span class="benchmark-current-center" style="color:${color}">${escapeHtml(currentLabel)}</span><span class="benchmark-achievement">${escapeHtml(fmtPct(achievement))}</span><em>Achievement</em></div>
+    </div>
+    <div class="benchmark-metric">${metric}</div>
+  </div>`;
+  return {html,current,target,achievement,remaining,title,basis:cfg.weight};
+}
+function roadmapChecksHtml(key,cfg){
+  return TARGET_ROADMAPS.map(r=>`<label class="target-check"><input type="checkbox" data-target-roadmap-key="${key}" data-target-roadmap="${escapeHtml(r)}" ${cfg.roadmaps.includes(r)?'checked':''}><span>${escapeHtml(TARGET_ABBR[r])}</span></label>`).join('');
+}
+function weightToggleHtml(key,cfg){return `<div class="target-weight-toggle"><button data-target-weight-key="${key}" data-target-weight="W" class="${cfg.weight==='W'?'active':''}">W</button><button data-target-weight-key="${key}" data-target-weight="NW" class="${cfg.weight==='NW'?'active':''}">NW</button></div>`;}
+function targetCardHtml(key){
+  const cfg=state.targetGauge[key],ob=benchmarkGaugeHtml(key,'OB',cfg),gm=benchmarkGaugeHtml(key,'OBM',cfg),label=key==='GM'?'Growing Markets':key;
+  return `<div class="target-card target-card-gauges" data-target-card="${key}">
+    <div class="target-card-heading"><div class="target-name">${label}</div></div>
+    <div class="target-checks target-checks-singleline">${roadmapChecksHtml(key,cfg)}</div>
+    <div class="target-scenario-title">${escapeHtml(targetScopeTitle(cfg))}</div>
+    <div class="target-gauge-pair">${ob.html}${gm.html}</div>
+    <div class="target-weight-area target-weight-bottom">${weightToggleHtml(key,cfg)}</div>
+  </div>`;
+}
+function targetMarketPieItems(cfg){
+  const totals=new Map([['Egypt',0],['KSA',0],['Growing Markets',0]]);
+  if(cfg.roadmaps.includes('Won')){
+    (state.data.orderbook||[]).filter(r=>Number(r.awardingYear)===2026).forEach(r=>{const m=normalizeMarket(r.market),label=m==='GM'?'Growing Markets':m;if(totals.has(label))totals.set(label,totals.get(label)+(Number(r.obSAR)||0));});
+  }
+  const nonWon=cfg.roadmaps.filter(r=>r!=='Won');
+  if(nonWon.length){
+    (state.data.opportunities||[]).filter(o=>Number(o.closeYear)===2026&&nonWon.includes(o.roadmap)).forEach(o=>{const m=normalizeMarket(o.market),label=m==='GM'?'Growing Markets':m;if(totals.has(label))totals.set(label,totals.get(label)+(Number(cfg.weight==='W'?o.weightedValueSAR:o.valueSAR)||0));});
+  }
+  return [...totals].map(([label,value])=>({label,value}));
+}
+function targetSectorPieItems(){
+  const active=activeOpps(currentOpps()),fn=state.targetSectorWeight==='W'?o=>o.weightedValueSAR:o=>o.valueSAR;
+  return group(active,'sector',fn);
+}
+function targetSectorCardHtml(){
+  return `<div class="target-card target-card-gauges target-sector-pie-card">
+    <div class="target-card-heading"><div class="target-name">Pipeline Per Sector Distribution</div></div>
+    <div class="target-insight-subtitle">Active Pipeline · Global Filters</div>
+    <div id="targetSectorPie" class="target-pie-area"></div>
+    <div class="target-weight-area target-weight-bottom"><div class="target-weight-toggle"><button data-target-sector-weight="W" class="${state.targetSectorWeight==='W'?'active':''}">W</button><button data-target-sector-weight="NW" class="${state.targetSectorWeight==='NW'?'active':''}">NW</button></div></div>
+  </div>`;
+}
+function allMarketTargetCardHtml(){
+  const key='Total',cfg=state.targetGauge.Total,ob=benchmarkGaugeHtml(key,'OB',cfg,true),gm=benchmarkGaugeHtml(key,'OBM',cfg,true);
+  return `<div class="target-card target-card-gauges all-market-target-card" data-target-card="Total">
+    <div class="target-card-heading"><div class="target-name">All Market Units</div></div>
+    <div class="target-checks target-checks-singleline">${roadmapChecksHtml(key,cfg)}</div>
+    <div class="target-scenario-title">${escapeHtml(targetScopeTitle(cfg))}</div>
+    <div class="all-market-content"><div class="target-gauge-pair all-target-gauges">${ob.html}${gm.html}</div><div class="all-market-pie-block"><div id="allMarketUnitPie" class="target-pie-area all-market-pie-area"></div></div></div>
+    <div class="target-weight-area target-weight-bottom">${weightToggleHtml(key,cfg)}</div>
+  </div>`;
+}
+function bindTargetControls(){
+  document.querySelectorAll('[data-target-weight-key]').forEach(btn=>btn.addEventListener('click',()=>{const key=btn.dataset.targetWeightKey;state.targetGauge[key].weight=btn.dataset.targetWeight;renderTargets();}));
+  document.querySelectorAll('[data-target-roadmap-key]').forEach(cb=>cb.addEventListener('change',()=>{const key=cb.dataset.targetRoadmapKey,rm=cb.dataset.targetRoadmap,cur=new Set(state.targetGauge[key].roadmaps);if(cb.checked)cur.add(rm);else cur.delete(rm);state.targetGauge[key].roadmaps=TARGET_ROADMAPS.filter(x=>cur.has(x));renderTargets();}));
+  document.querySelectorAll('[data-target-sector-weight]').forEach(btn=>btn.addEventListener('click',()=>{state.targetSectorWeight=btn.dataset.targetSectorWeight;renderTargets();}));
+  document.querySelectorAll('.benchmark-gauge').forEach(el=>{
+    const key=el.dataset.bmKey,metric=el.dataset.bmMetric,cfg=state.targetGauge[key],current=targetScenarioValue(key,metric,cfg),target=targetOfficial(key,metric),achievement=target?current/target:0,diff=target-current;
+    const hoverArc=el.querySelector('.benchmark-hover-arc');
+    bindHover(hoverArc,()=>tooltipHtml(`${key==='GM'?'Growing Markets':key} · ${metric}`,[
+      {label:'Selected Roadmap',value:targetScopeTitle(cfg)},
+      {label:'Basis',value:cfg.weight==='W'?'Weighted':'Non-Weighted'},
+      {label:'Current',value:`${fmtMillions(current,2)} SAR`},
+      {label:'Target',value:`${fmtMillions(target,2)} SAR`},
+      {label:'Achievement',value:fmtPct(achievement)},
+      {label:diff>=0?'Remaining':'Above Target',value:`${fmtMillions(Math.abs(diff),2)} SAR`}
+    ],cfg.roadmaps.includes('Won')?'Won/Awarded is sourced directly from the full 2026 Order Book. No OpportunityID matching or Roadmap-status restriction is used.':''));
+  });
+}
+function renderTargets(){
+  $('targetBenchmark').innerHTML=`<div class="target-grid target-grid-gauges">${['Egypt','KSA'].map(targetCardHtml).join('')}${targetCardHtml('GM')}${targetSectorCardHtml()}${allMarketTargetCardHtml()}</div>`;
+  renderPie('targetSectorPie',targetSectorPieItems(),{formatter:fmtSAR,valueLabel:state.targetSectorWeight==='W'?'Weighted SAR':'Non-Weighted SAR',title:'Pipeline Per Sector Distribution',maxSlices:7,compact:true});
+  renderPie('allMarketUnitPie',targetMarketPieItems(state.targetGauge.Total),{formatter:fmtSAR,valueLabel:state.targetGauge.Total.weight==='W'?'Weighted / Awarded SAR':'Non-Weighted / Awarded SAR',title:'Market Unit Distribution',maxSlices:4,compact:true});
+  bindTargetControls();
+}
+
+function renderListOpportunities(){
+  let rows=currentOpps();
+  const search=state.listSearch.trim().toLowerCase();
+  if(search){rows=rows.filter(o=>[o.legalEntity,o.market,o.customer,o.topic,o.d365Id,o.id,o.owner,o.roadmap,o.stage,o.status,o.channel,o.closeMonth,o.closeQuarter,o.closeYear].some(v=>safe(v).toLowerCase().includes(search)));}
+  const sort=state.listSort;
+  rows=[...rows].sort((a,b)=>{
+    let av=a[sort.field],bv=b[sort.field];
+    if(['actualOppValue','actualOppMargin','probability','weightedValueSAR','weightedMarginSAR','closeYear'].includes(sort.field)){av=Number(av)||0;bv=Number(bv)||0;return (av-bv)*(sort.dir==='asc'?1:-1);}
+    return String(av??'').localeCompare(String(bv??''),undefined,{numeric:true,sensitivity:'base'})*(sort.dir==='asc'?1:-1);
+  });
+  $('listOppCount').textContent=`${fmtNum(rows.length)} opportunities`;
+  const body=$('listOppBody');
+  body.innerHTML=rows.length?rows.map(o=>`<tr><td>${escapeHtml(o.legalEntity)}</td><td>${escapeHtml(o.market)}</td><td class="wide-cell">${escapeHtml(o.customer)}</td><td class="topic-cell" title="${escapeHtml(o.topic)}">${escapeHtml(o.topic)}</td><td>${escapeHtml(o.d365Id||'—')}</td><td><strong>${escapeHtml(o.id)}</strong></td><td class="wide-cell">${escapeHtml(o.owner)}</td><td><span class="roadmap-badge roadmap-${String(o.roadmap).toLowerCase().replace(/[^a-z]+/g,'-')}">${escapeHtml(o.roadmap)}</span></td><td>${escapeHtml(o.stage)}</td><td><span class="status-badge">${escapeHtml(o.status)}</span></td><td>${escapeHtml(o.channel)}</td><td class="money-cell">${fmtFull(o.actualOppValue)}</td><td class="money-cell">${fmtFull(o.actualOppMargin)}</td><td class="prob-cell">${fmtPct(Number(o.probability)||0)}</td><td class="money-cell">${fmtFull(o.weightedValueSAR)}</td><td class="money-cell">${fmtFull(o.weightedMarginSAR)}</td><td>${escapeHtml(o.closeMonth)}</td><td>${escapeHtml(o.closeQuarter)}</td><td>${escapeHtml(o.closeYear??'—')}</td></tr>`).join(''):`<tr><td colspan="19"><div class="empty-state"><strong>No matching opportunities</strong><span>Try changing the filters or table search.</span></div></td></tr>`;
+  const totals={actualOppValue:sum(rows,o=>o.actualOppValue),actualOppMargin:sum(rows,o=>o.actualOppMargin),weightedValueSAR:sum(rows,o=>o.weightedValueSAR),weightedMarginSAR:sum(rows,o=>o.weightedMarginSAR)};
+  $('listOppTotals').innerHTML='';
+  const totalsBar=$('listOppTotalsBar');
+  if(totalsBar) totalsBar.innerHTML=`
+    <div class="total-summary-item"><span>Sum of Actual Opp Value</span><strong>${fmtFull(totals.actualOppValue)}</strong></div>
+    <div class="total-summary-item"><span>Sum of Actual Opp Value Margin</span><strong>${fmtFull(totals.actualOppMargin)}</strong></div>
+    <div class="total-summary-item"><span>Sum of Weighted Opportunity Value</span><strong>${fmtFull(totals.weightedValueSAR)}</strong></div>
+    <div class="total-summary-item"><span>Sum of Weighted Opportunity Margin</span><strong>${fmtFull(totals.weightedMarginSAR)}</strong></div>`;
+  document.querySelectorAll('#listOppTable th[data-sort]').forEach(th=>{const f=th.dataset.sort,mark=sort.field===f?(sort.dir==='asc'?' ▲':' ▼'):'';th.querySelector('.sort-mark').textContent=mark;});
+}
+
+function quarterKey(o){ if(!o.closeYear) return ''; return `${o.closeYear} ${o.closeQuarter||''}`.trim(); }
+function renderOppTimeline(active){
+  const map=new Map(); active.forEach(o=>{const k=quarterKey(o);if(!k)return;const a=map.get(k)||{raw:0,weighted:0};a.raw+=o.valueSAR;a.weighted+=o.weightedValueSAR;map.set(k,a);});
+  const labels=[...map.keys()].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true})).slice(0,16); if(!labels.length){empty('oppTimeline');return;}
+  renderLine('oppTimeline',[{name:'Raw Pipeline',values:labels.map(k=>map.get(k).raw)},{name:'Weighted Pipeline',values:labels.map(k=>map.get(k).weighted),color:COLORS.pink}],labels,{yFormatter:fmtSAR});
+}
+function renderProbability(active){
+  const bands=[['0–20%',0,.2],['21–40%',.2,.4],['41–60%',.4,.6],['61–80%',.6,.8],['81–99%',.8,.9999],['100%',.9999,1.0001]];
+  const items=bands.map(([label,a,b])=>({label,value:active.filter(o=>o.probability>a-(a===0?1e-9:0)&&o.probability<=b).length}));
+  renderHBar('oppProbability',items,{formatter:v=>`${fmtNum(v)} jobs`});
+}
+function renderAttention(rows){
+  const active=activeOpps(rows);
+  const early=[...active.filter(o=>o.roadmap==='Early Stage')].sort((a,b)=>b.valueSAR-a.valueSAR).slice(0,5);
+  const committed=[...active.filter(o=>o.roadmap==='Committed')].sort((a,b)=>b.valueSAR-a.valueSAR).slice(0,5);
+  const negative=[...active.filter(o=>o.marginSAR<0)].sort((a,b)=>a.marginSAR-b.marginSAR).slice(0,5);
+  const pending=rows.filter(o=>o.roadmap==='Won'&&(!o.award||!o.award.matched)).slice(0,5);
+  const card=(title,list,subFn)=>`<div class="attention-card"><h4>${title}</h4><div class="attention-list">${list.length?list.map(o=>`<div class="attention-item"><strong title="${escapeHtml(o.customer)}">${escapeHtml(shortText(o.customer,28))}</strong><span>${escapeHtml(shortText(o.topic,32))} · ${subFn(o)}</span></div>`).join(''):'<div class="empty-state" style="min-height:120px">No items</div>'}</div></div>`;
+  $('oppAttention').innerHTML=`<div class="attention-grid">${card('Largest Early-Stage Deals',early,o=>`${fmtSAR(o.valueSAR)} SAR`)}${card('Largest Committed Deals',committed,o=>`${fmtSAR(o.valueSAR)} SAR`)}${card('Negative-Margin Opportunities',negative,o=>`${fmtSAR(o.marginSAR)} SAR margin`)}${card('Won Awaiting OB Match',pending,o=>`${o.id} · ${o.legalEntity}`)}</div>`;
+}
+
+function obMarginKey(){return state.obMargin==='GM'?'gmSAR':'cmSAR';}
+function renderOrderBook(){
+  const rows=currentOB(), mk=obMarginKey(), ob=sum(rows,r=>r.obSAR), mar=sum(rows,r=>r[mk]), contracts=uniqueCount(rows,'contractId'), customers=uniqueCount(rows,'customer'), years=uniqueCount(rows,'awardingYear');
+  renderKpis('obKpis',[
+    {label:'Actual OB SAR',value:`${fmtSAR(ob)} SAR`,sub:'Authoritative secured business'},
+    {label:`Actual ${state.obMargin} SAR`,value:`${fmtSAR(mar)} SAR`,sub:`${ob?fmtPct(mar/ob):'0.0%'} of OB`,accent:true},
+    {label:`${state.obMargin}%`,value:ob?fmtPct(mar/ob):'0.0%',sub:'Selected margin basis',accent:true},
+    {label:'Contracts',value:fmtNum(contracts),sub:'Distinct contract IDs'},
+    {label:'Customers',value:fmtNum(customers),sub:'Distinct customers'},
+    {label:'Average Contract',value:`${fmtSAR(contracts?ob/contracts:0)} SAR`,sub:'OB / distinct contracts'},
+    {label:'Order Book Rows',value:fmtNum(rows.length),sub:'Current filter scope'},
+    {label:'Awarding Years',value:fmtNum(years),sub:'Years represented'}
+  ]);
+  renderOrderBookGauges(rows,ob,mar);
+  $('obTrendHint').textContent=`${state.obMargin} view`;
+  renderOBTrend(rows,mk);
+  renderHBar('obMarket',group(rows,'market',r=>r.obSAR),{field:'market',formatter:fmtSAR,limit:10});
+  renderHBar('obCountry',group(rows,'country',r=>r.obSAR),{field:'country',formatter:fmtSAR,limit:12});
+  renderHBar('obVertical',group(rows,'vertical',r=>r.obSAR),{field:'vertical',formatter:fmtSAR,limit:12});
+  renderHBar('obEntity',group(rows,'legalEntity',r=>r.obSAR),{field:'legalEntity',formatter:fmtSAR,limit:12});
+  renderHBar('obContracts',groupByFn(rows,r=>`${r.contractId} · ${r.contractName}`,r=>r.obSAR),{formatter:fmtSAR,limit:10});
+  renderHBar('obCustomers',group(rows,'customer',r=>r.obSAR),{field:'customer',formatter:fmtSAR,limit:12});
+  renderOBMarketVerticals(rows);
+  $('obMarginByVerticalTitle').textContent=`${state.obMargin} SAR by Vertical`;
+  $('obMarginPctTitle').textContent=`${state.obMargin}% by Vertical`;
+  renderHBar('obMarginByVertical',group(rows,'vertical',r=>r[mk]),{field:'vertical',formatter:fmtSAR,limit:12});
+  const byV=new Map(); rows.forEach(r=>{const k=safe(r.vertical),a=byV.get(k)||{ob:0,m:0};a.ob+=r.obSAR;a.m+=r[mk];byV.set(k,a)});
+  const pct=[...byV].filter(([,x])=>Math.abs(x.ob)>1).map(([label,x])=>({label,value:x.m/x.ob})).filter(x=>Number.isFinite(x.value));
+  renderHBar('obMarginPct',pct,{field:'vertical',formatter:v=>fmtPct(v),limit:12});
+}
+function renderOrderBookGauges(rows,ob,mar){
+  const marginRate=ob?mar/ob:0,byMarket=group(rows,'market',r=>r.obSAR).sort((a,b)=>b.value-a.value),topMarket=byMarket[0]||{label:'—',value:0},byCustomer=group(rows,'customer',r=>r.obSAR).sort((a,b)=>b.value-a.value),top5=byCustomer.slice(0,5).reduce((a,x)=>a+x.value,0);
+  $('obMarginGaugeTitle').textContent=`${state.obMargin} Margin Rate`;renderGauge('obMarginGauge',marginRate,{max:1,formatter:fmtPct,label:`${state.obMargin} SAR / OB SAR`,title:`${state.obMargin} Margin Rate`,valueLabel:'Margin rate',note:`${fmtSAR(mar)} ${state.obMargin} on ${fmtSAR(ob)} OB`});
+  renderGauge('obMarketGauge',ob?topMarket.value/ob:0,{max:1,formatter:fmtPct,label:`${topMarket.label} share of OB`,title:'Top Market Concentration',valueLabel:'Top market share',note:`${topMarket.label}: ${fmtSAR(topMarket.value)} of ${fmtSAR(ob)}`});
+  renderGauge('obCustomerGauge',ob?top5/ob:0,{max:1,formatter:fmtPct,label:'Top 5 customers / total OB',title:'Top 5 Customer Concentration',valueLabel:'Top 5 share',note:`Top 5 customers represent ${fmtSAR(top5)} of secured OB`});
+}
+
+function renderOBTrend(rows,mk){
+  const years=[...new Set(rows.map(r=>r.awardingYear).filter(Boolean))].sort((a,b)=>a-b); const m=new Map(years.map(y=>[y,{ob:0,margin:0}]));
+  rows.forEach(r=>{if(!r.awardingYear)return;const a=m.get(r.awardingYear)||{ob:0,margin:0};a.ob+=r.obSAR;a.margin+=r[mk];m.set(r.awardingYear,a)});
+  renderLine('obTrend',[{name:'OB SAR',values:years.map(y=>m.get(y).ob)},{name:`${state.obMargin} SAR`,values:years.map(y=>m.get(y).margin),color:COLORS.pink}],years.map(String),{yFormatter:fmtSAR});
+}
+function marketMatcher(v,target){ const n=normalizeMarket(v); return target==='GM'?n==='GM':n===target; }
+function renderOBMarketVerticals(rows){
+  $('obMarketVerticals').innerHTML=['Egypt','KSA','GM'].map(m=>{
+    const subset=rows.filter(r=>marketMatcher(r.market,m)); const items=takeTop(group(subset,'vertical',r=>r.obSAR),9), max=Math.max(...items.map(x=>x.value),1);
+    return `<div class="mini-chart"><div class="mini-head">${m==='GM'?'Growing Markets':m} · OB SAR per Vertical</div><div class="mini-body">${items.length?`<div class="hbar-list">${items.map(x=>`<div class="hbar-row" title="${escapeHtml(x.label)}: ${fmtSAR(x.value)}" style="grid-template-columns:minmax(90px,34%) 1fr 72px"><div class="hbar-label">${escapeHtml(shortText(x.label,19))}</div><div class="hbar-track"><div class="hbar-fill" style="width:${Math.max(.7,x.value/max*100)}%"></div></div><div class="hbar-value">${fmtSAR(x.value)}</div></div>`).join('')}</div>`:'<div class="empty-state">No data</div>'}</div></div>`;
+  }).join('');
+}
+
+function poMetric(r){return state.poValue==='GROSS'?r.grossSAR:r.netSAR;}
+function renderPurchaseOrders(){
+  const rows=currentPO(), total=sum(rows,poMetric), net=sum(rows,r=>r.netSAR), gross=sum(rows,r=>r.grossSAR), vendors=uniqueCount(rows,'vendorAccount'), pos=uniqueCount(rows,'purchaseOrder'), customers=uniqueCount(rows,'customer');
+  const partnerRows=rows.filter(r=>r.partnerName&&r.partnerName!=='Unassigned'), partnerValue=sum(partnerRows,poMetric);
+  renderKpis('poKpis',[
+    {label:`${state.poValue==='GROSS'?'Gross':'Net'} PO SAR`,value:`${fmtSAR(total)} SAR`,sub:'Selected value basis'},
+    {label:'Net PO SAR',value:`${fmtSAR(net)} SAR`,sub:'Net amount in SAR'},
+    {label:'Gross PO SAR',value:`${fmtSAR(gross)} SAR`,sub:'Gross amount in SAR'},
+    {label:'Total POs',value:fmtNum(pos),sub:'Distinct Purchase Orders'},
+    {label:'Vendors',value:fmtNum(vendors),sub:'Distinct vendor accounts'},
+    {label:'Customers',value:fmtNum(customers),sub:'Distinct customers'},
+    {label:'Partner-Tagged Share',value:total?fmtPct(partnerValue/total):'0.0%',sub:'Partner Name populated',accent:true},
+    {label:'Average PO Value',value:`${fmtSAR(pos?total/pos:0)} SAR`,sub:'Selected value / POs'}
+  ]);
+  renderPurchaseOrderGauges(rows,total,partnerValue);
+  renderPOTrend(rows);
+  renderHBar('poMarket',group(rows,'market',poMetric),{field:'market',formatter:fmtSAR,limit:10});
+  renderHBar('poCountry',group(rows,'country',poMetric),{field:'country',formatter:fmtSAR,limit:12});
+  renderHBar('poVertical',group(rows,'vertical',poMetric),{field:'vertical',formatter:fmtSAR,limit:12});
+  renderDonut('poPartnerShare',partnerValue,Math.max(0,total-partnerValue),'Partner-tagged','No Partner Name');
+  renderPORankings(rows);
+  renderPOMarketVerticals(rows);
+  renderHBar('poCustomers',group(rows,'customer',poMetric),{field:'customer',formatter:fmtSAR,limit:12});
+  renderHBar('poProjectManagers',group(rows,'projectManager',poMetric),{field:'projectManager',formatter:fmtSAR,limit:12});
+}
+function renderPurchaseOrderGauges(rows,total,partnerValue){
+  const byMarket=group(rows,'market',poMetric).sort((a,b)=>b.value-a.value),topMarket=byMarket[0]||{label:'—',value:0},byVendor=groupByFn(rows,r=>safe(r.vendor),poMetric).sort((a,b)=>b.value-a.value),top10=byVendor.slice(0,10).reduce((a,x)=>a+x.value,0);
+  renderGauge('poPartnerGauge',total?partnerValue/total:0,{max:1,formatter:fmtPct,label:'Partner-tagged PO SAR / total',title:'Partner-Tagged Share',valueLabel:'Partner share',note:`${fmtSAR(partnerValue)} of ${fmtSAR(total)} selected PO value`});
+  renderGauge('poMarketGauge',total?topMarket.value/total:0,{max:1,formatter:fmtPct,label:`${topMarket.label} share of PO SAR`,title:'Top Market Concentration',valueLabel:'Top market share',note:`${topMarket.label}: ${fmtSAR(topMarket.value)} of ${fmtSAR(total)}`});
+  renderGauge('poVendorGauge',total?top10/total:0,{max:1,formatter:fmtPct,label:'Top 10 vendors / total PO SAR',title:'Top 10 Vendor Concentration',valueLabel:'Top 10 share',note:`Top 10 vendors represent ${fmtSAR(top10)} of selected PO value`});
+}
+
+function renderPOTrend(rows){
+  const years=[...new Set(rows.map(r=>r.year).filter(Boolean))].sort((a,b)=>a-b); const vals=years.map(y=>sum(rows.filter(r=>r.year===y),poMetric));
+  renderLine('poTrend',[{name:`${state.poValue==='GROSS'?'Gross':'Net'} PO SAR`,values:vals}],years.map(String),{yFormatter:fmtSAR});
+}
+function rankingItems(rows,key){
+  if(state.poRank==='count') return groupByFn(rows,r=>safe(r[key]),()=>1);
+  return groupByFn(rows,r=>safe(r[key]),poMetric);
+}
+function renderPORankings(rows){
+  const fmt=state.poRank==='count'?v=>`${fmtNum(v)} POs`:fmtSAR;
+  renderHBar('poVendors',rankingItems(rows,'vendor'),{field:'vendor',formatter:fmt,limit:state.poTopN});
+  const partnerRows=rows.filter(r=>r.partnerName&&r.partnerName!=='Unassigned');
+  renderHBar('poPartners',rankingItems(partnerRows,'partnerName'),{field:'partnerName',formatter:fmt,limit:state.poTopN});
+}
+function renderPOMarketVerticals(rows){
+  $('poMarketVerticals').innerHTML=['Egypt','KSA','GM'].map(m=>{
+    const subset=rows.filter(r=>marketMatcher(r.market,m)); const items=takeTop(group(subset,'vertical',poMetric),9), max=Math.max(...items.map(x=>x.value),1);
+    return `<div class="mini-chart"><div class="mini-head">${m==='GM'?'Growing Markets':m} · PO SAR per Vertical</div><div class="mini-body">${items.length?`<div class="hbar-list">${items.map(x=>`<div class="hbar-row" title="${escapeHtml(x.label)}: ${fmtSAR(x.value)}" style="grid-template-columns:minmax(90px,34%) 1fr 72px"><div class="hbar-label">${escapeHtml(shortText(x.label,19))}</div><div class="hbar-track"><div class="hbar-fill" style="width:${Math.max(.7,x.value/max*100)}%"></div></div><div class="hbar-value">${fmtSAR(x.value)}</div></div>`).join('')}</div>`:'<div class="empty-state">No data</div>'}</div></div>`;
+  }).join('');
+}
+
+function renderCurrentTab(){
+  if(state.tab==='opportunities') renderOpportunities();
+  else if(state.tab==='listOpportunities') renderListOpportunities();
+  else if(state.tab==='orderbook') renderOrderBook();
+  else renderPurchaseOrders();
+}
+function renderAll(){
+  if(!state.data) return;
+  renderFilters();
+  renderCurrentTab();
+  const meta=state.data.meta;
+  $('footerMeta').textContent=`Snapshot ${meta.generatedAt.replace('T',' ')} · ${fmtNum(meta.opportunities)} valid opportunities · ${fmtNum(meta.orderBookRows)} OB rows · ${fmtNum(meta.purchaseOrders)} POs`;
+}
+
+function bindControls(){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',async()=>{
+    state.ui.openFilter=null;
+    state.tab=b.dataset.tab;
+    document.querySelectorAll('.tab-btn').forEach(x=>x.classList.toggle('active',x===b));
+    document.querySelectorAll('.tab-view').forEach(v=>v.classList.toggle('active',v.id===`tab-${state.tab}`));
+    showLoading(`Loading ${TAB_LABELS[state.tab]} data…`); setStatus(`Loading ${TAB_LABELS[state.tab]}…`,'loading');
+    try{await ensureTabData(state.tab,true);setStatus('Data ready','ok');renderAll();}
+    catch(e){console.error(e);setStatus('Dropbox data load failed','error'); alert(`This section could not load the latest Dropbox data.\n\n${e.message||e}`);}
+    finally{hideLoading();}
+    window.scrollTo({top:0,behavior:'smooth'});
+  }));
+  $('resetFilters').addEventListener('click',()=>{const scope=filterScope(state.tab);state.filters[scope]=scope==='purchaseOrders'?{year:'2026'}:{};state.ui.openFilter=null;renderAll();});
+  $('oppEntityMetric').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{state.oppEntityMetric=b.dataset.mode;$('oppEntityMetric').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));renderOpportunities();}));
+  $('oppMarketMetric').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{state.oppMarketMetric=b.dataset.mode;$('oppMarketMetric').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));renderOpportunities();}));
+  [['oppCountryWeight','oppCountryWeight'],['oppSectorWeight','oppSectorWeight'],['oppCustomerWeight','oppCustomerWeight'],['oppTypePieWeight','oppTypePieWeight']].forEach(([id,key])=>$(id).querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{state[key]=b.dataset.mode;$(id).querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));renderOpportunities();})));
+  $('oppTypeMetric').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{state.oppTypeMetric=b.dataset.mode;$('oppTypeMetric').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));renderOpportunities();}));
+  $('oppCustomerTopN').addEventListener('input',e=>{state.oppCustomerTopN=Math.max(1,Number(e.target.value)||1);renderOpportunities();});
+  $('oppOwnerTopN').addEventListener('input',e=>{state.oppOwnerTopN=Math.max(1,Number(e.target.value)||1);renderOpportunities();});
+  $('obMarginToggle').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{state.obMargin=b.dataset.margin;$('obMarginToggle').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));renderOrderBook();}));
+  $('poValueToggle').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{state.poValue=b.dataset.value;$('poValueToggle').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));renderPurchaseOrders();}));
+  $('poTopN').addEventListener('change',e=>{state.poTopN=Number(e.target.value)||10;renderPurchaseOrders();});
+  $('poRankToggle').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{state.poRank=b.dataset.rank;$('poRankToggle').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));renderPurchaseOrders();}));
+  $('listOppSearch').addEventListener('input',e=>{state.listSearch=e.target.value;renderListOpportunities();});
+  document.querySelectorAll('#listOppTable th[data-sort]').forEach(th=>th.addEventListener('click',()=>{const f=th.dataset.sort;if(state.listSort.field===f)state.listSort.dir=state.listSort.dir==='asc'?'desc':'asc';else state.listSort={field:f,dir:'asc'};renderListOpportunities();}));
+  document.addEventListener('click',e=>{if(state.ui.openFilter&&!e.target.closest('.multi-filter')){state.ui.openFilter=null;document.querySelectorAll('.multi-filter.open').forEach(x=>x.classList.remove('open'));}});
+  $('refreshBtn').addEventListener('click',async()=>{
+    const btn=$('refreshBtn'),spinner=$('refreshSpinner');
+    if(state.refreshInProgress)return;
+    state.refreshInProgress=true;
+    btn.disabled=true;
+    spinner.classList.add('show');
+    spinner.setAttribute('aria-hidden','false');
+    try{
+      // Dropbox download + Excel processing happen in the Vercel server function.
+      // No page-blocking overlay is shown, so the user can keep filtering,
+      // changing tabs and interacting with the current snapshot while it runs.
+      const res=await fetch('/api/sync_dropbox',{method:'POST',cache:'no-store'});
+      const msg=await res.json();
+      if(!res.ok||!msg.ok){
+        const stage=msg.stage?`Stage: ${msg.stage}\n` : '';
+        throw new Error(`${stage}${msg.error||msg.message||'Dropbox refresh failed.'}`);
+      }
+
+      // Only after all 5 workbooks have finished processing do we swap the
+      // in-memory dashboard snapshot and redraw the screen.
+      await reloadScope('all');
+      renderAll();
+      setStatus('Latest Dropbox data loaded','ok');
+    }catch(e){
+      console.error(e);
+      setStatus('Dropbox refresh failed','error');
+      alert(`Latest Dropbox data could not be loaded.\n\n${e.message||e}`);
+    }finally{
+      state.refreshInProgress=false;
+      btn.disabled=false;
+      spinner.classList.remove('show');
+      spinner.setAttribute('aria-hidden','true');
+    }
+  });
+}
+
+async function fetchJSON(path,bust=true){
+  const join=path.includes('?')?'&':'?';
+  const url=`${path}${join}v=${Date.now()}`;
+  const res=await fetch(url,{cache:'no-store',headers:{'Cache-Control':'no-cache'}});
+  if(!res.ok) throw new Error(`Unable to load ${path} (${res.status})`);
+  return res.json();
+}
+
+async function reloadScope(scope){
+  if(!state.data) state.data={meta:{},targets:{},opportunities:[],orderbook:[],purchaseOrders:null};
+  if(scope==='all' || scope==='opportunities' || scope==='orderbook'){
+    const core=await fetchJSON('/api/data_core',true);
+    state.data.meta=core.meta;
+    state.data.targets=core.targets||{};
+    state.data.opportunities=core.opportunities||[];
+    state.data.orderbook=core.orderbook||[];
+  }
+  if(scope==='all' && state.data.purchaseOrders!==null){
+    const po=await fetchJSON('/api/data_po',true);
+    state.data.purchaseOrders=po.purchaseOrders||[];
+    if(po.meta) state.data.meta=po.meta;
+  }else if(scope==='purchaseOrders'){
+    const po=await fetchJSON('/api/data_po',true);
+    state.data.purchaseOrders=po.purchaseOrders||[];
+    if(po.meta) state.data.meta=po.meta;
+  }
+}
+async function ensureTabData(tab,bust=false){
+  if(tab==='purchaseOrders' && !state.data.purchaseOrders){
+    showLoading('Loading processed Purchase Order data…');setStatus('Loading Business with Partners data…','loading');
+    await reloadScope('purchaseOrders');
+  }
+  if(tab==='orderbook' && !state.data.orderbook) await reloadScope('orderbook');
+}
+async function loadData(bust=true){
+  showLoading('Loading the current shared dashboard data…');setStatus('Loading current data…','loading');
+  const core=await fetchJSON('/api/data_core',true);
+  state.data={meta:core.meta,targets:core.targets||{},opportunities:core.opportunities||[],orderbook:core.orderbook||[],purchaseOrders:null};
+  setStatus('Current data ready · Refresh Data checks Dropbox','ok');renderAll();hideLoading();
+}
+
+window.dashboardReloadImportedScope=async function(){
+  await reloadScope('all');
+  renderAll();
+  setStatus('Imported data ready','ok');
+};
+
+bindControls();
+showLoading('Loading dashboard…');
+loadData(true).catch(err=>{console.error(err);hideLoading();setStatus('Press Refresh Data to initialize Dropbox data','error');});
+
+
+</script>
+<script src="/blob-import.js" defer></script>
+</body>
+</html>

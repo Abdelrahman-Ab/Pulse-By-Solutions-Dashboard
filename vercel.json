@@ -1,0 +1,42 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "fluid": true,
+  "framework": null,
+  "buildCommand": "npm run build",
+  "outputDirectory": "public",
+  "functions": {
+    "api/sync_dropbox.py": {
+      "maxDuration": 300
+    },
+    "api/import_process.py": {
+      "maxDuration": 300
+    },
+    "api/data_core.py": {
+      "maxDuration": 30
+    },
+    "api/data_po.py": {
+      "maxDuration": 30
+    },
+    "api/health.py": {
+      "maxDuration": 30
+    },
+    "api/blob_upload.js": {
+      "maxDuration": 30
+    }
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    }
+  ]
+}
