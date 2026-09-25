@@ -1,0 +1,8 @@
+.vercel
+node_modules
+public
+__pycache__
+*.pyc
+
+# Local dashboard snapshots can contain confidential company data.
+local_cache/
