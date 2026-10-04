@@ -1089,6 +1089,9 @@ h1{font-size:29px;margin-top:5px;white-space:nowrap}
   stroke-linejoin:round;
   cursor:help;
 }
+.pie-slice.is-clickable,.pie-callout-hit.is-clickable{cursor:pointer!important}
+.pie-slice.is-clickable:hover{opacity:.84}
+.pie-highlight-overlay{pointer-events:none!important}
 .pie-callout-line{
   fill:none;
   stroke:#9a8ca5;
@@ -1327,12 +1330,12 @@ h1{font-size:29px;margin-top:5px;white-space:nowrap}
 @media(max-width:900px){.partner-performance-filter-grid{grid-template-columns:repeat(2,minmax(160px,1fr))!important}.partner-performance-grid{grid-template-columns:1fr}}
 
 </style>
-  <link rel="icon" href="/favicon.ico?v=29" sizes="any">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=29">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=29">
-  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png?v=29">
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=29">
-  <link rel="manifest" href="/site.webmanifest?v=29">
+  <link rel="icon" href="/favicon.ico?v=30" sizes="any">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=30">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=30">
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png?v=30">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=30">
+  <link rel="manifest" href="/site.webmanifest?v=30">
 </head>
 <body>
   <div id="manualImportModal" class="manual-import-modal" role="dialog" aria-modal="true" aria-labelledby="manualImportTitle">
@@ -2617,9 +2620,9 @@ function renderPie(id,items,opts={}){
   rows.forEach((x,i)=>{
     const sweep=x.value/total*360,start=angle,end=start+sweep,mid=start+sweep/2;angle=end;const color=(opts.colorMap&&opts.colorMap[x.label])||palette[i%palette.length],hv=active?x.members.reduce((a,k)=>a+(Number(highlightMap.get(String(k)))||0),0):x.value,ratio=x.value?Math.max(0,Math.min(1,Math.abs(hv)/Math.abs(x.value))):0;
     meta.push({x,i,color,start,end,mid,sweep,side:Math.cos((mid-90)*Math.PI/180)>=0?'right':'left',highlighted:hv});
-    if(sweep>=359.999)paths+=`<circle class="pie-slice ${active?'highlight-base':''}" data-pie-index="${i}" cx="${cx}" cy="${cy}" r="${r}" fill="${color}"/>`;
-    else{const [x1,y1]=polar(r,start),[x2,y2]=polar(r,end),large=sweep>180?1:0;paths+=`<path class="pie-slice ${active?'highlight-base':''}" data-pie-index="${i}" d="M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 ${large} 1 ${x2} ${y2} Z" fill="${color}"/>`;}
-    if(active&&ratio>0){const rr=r*Math.sqrt(ratio);if(sweep>=359.999)overlays+=`<circle class="pie-highlight-overlay" cx="${cx}" cy="${cy}" r="${rr}" fill="${color}"/>`;else{const [x1,y1]=polar(rr,start),[x2,y2]=polar(rr,end),large=sweep>180?1:0;overlays+=`<path class="pie-highlight-overlay" d="M ${cx} ${cy} L ${x1} ${y1} A ${rr} ${rr} 0 ${large} 1 ${x2} ${y2} Z" fill="${color}"/>`;}}
+    if(sweep>=359.999)paths+=`<circle class="pie-slice ${opts.field?'is-clickable':''} ${active?'highlight-base':''}" data-pie-index="${i}" cx="${cx}" cy="${cy}" r="${r}" fill="${color}"/>`;
+    else{const [x1,y1]=polar(r,start),[x2,y2]=polar(r,end),large=sweep>180?1:0;paths+=`<path class="pie-slice ${opts.field?'is-clickable':''} ${active?'highlight-base':''}" data-pie-index="${i}" d="M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 ${large} 1 ${x2} ${y2} Z" fill="${color}"/>`;}
+    if(active&&ratio>0){const rr=r*Math.sqrt(ratio);if(sweep>=359.999)overlays+=`<circle class="pie-highlight-overlay" cx="${cx}" cy="${cy}" r="${rr}" fill="${color}" pointer-events="none"/>`;else{const [x1,y1]=polar(rr,start),[x2,y2]=polar(rr,end),large=sweep>180?1:0;overlays+=`<path class="pie-highlight-overlay" d="M ${cx} ${cy} L ${x1} ${y1} A ${rr} ${rr} 0 ${large} 1 ${x2} ${y2} Z" fill="${color}" pointer-events="none"/>`;}}
   });
 
   const placeSide=(side)=>{
@@ -2630,7 +2633,7 @@ function renderPie(id,items,opts={}){
     return list;
   };
   const placed=[...placeSide('left'),...placeSide('right')];
-  const labels=placed.map(m=>{const [sx,sy]=polar(r+2,m.mid),[mx,my]=polar(outerR,m.mid),right=m.side==='right',endX=right?350:110,textX=right?356:104,anchor=right?'start':'end',name=shortText(m.x.label,22),share=fmtPct(total?m.x.value/total:0),val=formatter(m.x.value),line=`<polyline class="pie-callout-line" points="${sx.toFixed(1)},${sy.toFixed(1)} ${mx.toFixed(1)},${my.toFixed(1)} ${endX},${m.labelY.toFixed(1)}"/>`,dot=`<circle class="pie-callout-dot" cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="2.3" fill="${m.color}"/>`,text=`<text x="${textX}" y="${(m.labelY-3).toFixed(1)}" text-anchor="${anchor}" class="pie-callout-label">${escapeHtml(name)}</text><text x="${textX}" y="${(m.labelY+12).toFixed(1)}" text-anchor="${anchor}" class="pie-callout-value">${escapeHtml(val)} · ${escapeHtml(share)}</text>`,hitX=right?350:4,hitW=106;return `${line}${dot}${text}<rect class="pie-callout-hit" data-pie-index="${m.i}" x="${hitX}" y="${(m.labelY-18).toFixed(1)}" width="${hitW}" height="38"/>`;}).join('');
+  const labels=placed.map(m=>{const [sx,sy]=polar(r+2,m.mid),[mx,my]=polar(outerR,m.mid),right=m.side==='right',endX=right?350:110,textX=right?356:104,anchor=right?'start':'end',name=shortText(m.x.label,22),share=fmtPct(total?m.x.value/total:0),val=formatter(m.x.value),line=`<polyline class="pie-callout-line" points="${sx.toFixed(1)},${sy.toFixed(1)} ${mx.toFixed(1)},${my.toFixed(1)} ${endX},${m.labelY.toFixed(1)}"/>`,dot=`<circle class="pie-callout-dot" cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="2.3" fill="${m.color}"/>`,text=`<text x="${textX}" y="${(m.labelY-3).toFixed(1)}" text-anchor="${anchor}" class="pie-callout-label">${escapeHtml(name)}</text><text x="${textX}" y="${(m.labelY+12).toFixed(1)}" text-anchor="${anchor}" class="pie-callout-value">${escapeHtml(val)} · ${escapeHtml(share)}</text>`,hitX=right?350:4,hitW=106;return `${line}${dot}${text}<rect class="pie-callout-hit ${opts.field?'is-clickable':''}" data-pie-index="${m.i}" x="${hitX}" y="${(m.labelY-18).toFixed(1)}" width="${hitW}" height="38"/>`;}).join('');
 
   el.innerHTML=`<div class="pie-chart-wrap ${opts.compact?'compact':''} ${opts.className||''}"><div class="pie-visual"><svg viewBox="0 0 ${W} ${H}" class="pie-svg" aria-label="${escapeHtml(opts.title||'Pie chart')}">${paths}${overlays}${labels}</svg></div></div>`;
   const tooltipFor=index=>{const m=meta[Number(index)]||meta[0],x=m.x,v=Number(x.value)||0,hv=Number(m.highlighted)||0,tf=opts.tooltipFormatter||(opts.formatter===fmtSAR?fmtHoverSAR:formatter),ttRows=active?[{label:`Actual ${opts.valueLabel||'Value'}`,value:tf(v)},{label:'Highlighted',value:tf(hv)},{label:'Highlighted share',value:fmtPct(v?hv/v:0)}]:[{label:opts.valueLabel||'Value',value:tf(v)},{label:'Share',value:fmtPct(total?v/total:0)}];return tooltipHtml(x.label,ttRows,opts.field?'Click to highlight related data. Click the same slice again to clear.':(opts.note||''))};
@@ -2932,6 +2935,39 @@ function targetMarketPieItems(cfg){
   }
   return [...totals].map(([label,value])=>({label,value}));
 }
+function targetOrderBookRowMatchesOpportunityHighlight(r){
+  const h=highlightForScope('opportunities');
+  if(!h||!h.conditions?.length)return false;
+  return h.conditions.every(c=>{
+    const obField=OPPORTUNITY_SHARED_AWARD_FIELDS[c.field];
+    if(!obField)return false;
+    const actual=safe(r[obField]);
+    if(c.field==='market')return normalizeMarket(actual)===normalizeMarket(c.value);
+    return actual===String(c.value);
+  });
+}
+function targetMarketPieHighlightItems(cfg){
+  if(!hasActiveHighlight('opportunities'))return [];
+  const totals=new Map([['Egypt',0],['KSA',0],['Growing Markets',0]]);
+  if(cfg.roadmaps.includes('Won')){
+    (state.data.orderbook||[])
+      .filter(r=>Number(r.awardingYear)===2026&&targetOrderBookRowMatchesOpportunityHighlight(r))
+      .forEach(r=>{
+        const m=normalizeMarket(r.market),label=m==='GM'?'Growing Markets':m;
+        if(totals.has(label))totals.set(label,totals.get(label)+(Number(r.obSAR)||0));
+      });
+  }
+  const nonWon=cfg.roadmaps.filter(r=>r!=='Won');
+  if(nonWon.length){
+    (state.data.opportunities||[])
+      .filter(o=>Number(o.closeYear)===2026&&nonWon.includes(o.roadmap)&&rowMatchesActiveHighlight(o,'opportunities'))
+      .forEach(o=>{
+        const m=normalizeMarket(o.market),label=m==='GM'?'Growing Markets':m;
+        if(totals.has(label))totals.set(label,totals.get(label)+(Number(cfg.weight==='W'?o.weightedValueSAR:o.valueSAR)||0));
+      });
+  }
+  return [...totals].map(([label,value])=>({label,value}));
+}
 function targetSectorPieItems(){
   const active=activeOpps(currentOpps()),fn=state.targetSectorWeight==='W'?o=>o.weightedValueSAR:o=>o.valueSAR;
   return group(active,'sector',fn);
@@ -2973,8 +3009,9 @@ function bindTargetControls(){
 }
 function renderTargets(){
   $('targetBenchmark').innerHTML=`<div class="target-grid target-grid-gauges">${['Egypt','KSA'].map(targetCardHtml).join('')}${targetCardHtml('GM')}${targetSectorCardHtml()}${allMarketTargetCardHtml()}</div>`;
-  renderPie('targetSectorPie',targetSectorPieItems(),{formatter:fmtSAR,valueLabel:state.targetSectorWeight==='W'?'Weighted SAR':'Non-Weighted SAR',title:'Pipeline Per Sector Distribution',maxSlices:7,compact:true});
-  renderPie('allMarketUnitPie',targetMarketPieItems(state.targetGauge.Total),{formatter:fmtSAR,valueLabel:state.targetGauge.Total.weight==='W'?'Weighted / Awarded SAR':'Non-Weighted / Awarded SAR',title:'Market Unit Distribution',maxSlices:4,compact:true});
+  const targetSectorRows=activeOpps(currentOpps()),targetSectorValue=state.targetSectorWeight==='W'?o=>o.weightedValueSAR:o=>o.valueSAR;
+  renderPie('targetSectorPie',targetSectorPieItems(),{field:'sector',records:targetSectorRows,groupKey:'sector',valueFn:targetSectorValue,formatter:fmtSAR,valueLabel:state.targetSectorWeight==='W'?'Weighted SAR':'Non-Weighted SAR',title:'Pipeline Per Sector Distribution',maxSlices:7,compact:true});
+  renderPie('allMarketUnitPie',targetMarketPieItems(state.targetGauge.Total),{field:'market',highlightItems:targetMarketPieHighlightItems(state.targetGauge.Total),formatter:fmtSAR,valueLabel:state.targetGauge.Total.weight==='W'?'Weighted / Awarded SAR':'Non-Weighted / Awarded SAR',title:'Market Unit Distribution',maxSlices:4,compact:true});
   bindTargetControls();
 }
 
