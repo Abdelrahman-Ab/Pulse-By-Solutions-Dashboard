@@ -41,7 +41,7 @@ def excel_iso(v):
         if 20000<n<80000:
             return (datetime(1899,12,30)+timedelta(days=n)).date().isoformat()
     except Exception: pass
-    for fmt in ('%Y-%m-%d %H:%M:%S','%Y-%m-%d','%d/%m/%Y','%m/%d/%Y'):
+    for fmt in ('%Y-%m-%d %H:%M:%S','%Y-%m-%d','%d/%m/%Y','%m/%d/%Y','%d-%b-%y','%d-%b-%Y','%d %b %y','%d %b %Y'):
         try:return datetime.strptime(s,fmt).date().isoformat()
         except Exception:pass
     return s[:10]
@@ -257,7 +257,7 @@ def iter_records(path, header_row, wanted_headers=None):
 def load_opportunities():
     W={
 'Legal Entity','LegalEntity','MKU','Market Unit','MarketUnit','Potential Customer','PotentialCustomer','Customer','Customer Name','Topic','Opportunity Topic','Project Name','OppID','Opp ID','Opportunity ID','OpportunityID','Opportunity No','Opportunity Number','D365 OppID','D365OpportunityId','D365OpportunityID','D365 Opportunity ID','D365 OPP ID','D365 Opp ID','D365 ID','Owner','Opportunity Owner','Roadmap','Road Map','Roadmap Status','Road Map Status','Roadmap Stage','Road Map Stage','Stage','Opportunity Stage','Channel','Opportunity Channel','Actual OPP Value','Actual OPP Value Margin',
-'Full Expect Close Year - Year','Full Expect Close Year - Quarter','Full Expect Close Year - Month','Country','LOBDept','Offering','Sector','SubSector','Leading LoB','STATUS','PROBABILITY','Expected Closing Quarter','Expected Closing Year','CURRENCY','Opportunity Type','BusinessUnit','Probability %','Opp Value SAR','Opp Margin SAR','Expected Closing Date','Expected Close Date','Expected Closure Date','Expected Month','Opportunity Engagement','Opportunity Nature','Account Manager','ACCOUNTMANAGER','PROJECTMANAGER','Sales Manager','Presales Manager/Director','Presales Engineer','Bid Manager','Etimad','Etimad Type','MUST WIN','Mapped Status','OpportunityType'
+'Full Expect Close Year - Year','Full Expect Close Year - Quarter','Full Expect Close Year - Month','Country','LOBDept','Offering','Sector','SubSector','Leading LoB','STATUS','PROBABILITY','Expected Closing Quarter','Expected Closing Year','CURRENCY','Opportunity Type','BusinessUnit','Probability %','Opp Value SAR','Opp Margin SAR','Expected Closing Date','Expected Close Date','Expected Closure Date','Expected Month','Date Opened','DateOpened','Opened Date','Opportunity Opened Date','Opportunity Engagement','Opportunity Nature','Account Manager','ACCOUNTMANAGER','PROJECTMANAGER','Sales Manager','Presales Manager/Director','Presales Engineer','Bid Manager','Etimad','Etimad Type','MUST WIN','Mapped Status','OpportunityType'
 }
     # Roadmap is a BUSINESS GATE, not an optional attribute. We make finding the
     # column resilient, but we never relax the rule: blank Roadmap => ignore the row.
@@ -293,6 +293,7 @@ def load_opportunities():
             continue
         channel=norm_missing(r.get('Channel')) or norm_missing(r.get('Opportunity Channel')) or 'Sales'
         close=excel_iso(r.get('Expected Closing Date') or r.get('Expected Close Date') or r.get('Expected Closure Date'))
+        opened=excel_iso(r.get('Date Opened') or r.get('DateOpened') or r.get('Opened Date') or r.get('Opportunity Opened Date'))
         cy=clean(r.get('Full Expect Close Year - Year')) or clean(r.get('Expected Closing Year')) or (str(year_from_iso(close)) if year_from_iso(close) else '')
         try:cy=int(float(cy)) if cy else None
         except:cy=None
@@ -304,7 +305,7 @@ def load_opportunities():
         out.append({
 'id':oid,'d365Id':d365,'legalEntity':clean(r.get('Legal Entity'),'Unassigned'),'market':clean(r.get('MKU')) or clean(r.get('Market Unit')) or clean(r.get('MarketUnit')) or clean(r.get('Market Unit')) or 'Unassigned','country':clean(r.get('Country'),'Unassigned'),'customer':customer or 'Unassigned','topic':topic,'owner':clean(r.get('Owner')) or clean(r.get('Opportunity Owner')) or 'Unassigned','roadmap':roadmap,'stage':clean(r.get('Stage')) or clean(r.get('Opportunity Stage')) or 'Unassigned','channel':channel,
 'actualOppValue':num(r.get('Actual OPP Value')),'actualOppMargin':num(r.get('Actual OPP Value Margin')),
-'valueSAR':val,'marginSAR':mar,'weightedValueSAR':val*p,'weightedMarginSAR':mar*p,'probability':p,'closeYear':cy,'closeQuarter':cq,'closeMonth':cm,'closeDate':close,
+'valueSAR':val,'marginSAR':mar,'weightedValueSAR':val*p,'weightedMarginSAR':mar*p,'probability':p,'closeYear':cy,'closeQuarter':cq,'closeMonth':cm,'closeDate':close,'dateOpened':opened,
 'status':clean(r.get('STATUS'),'Unassigned'),'mappedStatus':clean(r.get('Mapped Status'),'Unassigned'),'sector':clean(r.get('Sector'),'Unassigned'),'subSector':clean(r.get('SubSector'),'Unassigned'),'lob':clean(r.get('LOBDept'),'Unassigned'),'leadingLob':clean(r.get('Leading LoB'),'Unassigned'),'offering':clean(r.get('Offering'),'Unassigned'),'businessUnit':clean(r.get('BusinessUnit'),'Unassigned'),'opportunityType':clean(r.get('Opportunity Type')) or clean(r.get('OpportunityType')) or 'Unassigned','nature':clean(r.get('Opportunity Nature'),'Unassigned'),'engagement':clean(r.get('Opportunity Engagement'),'Unassigned'),'accountManager':clean(r.get('Account Manager')) or clean(r.get('ACCOUNTMANAGER')) or 'Unassigned','projectManager':clean(r.get('PROJECTMANAGER'),'Unassigned'),'salesManager':clean(r.get('Sales Manager'),'Unassigned'),'presalesManager':clean(r.get('Presales Manager/Director'),'Unassigned'),'presalesEngineer':clean(r.get('Presales Engineer'),'Unassigned'),'bidManager':clean(r.get('Bid Manager'),'Unassigned'),'etimad':clean(r.get('Etimad'),'Unassigned'),'etimadType':clean(r.get('Etimad Type'),'Unassigned'),'mustWin':clean(r.get('MUST WIN'),'Unassigned'),'currency':clean(r.get('CURRENCY'),'Unassigned')
 })
     return out

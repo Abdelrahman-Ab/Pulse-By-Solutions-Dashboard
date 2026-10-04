@@ -315,6 +315,29 @@ h1{font-size:29px;margin-top:5px;white-space:nowrap}
 }
 
   
+
+/* ===== Active Pipeline Progress v28 ===== */
+.active-pipeline-progress-shell{margin-top:20px;min-height:610px;overflow:hidden}
+.active-pipeline-progress-global-title{min-height:58px}
+.active-pipeline-progress-shell-body{padding:18px 20px 20px}
+.active-pipeline-progress-roadmaps{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:0 auto 10px}
+.progress-roadmap-toggle button,.progress-weight-toggle button{border:1px solid #d7c8e5;background:#fff;color:var(--purple);border-radius:9px;padding:8px 15px;font-size:13px;font-weight:900;cursor:pointer}
+.progress-roadmap-toggle button.active{background:var(--purple);border-color:var(--purple);color:#fff;box-shadow:0 4px 12px rgba(79,0,140,.16)}
+.active-pipeline-progress-weight{display:flex;justify-content:center;margin:0 auto 16px;width:max-content}
+.active-pipeline-progress-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:start}
+.active-pipeline-progress-subchart{min-width:0;border:1px solid #eee7f4;border-radius:14px;background:#fff;overflow:hidden}
+.active-pipeline-progress-subchart h3{margin:0;padding:11px 14px 5px;text-align:center;color:#3f294f;font-size:17px;font-weight:900}
+.active-pipeline-progress-chart{height:445px;min-height:445px;padding:0 8px 8px}
+.active-progress-svg{width:100%;height:100%;display:block;overflow:visible}
+.active-progress-x-label{font-size:13px;font-weight:900;fill:#4e4058}
+.active-progress-y-label{font-size:12px;font-weight:850;fill:#62546c}
+.active-progress-hit{pointer-events:all}
+@media(max-width:1150px){
+  .active-pipeline-progress-grid{grid-template-columns:1fr 1fr;gap:12px}
+  .active-pipeline-progress-chart{height:420px;min-height:420px}
+  .active-progress-x-label{font-size:12px}
+}
+
 /* ===== Opportunity filters + List of Opportunities update ===== */
 .main-tabs{gap:8px}
 .tab-btn{min-width:205px}
@@ -1304,8 +1327,12 @@ h1{font-size:29px;margin-top:5px;white-space:nowrap}
 @media(max-width:900px){.partner-performance-filter-grid{grid-template-columns:repeat(2,minmax(160px,1fr))!important}.partner-performance-grid{grid-template-columns:1fr}}
 
 </style>
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png?v=26">
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=26">
+  <link rel="icon" href="/favicon.ico?v=29" sizes="any">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=29">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=29">
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png?v=29">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=29">
+  <link rel="manifest" href="/site.webmanifest?v=29">
 </head>
 <body>
   <div id="manualImportModal" class="manual-import-modal" role="dialog" aria-modal="true" aria-labelledby="manualImportTitle">
@@ -1408,6 +1435,36 @@ h1{font-size:29px;margin-top:5px;white-space:nowrap}
         <article class="panel fixed-h-420 engagement-panel"><div class="panel-titlebar"><span>Engagement Motion</span><span class="panel-hint">Pro-active vs Re-active</span></div><div id="oppEngagement" class="panel-body chart-area"></div></article>
       </div>
 
+      <article class="panel active-pipeline-progress-shell">
+        <div class="panel-titlebar active-pipeline-progress-global-title">
+          <span>Active Pipeline Progress</span>
+          <span class="panel-hint">Weekly progression through the current 2026 week</span>
+        </div>
+        <div class="active-pipeline-progress-shell-body">
+          <div id="oppProgressRoadmaps" class="progress-roadmap-toggle active-pipeline-progress-roadmaps">
+            <button class="active" data-progress-roadmap="Committed">Comm</button>
+            <button class="active" data-progress-roadmap="Upside">Ups</button>
+            <button class="active" data-progress-roadmap="Prospect">Pros</button>
+            <button class="active" data-progress-roadmap="Early Stage">Early</button>
+          </div>
+
+          <div id="oppProgressWeight" class="small-toggle progress-weight-toggle active-pipeline-progress-weight">
+            <button data-mode="W">W</button><button class="active" data-mode="NW">NW</button>
+          </div>
+
+          <div class="active-pipeline-progress-grid">
+            <section class="active-pipeline-progress-subchart">
+              <h3>Value</h3>
+              <div id="oppProgressValue" class="active-pipeline-progress-chart"></div>
+            </section>
+            <section class="active-pipeline-progress-subchart">
+              <h3>Margin</h3>
+              <div id="oppProgressMargin" class="active-pipeline-progress-chart"></div>
+            </section>
+          </div>
+        </div>
+      </article>
+
       <article class="panel fixed-h-560 management-oddities-panel"><div class="panel-titlebar"><span>Management Reporting — Data Quality &amp; Oddities</span><span class="panel-hint">Financial anomalies, lifecycle inconsistencies &amp; ownership gaps</span></div><div id="oppAttention" class="panel-body"></div></article>
     </section>
 
@@ -1432,6 +1489,7 @@ h1{font-size:29px;margin-top:5px;white-space:nowrap}
               <th data-sort="topic">Topic<span class="sort-mark"></span></th>
               <th data-sort="d365Id">D365 OPP ID<span class="sort-mark"></span></th>
               <th data-sort="id">OPP ID<span class="sort-mark"></span></th>
+              <th data-sort="dateOpened">Date Opened<span class="sort-mark"></span></th>
               <th data-sort="owner">Owner<span class="sort-mark"></span></th>
               <th data-sort="roadmap">Roadmap<span class="sort-mark"></span></th>
               <th data-sort="stage">Stage<span class="sort-mark"></span></th>
@@ -1616,6 +1674,8 @@ const state = {
   oppTypeMetric:'count',
   oppCustomerTopN:10,
   oppOwnerTopN:10,
+  oppProgressRoadmaps:['Committed','Upside','Prospect','Early Stage'],
+  oppProgressWeight:'NW',
   targetGauge:{
     Egypt:{weight:'NW',roadmaps:['Won']},
     KSA:{weight:'NW',roadmaps:['Won']},
@@ -2582,7 +2642,11 @@ function currentOB(){return applyFilters(state.data.orderbook||[],'orderbook');}
 function currentOBExcept(field){return applyFilters(state.data.orderbook||[],'orderbook',field);}
 function currentPO(){return applyFilters(state.data.purchaseOrderDetails||[],'purchaseOrders');}
 function currentPOExcept(field){return applyFilters(state.data.purchaseOrderDetails||[],'purchaseOrders',field);}
-function activeOpps(arr){return arr.filter(o=>o.roadmap!=='Won');}
+const INACTIVE_OPPORTUNITY_STATUSES=new Set(['won','lost - commercial','lost - technical']);
+function normalizeOpportunityStatus(v){
+  return safe(v).trim().toLowerCase().replace(/[–—]/g,'-').replace(/\s*-\s*/g,' - ').replace(/\s+/g,' ');
+}
+function activeOpps(arr){return arr.filter(o=>!INACTIVE_OPPORTUNITY_STATUSES.has(normalizeOpportunityStatus(o.status)));}
 function awardedValue(o,key='obSAR'){return o.roadmap==='Won' && o.award && o.award.matched ? Number(o.award[key])||0 : 0;}
 function opportunitySharedScopeRows(){
   const filters=state.filters.opportunities||{};
@@ -2622,13 +2686,131 @@ function kpiIconSvg(type){
   return `<svg class="kpi-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[type]||paths.pipeline}</svg>`;
 }
 
+
+function parseOpportunityOpenedDate(value){
+  const s=String(value??'').trim();
+  if(!s||s.toLowerCase()==='unassigned')return null;
+  let m=s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if(m)return new Date(Date.UTC(Number(m[1]),Number(m[2])-1,Number(m[3])));
+  m=s.match(/^(\d{1,2})-([A-Za-z]{3})-(\d{2}|\d{4})$/);
+  if(m){
+    const months={jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
+    const mon=months[m[2].toLowerCase()];
+    if(mon===undefined)return null;
+    let yr=Number(m[3]);if(yr<100)yr+=yr>=70?1900:2000;
+    return new Date(Date.UTC(yr,mon,Number(m[1])));
+  }
+  const d=new Date(s);
+  return Number.isFinite(d.getTime())?new Date(Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate())):null;
+}
+function effectiveOpenedDate2026(value){
+  const d=parseOpportunityOpenedDate(value);if(!d)return null;
+  const start=new Date(Date.UTC(2026,0,1)),end=new Date(Date.UTC(2026,11,31));
+  if(d<start)return start;
+  if(d>end)return null;
+  return d;
+}
+function activePipelineCutoff2026(){
+  const start=Date.UTC(2026,0,1),end=Date.UTC(2026,11,31),now=new Date();
+  const today=Date.UTC(now.getFullYear(),now.getMonth(),now.getDate());
+  if(today<=start)return new Date(start);
+  if(today>=end)return new Date(end);
+  const days=(today-start)/86400000;
+  const marker=start+Math.ceil(days/7)*7*86400000;
+  return new Date(Math.min(marker,end));
+}
+function activePipelineWeeks2026(){
+  const out=[],d=new Date(Date.UTC(2026,0,1)),cutoff=activePipelineCutoff2026().getTime();
+  while(d.getTime()<=cutoff){out.push(new Date(d.getTime()));d.setUTCDate(d.getUTCDate()+7);}
+  return out;
+}
+function weekStartLabel(d){return `${d.getUTCDate()}/${d.getUTCMonth()+1}`;}
+function activePipelineProgressRows(rows){
+  const selected=new Set(state.oppProgressRoadmaps||[]),cutoff=activePipelineCutoff2026().getTime();
+  return activeOpps(rows).filter(o=>{
+    if(!selected.has(o.roadmap))return false;
+    const d=effectiveOpenedDate2026(o.dateOpened);
+    return !!d&&d.getTime()<=cutoff;
+  });
+}
+function activePipelineProgressSeries(rows,metric){
+  const weeks=activePipelineWeeks2026(),filtered=activePipelineProgressRows(rows),weighted=state.oppProgressWeight==='W';
+  const events=filtered.map(o=>{
+    const d=effectiveOpenedDate2026(o.dateOpened);
+    let amount=0;
+    if(metric==='margin')amount=weighted?(Number(o.weightedMarginSAR)||0):(Number(o.marginSAR)||0);
+    else amount=weighted?(Number(o.weightedValueSAR)||0):(Number(o.valueSAR)||0);
+    return {t:d.getTime(),amount};
+  }).sort((a,b)=>a.t-b.t);
+  let total=0,idx=0;
+  const values=weeks.map(w=>{
+    const wt=w.getTime();
+    while(idx<events.length&&events[idx].t<=wt){total+=events[idx].amount;idx++;}
+    return total;
+  });
+  return {weeks,values,records:filtered.length};
+}
+function renderActivePipelineProgressChart(id,rows,metric){
+  const host=$(id);if(!host)return;
+  const {weeks,values,records}=activePipelineProgressSeries(rows,metric);
+  if(!records){empty(id,'No active pipeline with Date Opened','Try changing the Roadmap controls or global filters.');return;}
+  const W=790,H=430,pL=78,pR=24,pT=24,pB=70,innerW=W-pL-pR,innerH=H-pT-pB;
+  const x=i=>pL+(weeks.length===1?innerW/2:i*innerW/(weeks.length-1));
+  const minRaw=Math.min(0,...values),maxRaw=Math.max(0,...values),span=Math.max(1,maxRaw-minRaw),step=niceStep(span,5);
+  let yMin=Math.floor(minRaw/step)*step,yMax=Math.ceil(maxRaw/step)*step;
+  if(yMax<=yMin)yMax=yMin+step;
+  const y=v=>pT+innerH-(Number(v)-yMin)/(yMax-yMin)*innerH;
+  let grids='';
+  const tickCount=Math.max(1,Math.round((yMax-yMin)/step));
+  for(let i=0;i<=tickCount;i++){
+    const v=yMin+i*step,yy=y(v);
+    grids+=`<line x1="${pL}" y1="${yy}" x2="${W-pR}" y2="${yy}" stroke="#eee8f3"/><text x="${pL-13}" y="${yy+5}" text-anchor="end" class="active-progress-y-label">${fmtAxisSAR(v)}</text>`;
+  }
+  const weeklyGrid=weeks.map((w,i)=>`<line x1="${x(i)}" y1="${pT}" x2="${x(i)}" y2="${pT+innerH}" stroke="${i%4===0?'#d9cce4':'#e9e0ef'}" stroke-width="${i%4===0?1.25:1}" stroke-dasharray="4 6"/>`).join('');
+  // Every week keeps its dash. Labels are thinned so the two half-width charts remain readable.
+  const labelEvery=weeks.length>44?6:weeks.length>32?5:weeks.length>22?4:3;
+  const labelIdx=new Set([0,weeks.length-1]);for(let i=labelEvery;i<weeks.length-1;i+=labelEvery)labelIdx.add(i);
+  const xlabels=weeks.map((w,i)=>labelIdx.has(i)?`<text x="${x(i)}" y="${H-25}" text-anchor="${i===0?'start':i===weeks.length-1?'end':'middle'}" class="active-progress-x-label">${weekStartLabel(w)}</text>`:'').join('');
+  const color=metric==='margin'?COLORS.pink:COLORS.purple,points=values.map((v,i)=>`${x(i)},${y(v)}`).join(' '),zeroY=y(0);
+  const area=`${x(0)},${zeroY} ${points} ${x(values.length-1)},${zeroY}`,half=weeks.length>1?innerW/(weeks.length-1)/2:0;
+  host.innerHTML=`<svg class="active-progress-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">
+    ${grids}${weeklyGrid}<polygon points="${area}" fill="${color}" opacity=".10"/>
+    <polyline fill="none" stroke="${color}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" points="${points}"/>
+    ${xlabels}<line class="active-progress-guide" y1="${pT}" y2="${pT+innerH}" stroke="#79658b" stroke-width="1.5" stroke-dasharray="5 5" style="display:none"/>
+    <circle class="active-progress-dot" r="7" fill="${color}" stroke="#fff" stroke-width="2.5" style="display:none"/>
+    <rect class="active-progress-hit" x="${Math.max(0,pL-half)}" y="${pT}" width="${Math.min(W,pL+innerW+half)-Math.max(0,pL-half)}" height="${innerH}" fill="transparent"/>
+  </svg>`;
+  const svg=host.querySelector('svg'),hit=host.querySelector('.active-progress-hit'),guide=host.querySelector('.active-progress-guide'),dot=host.querySelector('.active-progress-dot');
+  hit.addEventListener('mousemove',e=>{
+    const idx=nearestTimelineIndex(svg,e,x,weeks.length),xx=x(idx),val=values[idx];
+    guide.setAttribute('x1',xx);guide.setAttribute('x2',xx);guide.style.display='';
+    dot.setAttribute('cx',xx);dot.setAttribute('cy',y(val));dot.style.display='';
+    const title=metric==='margin'?'Active Pipeline Margin Progress':'Active Pipeline Value Progress';
+    showTooltip(e,tooltipHtml(`${title} · ${weekStartLabel(weeks[idx])}/2026`,[
+      {label:state.oppProgressWeight==='W'?'Weighted SAR':'Non-Weighted SAR',value:fmtHoverSAR(val)},
+      {label:'Active opportunities',value:fmtNum(records)}
+    ],`Roadmap: ${(state.oppProgressRoadmaps||[]).join(', ')||'None'} · Current-week cutoff: ${weekStartLabel(activePipelineCutoff2026())}/2026`));
+  });
+  hit.addEventListener('mouseleave',()=>{guide.style.display='none';dot.style.display='none';hideTooltip();});
+}
+function syncActivePipelineProgressControls(){
+  const selected=new Set(state.oppProgressRoadmaps||[]);
+  $('oppProgressRoadmaps')?.querySelectorAll('button').forEach(b=>b.classList.toggle('active',selected.has(b.dataset.progressRoadmap)));
+  $('oppProgressWeight')?.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.mode===state.oppProgressWeight));
+}
+function renderActivePipelineProgress(rows){
+  syncActivePipelineProgressControls();
+  renderActivePipelineProgressChart('oppProgressValue',rows,'value');
+  renderActivePipelineProgressChart('oppProgressMargin',rows,'margin');
+}
+
 function renderOpportunities(){
   const rows=currentOpps(),active=activeOpps(rows);
   const pipeline=sum(active,o=>o.valueSAR),weighted=sum(active,o=>o.weightedValueSAR),margin=sum(active,o=>o.marginSAR),weightedMargin=sum(active,o=>o.weightedMarginSAR);
   const awardedRows=directAwardedRows(),awardOB=sum(awardedRows,r=>r.obSAR);
   const roadmapValue=rm=>sum(rows.filter(o=>o.roadmap===rm),o=>o.valueSAR);
   renderKpis('oppKpisTop',[
-    {label:'Active Pipeline',value:`${fmtSAR(pipeline)} SAR`,rawValue:pipeline,sub:'Won excluded from pipeline',icon:'pipeline'},
+    {label:'Active Pipeline',value:`${fmtSAR(pipeline)} SAR`,rawValue:pipeline,sub:'Won and Lost statuses excluded from pipeline',icon:'pipeline'},
     {label:'Weighted Pipeline',value:`${fmtSAR(weighted)} SAR`,rawValue:weighted,sub:'Probability-adjusted pipeline',icon:'weighted'},
     {label:'Margin',value:`${fmtSAR(margin)} SAR`,rawValue:margin,sub:pipeline?`${fmtPct(margin/pipeline)} of active pipeline`:'',icon:'margin'},
     {label:'Weighted Margin',value:`${fmtSAR(weightedMargin)} SAR`,rawValue:weightedMargin,sub:weighted?`${fmtPct(weightedMargin/weighted)} of weighted pipeline`:'',icon:'weighted'},
@@ -2641,6 +2823,7 @@ function renderOpportunities(){
     {label:'Prospect',value:`${fmtSAR(roadmapValue('Prospect'))} SAR`,rawValue:roadmapValue('Prospect'),sub:`${fmtNum(rows.filter(o=>o.roadmap==='Prospect').length)} opportunities`,icon:'prospect',secondary:true},
     {label:'Early Stage',value:`${fmtSAR(roadmapValue('Early Stage'))} SAR`,rawValue:roadmapValue('Early Stage'),sub:`${fmtNum(rows.filter(o=>o.roadmap==='Early Stage').length)} opportunities`,icon:'early',secondary:true}
   ]);
+  renderActivePipelineProgress(rows);
   renderTargets();
   const entityMetric=state.oppEntityMetric==='count' ? ()=>1 : o=>o.roadmap==='Won'?awardedValue(o,'obSAR'):o.valueSAR;
   const marketMetric=state.oppMarketMetric==='count' ? ()=>1 : o=>o.roadmap==='Won'?awardedValue(o,'obSAR'):o.valueSAR;
@@ -2795,10 +2978,16 @@ function renderTargets(){
   bindTargetControls();
 }
 
+function formatDateOpened(value){
+  const s=String(value??'').trim();if(!s||s.toLowerCase()==='unassigned')return '—';
+  const m=s.match(/^(\d{4})-(\d{2})-(\d{2})/);if(!m)return s;
+  const mons=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${m[3]}-${mons[Number(m[2])-1]}-${String(m[1]).slice(-2)}`;
+}
 function renderListOpportunities(){
   let rows=currentOpps();
   const search=state.listSearch.trim().toLowerCase();
-  if(search){rows=rows.filter(o=>[o.legalEntity,o.market,o.customer,o.topic,o.d365Id,o.id,o.owner,o.roadmap,o.stage,o.status,o.channel,o.closeMonth,o.closeQuarter,o.closeYear].some(v=>safe(v).toLowerCase().includes(search)));}
+  if(search){rows=rows.filter(o=>[o.legalEntity,o.market,o.customer,o.topic,o.d365Id,o.id,o.dateOpened,o.owner,o.roadmap,o.stage,o.status,o.channel,o.closeMonth,o.closeQuarter,o.closeYear].some(v=>safe(v).toLowerCase().includes(search)));}
   const sort=state.listSort;
   rows=[...rows].sort((a,b)=>{
     let av=a[sort.field],bv=b[sort.field];
@@ -2807,7 +2996,7 @@ function renderListOpportunities(){
   });
   $('listOppCount').textContent=`${fmtNum(rows.length)} opportunities`;
   const body=$('listOppBody');
-  body.innerHTML=rows.length?rows.map(o=>`<tr><td>${escapeHtml(o.legalEntity)}</td><td>${escapeHtml(o.market)}</td><td class="wide-cell">${escapeHtml(o.customer)}</td><td class="topic-cell" title="${escapeHtml(o.topic)}">${escapeHtml(o.topic)}</td><td>${escapeHtml(o.d365Id||'—')}</td><td><strong>${escapeHtml(o.id)}</strong></td><td class="wide-cell">${escapeHtml(o.owner)}</td><td><span class="roadmap-badge roadmap-${String(o.roadmap).toLowerCase().replace(/[^a-z]+/g,'-')}">${escapeHtml(o.roadmap)}</span></td><td>${escapeHtml(o.stage)}</td><td><span class="status-badge">${escapeHtml(o.status)}</span></td><td>${escapeHtml(o.channel)}</td><td class="money-cell">${fmtFull(o.actualOppValue)}</td><td class="money-cell">${fmtFull(o.actualOppMargin)}</td><td class="prob-cell">${fmtPct(Number(o.probability)||0)}</td><td class="money-cell">${fmtFull(o.weightedValueSAR)}</td><td class="money-cell">${fmtFull(o.weightedMarginSAR)}</td><td>${escapeHtml(o.closeMonth)}</td><td>${escapeHtml(o.closeQuarter)}</td><td>${escapeHtml(o.closeYear??'—')}</td></tr>`).join(''):`<tr><td colspan="19"><div class="empty-state"><strong>No matching opportunities</strong><span>Try changing the filters or table search.</span></div></td></tr>`;
+  body.innerHTML=rows.length?rows.map(o=>`<tr><td>${escapeHtml(o.legalEntity)}</td><td>${escapeHtml(o.market)}</td><td class="wide-cell">${escapeHtml(o.customer)}</td><td class="topic-cell" title="${escapeHtml(o.topic)}">${escapeHtml(o.topic)}</td><td>${escapeHtml(o.d365Id||'—')}</td><td><strong>${escapeHtml(o.id)}</strong></td><td>${escapeHtml(formatDateOpened(o.dateOpened))}</td><td class="wide-cell">${escapeHtml(o.owner)}</td><td><span class="roadmap-badge roadmap-${String(o.roadmap).toLowerCase().replace(/[^a-z]+/g,'-')}">${escapeHtml(o.roadmap)}</span></td><td>${escapeHtml(o.stage)}</td><td><span class="status-badge">${escapeHtml(o.status)}</span></td><td>${escapeHtml(o.channel)}</td><td class="money-cell">${fmtFull(o.actualOppValue)}</td><td class="money-cell">${fmtFull(o.actualOppMargin)}</td><td class="prob-cell">${fmtPct(Number(o.probability)||0)}</td><td class="money-cell">${fmtFull(o.weightedValueSAR)}</td><td class="money-cell">${fmtFull(o.weightedMarginSAR)}</td><td>${escapeHtml(o.closeMonth)}</td><td>${escapeHtml(o.closeQuarter)}</td><td>${escapeHtml(o.closeYear??'—')}</td></tr>`).join(''):`<tr><td colspan="20"><div class="empty-state"><strong>No matching opportunities</strong><span>Try changing the filters or table search.</span></div></td></tr>`;
   const totals={actualOppValue:sum(rows,o=>o.actualOppValue),actualOppMargin:sum(rows,o=>o.actualOppMargin),weightedValueSAR:sum(rows,o=>o.weightedValueSAR),weightedMarginSAR:sum(rows,o=>o.weightedMarginSAR)};
   $('listOppTotals').innerHTML='';
   const totalsBar=$('listOppTotalsBar');
@@ -3035,6 +3224,16 @@ function bindControls(){
   $('resetFilters').addEventListener('click',()=>{if(state.tab==='partnersPerformance'){state.partnerPerformanceSelections=Array.from({length:20},()=>[]);state.partnerPerformanceTitles=Array(20).fill('');state.partnerPerformanceStrategic=Array(20).fill(false);state.partnerPerformanceSeries=Array.from({length:20},()=>['Egypt','KSA','GM','Total']);state.partnerPerformanceCombinedSeries=['Egypt','KSA','GM','Total'];state.ui.openFilter=null;renderAll();return;}const scope=filterScope(state.tab);state.filters[scope]={};clearChartHighlight(scope);if(state.tab==='orderbook')state.obPartnersLeads=false;state.ui.openFilter=null;renderAll();});
   $('oppEntityMetric').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{state.oppEntityMetric=b.dataset.mode;$('oppEntityMetric').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));renderOpportunities();}));
   $('oppMarketMetric').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{state.oppMarketMetric=b.dataset.mode;$('oppMarketMetric').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));renderOpportunities();}));
+  $('oppProgressRoadmaps').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+    const rm=b.dataset.progressRoadmap,cur=new Set(state.oppProgressRoadmaps||[]);
+    if(cur.has(rm))cur.delete(rm);else cur.add(rm);
+    state.oppProgressRoadmaps=['Committed','Upside','Prospect','Early Stage'].filter(x=>cur.has(x));
+    renderActivePipelineProgress(currentOpps());
+  }));
+  $('oppProgressWeight').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+    state.oppProgressWeight=b.dataset.mode;
+    renderActivePipelineProgress(currentOpps());
+  }));
   [['oppCountryWeight','oppCountryWeight'],['oppSectorWeight','oppSectorWeight'],['oppCustomerWeight','oppCustomerWeight'],['oppTypePieWeight','oppTypePieWeight']].forEach(([id,key])=>$(id).querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{state[key]=b.dataset.mode;$(id).querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));renderOpportunities();})));
   $('oppTypeMetric').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{state.oppTypeMetric=b.dataset.mode;$('oppTypeMetric').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));renderOpportunities();}));
   $('oppCustomerTopN').addEventListener('input',e=>{state.oppCustomerTopN=Math.max(1,Number(e.target.value)||1);renderOpportunities();});

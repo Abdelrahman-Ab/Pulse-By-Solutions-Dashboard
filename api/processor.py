@@ -124,7 +124,7 @@ def build_all(paths: dict, source: str = 'dropbox', previous_meta: dict | None =
         'roadmapOrder': data_engine.ROADMAP_ORDER,
         'source': source,
         'buildSeconds': round(time.time() - started, 2),
-        'pipelineVersion': 'partners-performance-v25-no-po-summary',
+        'pipelineVersion': 'active-pipeline-progress-v27',
     }
 
     # These checks catch a parser that technically emitted rows but lost critical columns.
