@@ -1687,6 +1687,7 @@ const state = {
   },
   obMargin:'GM',
   obPartnersLeads:false,
+  obContractIdsFromVendor:false,
   obDimension:'vertical',
   obAmountDim:'vertical',
   obMarginDim:'vertical',
@@ -2116,7 +2117,7 @@ function setAwardingToken(token,checked){
   if(cur.size)state.filters.orderbook.awardingDate=[...cur];else delete state.filters.orderbook.awardingDate;
 }
 function bindOrderBookFilterOptionEvents(control,field){
-  control.querySelectorAll('[data-option-value]').forEach(cb=>cb.addEventListener('change',e=>{e.stopPropagation();const cur=new Set(state.filters.orderbook[field]||[]);if(cb.checked)cur.add(cb.dataset.optionValue);else cur.delete(cb.dataset.optionValue);if(cur.size)state.filters.orderbook[field]=[...cur];else delete state.filters.orderbook[field];if(field==='opportunityId')state.obPartnersLeads=false;scheduleRenderAll();}));
+  control.querySelectorAll('[data-option-value]').forEach(cb=>cb.addEventListener('change',e=>{e.stopPropagation();const cur=new Set(state.filters.orderbook[field]||[]);if(cb.checked)cur.add(cb.dataset.optionValue);else cur.delete(cb.dataset.optionValue);if(cur.size)state.filters.orderbook[field]=[...cur];else delete state.filters.orderbook[field];if(field==='opportunityId')state.obPartnersLeads=false;if(field==='contractId')state.obContractIdsFromVendor=false;scheduleRenderAll();}));
   control.querySelectorAll('[data-award-date-token]').forEach(cb=>cb.addEventListener('change',e=>{e.stopPropagation();setAwardingToken(cb.dataset.awardDateToken,cb.checked);scheduleRenderAll();}));
   control.querySelectorAll('[data-date-expand]').forEach(btn=>btn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();const k=btn.dataset.dateExpand;state.ui.expandedDates[k]=!state.ui.expandedDates[k];renderFilters();}));
 }
@@ -2132,7 +2133,7 @@ function renderOrderBookFilters(){
   const root=$('filters');
   root.querySelectorAll('[data-ob-filter-trigger]').forEach(btn=>btn.addEventListener('click',e=>{e.stopPropagation();const field=btn.dataset.obFilterTrigger,key=`ob:${field}`,opening=state.ui.openFilter!==key;state.ui.openFilter=opening?key:null;if(opening)state.ui.filterSearch[key]='';renderFilters();if(state.ui.openFilter){const input=root.querySelector(`[data-ob-filter-search="${field}"]`);if(input)setTimeout(()=>{input.value='';input.focus();},0);}}));
   root.querySelectorAll('[data-ob-filter-search]').forEach(input=>input.addEventListener('input',e=>{const field=input.dataset.obFilterSearch,key=`ob:${field}`;state.ui.filterSearch[key]=e.target.value;const control=input.closest('.filter-control'),{records,options}=optionValuesForOrderBookField(field),selected=state.filters.orderbook[field]||[];control.querySelector('.multi-options').innerHTML=field==='awardingDate'?renderAwardingOptions(records,selected,e.target.value):renderStandardMultiOptions(field,options,selected,e.target.value);bindOrderBookFilterOptionEvents(control,field);}));
-  root.querySelectorAll('[data-ob-filter-action]').forEach(btn=>btn.addEventListener('click',e=>{e.stopPropagation();const field=btn.dataset.field,key=`ob:${field}`,action=btn.dataset.obFilterAction;if(action==='clear'){delete state.filters.orderbook[field];if(field==='opportunityId')state.obPartnersLeads=false;scheduleRenderAll();return;}const {records,options}=optionValuesForOrderBookField(field),search=cleanFilterSearch(state.ui.filterSearch[key]);if(field==='awardingDate'){const toks=[...availableAwardingTokens(records)].filter(t=>{if(!search)return t.startsWith('Y|');const p=t.split('|'),txt=p[0]==='Y'?p[1]:p[0]==='Q'?`${p[1]} Q${p[2]}`:`${p[1]} Q${p[2]} ${p.slice(3).join('|')}`;return txt.toLowerCase().includes(search.toLowerCase());});state.filters.orderbook[field]=toks;}else{const q=search.toLowerCase(),shown=options.filter(v=>!q||String(v).toLowerCase().includes(q));state.filters.orderbook[field]=uniq([...(state.filters.orderbook[field]||[]),...shown]);if(field==='opportunityId')state.obPartnersLeads=false;}scheduleRenderAll();}));
+  root.querySelectorAll('[data-ob-filter-action]').forEach(btn=>btn.addEventListener('click',e=>{e.stopPropagation();const field=btn.dataset.field,key=`ob:${field}`,action=btn.dataset.obFilterAction;if(action==='clear'){delete state.filters.orderbook[field];if(field==='opportunityId')state.obPartnersLeads=false;if(field==='contractId')state.obContractIdsFromVendor=false;scheduleRenderAll();return;}const {records,options}=optionValuesForOrderBookField(field),search=cleanFilterSearch(state.ui.filterSearch[key]);if(field==='awardingDate'){const toks=[...availableAwardingTokens(records)].filter(t=>{if(!search)return t.startsWith('Y|');const p=t.split('|'),txt=p[0]==='Y'?p[1]:p[0]==='Q'?`${p[1]} Q${p[2]}`:`${p[1]} Q${p[2]} ${p.slice(3).join('|')}`;return txt.toLowerCase().includes(search.toLowerCase());});state.filters.orderbook[field]=toks;}else{const q=search.toLowerCase(),shown=options.filter(v=>!q||String(v).toLowerCase().includes(q));state.filters.orderbook[field]=uniq([...(state.filters.orderbook[field]||[]),...shown]);if(field==='opportunityId')state.obPartnersLeads=false;if(field==='contractId')state.obContractIdsFromVendor=false;}scheduleRenderAll();}));
   root.querySelectorAll('.filter-control').forEach(c=>bindOrderBookFilterOptionEvents(c,c.dataset.filterControl));
 }
 
@@ -2179,13 +2180,58 @@ function renderPODateOptions(records,selected,search=''){
 }
 function optionValuesForPOField(field){const key=optionCacheKey('po',field);if(filterOptionCache.has(key))return filterOptionCache.get(key);const records=applyFilters(state.data.purchaseOrderDetails||[],'purchaseOrders',field);let result;if(field==='accountingDate')result={records,options:[]};else{const vals=new Set();for(const r of records){for(const v of recordFieldValues(r,field)){if(v&&!isUnassignedOption(v))vals.add(v);}}result={records,options:sortOptions(field,[...vals])};}if(filterOptionCache.size>160)filterOptionCache.clear();filterOptionCache.set(key,result);return result;}
 function setPOToken(token,checked){const cur=new Set(state.filters.purchaseOrders.accountingDate||[]),p=token.split('|');if(checked){if(p[0]==='Y'){for(const t of [...cur])if(t.startsWith(`Q|${p[1]}|`)||t.startsWith(`M|${p[1]}|`))cur.delete(t);}if(p[0]==='Q'){for(const t of [...cur])if(t.startsWith(`M|${p[1]}|${p[2]}|`))cur.delete(t);}cur.add(token);}else cur.delete(token);if(cur.size)state.filters.purchaseOrders.accountingDate=[...cur];else delete state.filters.purchaseOrders.accountingDate;}
-function bindPOFilterOptionEvents(control,field){control.querySelectorAll('[data-option-value]').forEach(cb=>cb.addEventListener('change',e=>{e.stopPropagation();const cur=new Set(state.filters.purchaseOrders[field]||[]);if(cb.checked)cur.add(cb.dataset.optionValue);else cur.delete(cb.dataset.optionValue);if(cur.size)state.filters.purchaseOrders[field]=[...cur];else delete state.filters.purchaseOrders[field];scheduleRenderAll();}));control.querySelectorAll('[data-po-date-token]').forEach(cb=>cb.addEventListener('change',e=>{e.stopPropagation();setPOToken(cb.dataset.poDateToken,cb.checked);scheduleRenderAll();}));control.querySelectorAll('[data-date-expand]').forEach(btn=>btn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();const k=btn.dataset.dateExpand;state.ui.expandedDates[k]=!state.ui.expandedDates[k];renderFilters();}));}
+function syncOrderBookContractIdsFromPurchaseOrderVendorScope(){
+  const poFilters=state.filters.purchaseOrders||{},vendors=Array.isArray(poFilters.vendorName)?poFilters.vendorName.filter(v=>v&&!isUnassignedOption(v)):[];
+  if(!vendors.length){
+    if(state.obContractIdsFromVendor){
+      delete state.filters.orderbook.contractId;
+      state.obContractIdsFromVendor=false;
+      clearChartHighlight('orderbook');
+    }
+    return [];
+  }
+
+  // Use the current Business with Partners scope, but ignore its Contract ID itself.
+  // This gives the full set of contracts related to the selected Vendor(s) and
+  // any other currently active PO filters.
+  const poRows=applyFilters(state.data.purchaseOrderDetails||[],'purchaseOrders','contractId');
+  const candidateIds=uniq(
+    poRows.map(r=>safe(r.contractId).trim())
+      .filter(v=>v&&!isUnassignedOption(v))
+  );
+
+  // Only select IDs that actually exist in Order Book.
+  const obMap=new Map();
+  for(const r of (state.data.orderbook||[])){
+    const raw=safe(r.contractId).trim();
+    if(!raw||isUnassignedOption(raw))continue;
+    const key=raw.toLocaleLowerCase();
+    if(!obMap.has(key))obMap.set(key,raw);
+  }
+  const synced=[];
+  const seen=new Set();
+  for(const id of candidateIds){
+    const actual=obMap.get(String(id).toLocaleLowerCase());
+    if(actual&&!seen.has(actual)){seen.add(actual);synced.push(actual);}
+  }
+  synced.sort((a,b)=>String(a).localeCompare(String(b),undefined,{numeric:true,sensitivity:'base'}));
+
+  if(synced.length)state.filters.orderbook.contractId=synced;
+  else delete state.filters.orderbook.contractId;
+
+  state.obContractIdsFromVendor=true;
+  state.obPartnersLeads=false;
+  clearChartHighlight('orderbook');
+  return synced;
+}
+
+function bindPOFilterOptionEvents(control,field){control.querySelectorAll('[data-option-value]').forEach(cb=>cb.addEventListener('change',e=>{e.stopPropagation();const cur=new Set(state.filters.purchaseOrders[field]||[]);if(cb.checked)cur.add(cb.dataset.optionValue);else cur.delete(cb.dataset.optionValue);if(cur.size)state.filters.purchaseOrders[field]=[...cur];else delete state.filters.purchaseOrders[field];syncOrderBookContractIdsFromPurchaseOrderVendorScope();scheduleRenderAll();}));control.querySelectorAll('[data-po-date-token]').forEach(cb=>cb.addEventListener('change',e=>{e.stopPropagation();setPOToken(cb.dataset.poDateToken,cb.checked);syncOrderBookContractIdsFromPurchaseOrderVendorScope();scheduleRenderAll();}));control.querySelectorAll('[data-date-expand]').forEach(btn=>btn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();const k=btn.dataset.dateExpand;state.ui.expandedDates[k]=!state.ui.expandedDates[k];renderFilters();}));}
 function renderPurchaseOrderFilters(){
   const filters=state.filters.purchaseOrders,defs=FILTER_DEFS.purchaseOrders;$('filters').className='filter-grid po-filter-grid';
   $('filters').innerHTML=defs.map(([field,label])=>{const selected=Array.isArray(filters[field])?filters[field]:[],key=`po:${field}`,search=cleanFilterSearch(state.ui.filterSearch[key]),open=state.ui.openFilter===key;let optionHtml='';if(open){const {records,options}=optionValuesForPOField(field);optionHtml=field==='accountingDate'?renderPODateOptions(records,selected,search):renderStandardMultiOptions(field,options,selected,search);}return `<div class="filter-control multi-filter ${open?'open':''}" data-filter-control="${field}"><label>${label}</label><button type="button" class="multi-trigger" data-po-filter-trigger="${field}" aria-expanded="${open?'true':'false'}"><span>${escapeHtml(selectedLabel(field,selected))}</span><i>⌄</i></button><div class="multi-popover"><div class="filter-search-wrap"><input type="text" data-po-filter-search="${field}" value="${escapeHtml(search)}" placeholder="Search ${escapeHtml(label)}…" autocomplete="off" autocapitalize="none" spellcheck="false"></div><div class="filter-actions"><button type="button" data-po-filter-action="select-visible" data-field="${field}">Select shown</button><button type="button" data-po-filter-action="clear" data-field="${field}">Clear</button></div><div class="multi-options ${field==='accountingDate'?'date-tree':''}">${optionHtml}</div></div></div>`;}).join('');
   const root=$('filters');root.querySelectorAll('[data-po-filter-trigger]').forEach(btn=>btn.addEventListener('click',e=>{e.stopPropagation();const field=btn.dataset.poFilterTrigger,key=`po:${field}`,opening=state.ui.openFilter!==key;state.ui.openFilter=opening?key:null;if(opening)state.ui.filterSearch[key]='';renderFilters();if(state.ui.openFilter){const input=root.querySelector(`[data-po-filter-search="${field}"]`);if(input)setTimeout(()=>{input.value='';input.focus();},0);}}));
   root.querySelectorAll('[data-po-filter-search]').forEach(input=>input.addEventListener('input',e=>{const field=input.dataset.poFilterSearch,key=`po:${field}`;state.ui.filterSearch[key]=e.target.value;const control=input.closest('.filter-control'),{records,options}=optionValuesForPOField(field),selected=state.filters.purchaseOrders[field]||[];control.querySelector('.multi-options').innerHTML=field==='accountingDate'?renderPODateOptions(records,selected,e.target.value):renderStandardMultiOptions(field,options,selected,e.target.value);bindPOFilterOptionEvents(control,field);}));
-  root.querySelectorAll('[data-po-filter-action]').forEach(btn=>btn.addEventListener('click',e=>{e.stopPropagation();const field=btn.dataset.field,key=`po:${field}`,action=btn.dataset.poFilterAction;if(action==='clear'){delete state.filters.purchaseOrders[field];scheduleRenderAll();return;}const {records,options}=optionValuesForPOField(field),search=cleanFilterSearch(state.ui.filterSearch[key]);if(field==='accountingDate'){const toks=[...availablePOTokens(records)].filter(t=>{if(!search)return t.startsWith('Y|');const p=t.split('|'),txt=p[0]==='Y'?p[1]:p[0]==='Q'?`${p[1]} Q${p[2]}`:`${p[1]} Q${p[2]} ${p.slice(3).join('|')}`;return txt.toLowerCase().includes(search.toLowerCase());});state.filters.purchaseOrders[field]=toks;}else{const q=search.toLowerCase(),shown=options.filter(v=>!q||String(v).toLowerCase().includes(q));state.filters.purchaseOrders[field]=uniq([...(state.filters.purchaseOrders[field]||[]),...shown]);}scheduleRenderAll();}));root.querySelectorAll('.filter-control').forEach(c=>bindPOFilterOptionEvents(c,c.dataset.filterControl));
+  root.querySelectorAll('[data-po-filter-action]').forEach(btn=>btn.addEventListener('click',e=>{e.stopPropagation();const field=btn.dataset.field,key=`po:${field}`,action=btn.dataset.poFilterAction;if(action==='clear'){delete state.filters.purchaseOrders[field];syncOrderBookContractIdsFromPurchaseOrderVendorScope();scheduleRenderAll();return;}const {records,options}=optionValuesForPOField(field),search=cleanFilterSearch(state.ui.filterSearch[key]);if(field==='accountingDate'){const toks=[...availablePOTokens(records)].filter(t=>{if(!search)return t.startsWith('Y|');const p=t.split('|'),txt=p[0]==='Y'?p[1]:p[0]==='Q'?`${p[1]} Q${p[2]}`:`${p[1]} Q${p[2]} ${p.slice(3).join('|')}`;return txt.toLowerCase().includes(search.toLowerCase());});state.filters.purchaseOrders[field]=toks;}else{const q=search.toLowerCase(),shown=options.filter(v=>!q||String(v).toLowerCase().includes(q));state.filters.purchaseOrders[field]=uniq([...(state.filters.purchaseOrders[field]||[]),...shown]);}syncOrderBookContractIdsFromPurchaseOrderVendorScope();scheduleRenderAll();}));root.querySelectorAll('.filter-control').forEach(c=>bindPOFilterOptionEvents(c,c.dataset.filterControl));
 }
 
 function isUnassignedOption(value){
@@ -2455,7 +2501,7 @@ function renderFilters(){
   if(isOpportunityTab(tab)) renderOpportunityFilters(); else if(tab==='orderbook') renderOrderBookFilters(); else if(tab==='purchaseOrders'||tab==='poDetails') renderPurchaseOrderFilters(); else {}
   const visible=applyFilters(records,tab);
   $('filterSummary').textContent=`${fmtNum(visible.length)} of ${fmtNum(records.length)} records in current scope`;
-  $('filterNote').textContent=isOpportunityTab(tab)?'Blank Roadmap drafts excluded · Blank/252 Channel = Sales · Awarded is read directly from the full 2026 Order Book':tab==='orderbook'&&state.obPartnersLeads?'Partners Leads active · Opportunity ID filter filled from Opportunities where Roadmap = Won and Channel = Partner':(tab==='purchaseOrders'||tab==='poDetails')?'Source: Purchase Order Details':'';
+  $('filterNote').textContent=isOpportunityTab(tab)?'Blank Roadmap drafts excluded · Blank/252 Channel = Sales · Awarded is read directly from the full 2026 Order Book':tab==='orderbook'&&state.obPartnersLeads?'Partners Leads active · Opportunity ID filter filled from Opportunities where Roadmap = Won and Channel = Partner':tab==='orderbook'&&state.obContractIdsFromVendor?'Contract ID automatically selected from the current Business with Partners Vendor scope':(tab==='purchaseOrders'||tab==='poDetails')?'Source: Purchase Order Details':'';
   if(plBtn){plBtn.classList.toggle('active',tab==='orderbook'&&state.obPartnersLeads);plBtn.setAttribute('aria-pressed',tab==='orderbook'&&state.obPartnersLeads?'true':'false');}
   sanitizeRenderedFilterSearchInputs();
 }
