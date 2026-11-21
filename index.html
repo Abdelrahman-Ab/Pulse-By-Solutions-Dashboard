@@ -1493,6 +1493,7 @@ h1{font-size:29px;margin-top:5px;white-space:nowrap}
               <th data-sort="d365Id">D365 OPP ID<span class="sort-mark"></span></th>
               <th data-sort="id">OPP ID<span class="sort-mark"></span></th>
               <th data-sort="dateOpened">Date Opened<span class="sort-mark"></span></th>
+              <th data-sort="actualClosureDate">Closure Date<span class="sort-mark"></span></th>
               <th data-sort="owner">Owner<span class="sort-mark"></span></th>
               <th data-sort="roadmap">Roadmap<span class="sort-mark"></span></th>
               <th data-sort="stage">Stage<span class="sort-mark"></span></th>
@@ -3091,7 +3092,7 @@ function formatDateOpened(value){
 function renderListOpportunities(){
   let rows=currentOpps();
   const search=state.listSearch.trim().toLowerCase();
-  if(search){rows=rows.filter(o=>[o.legalEntity,o.market,o.customer,o.topic,o.d365Id,o.id,o.dateOpened,o.owner,o.roadmap,o.stage,o.status,o.channel,o.closeMonth,o.closeQuarter,o.closeYear].some(v=>safe(v).toLowerCase().includes(search)));}
+  if(search){rows=rows.filter(o=>[o.legalEntity,o.market,o.customer,o.topic,o.d365Id,o.id,o.dateOpened,o.actualClosureDate,o.owner,o.roadmap,o.stage,o.status,o.channel,o.closeMonth,o.closeQuarter,o.closeYear].some(v=>safe(v).toLowerCase().includes(search)));}
   const sort=state.listSort;
   rows=[...rows].sort((a,b)=>{
     let av=a[sort.field],bv=b[sort.field];
@@ -3100,7 +3101,7 @@ function renderListOpportunities(){
   });
   $('listOppCount').textContent=`${fmtNum(rows.length)} opportunities`;
   const body=$('listOppBody');
-  body.innerHTML=rows.length?rows.map(o=>`<tr><td>${escapeHtml(o.legalEntity)}</td><td>${escapeHtml(o.market)}</td><td class="wide-cell">${escapeHtml(o.customer)}</td><td class="topic-cell" title="${escapeHtml(o.topic)}">${escapeHtml(o.topic)}</td><td>${escapeHtml(o.d365Id||'—')}</td><td><strong>${escapeHtml(o.id)}</strong></td><td>${escapeHtml(formatDateOpened(o.dateOpened))}</td><td class="wide-cell">${escapeHtml(o.owner)}</td><td><span class="roadmap-badge roadmap-${String(o.roadmap).toLowerCase().replace(/[^a-z]+/g,'-')}">${escapeHtml(o.roadmap)}</span></td><td>${escapeHtml(o.stage)}</td><td><span class="status-badge">${escapeHtml(o.status)}</span></td><td>${escapeHtml(o.channel)}</td><td class="money-cell">${fmtFull(o.actualOppValue)}</td><td class="money-cell">${fmtFull(o.actualOppMargin)}</td><td class="prob-cell">${fmtPct(Number(o.probability)||0)}</td><td class="money-cell">${fmtFull(o.weightedValueSAR)}</td><td class="money-cell">${fmtFull(o.weightedMarginSAR)}</td><td>${escapeHtml(o.closeMonth)}</td><td>${escapeHtml(o.closeQuarter)}</td><td>${escapeHtml(o.closeYear??'—')}</td></tr>`).join(''):`<tr><td colspan="20"><div class="empty-state"><strong>No matching opportunities</strong><span>Try changing the filters or table search.</span></div></td></tr>`;
+  body.innerHTML=rows.length?rows.map(o=>`<tr><td>${escapeHtml(o.legalEntity)}</td><td>${escapeHtml(o.market)}</td><td class="wide-cell">${escapeHtml(o.customer)}</td><td class="topic-cell" title="${escapeHtml(o.topic)}">${escapeHtml(o.topic)}</td><td>${escapeHtml(o.d365Id||'—')}</td><td><strong>${escapeHtml(o.id)}</strong></td><td>${escapeHtml(formatDateOpened(o.dateOpened))}</td><td>${escapeHtml(formatDateOpened(o.actualClosureDate))}</td><td class="wide-cell">${escapeHtml(o.owner)}</td><td><span class="roadmap-badge roadmap-${String(o.roadmap).toLowerCase().replace(/[^a-z]+/g,'-')}">${escapeHtml(o.roadmap)}</span></td><td>${escapeHtml(o.stage)}</td><td><span class="status-badge">${escapeHtml(o.status)}</span></td><td>${escapeHtml(o.channel)}</td><td class="money-cell">${fmtFull(o.actualOppValue)}</td><td class="money-cell">${fmtFull(o.actualOppMargin)}</td><td class="prob-cell">${fmtPct(Number(o.probability)||0)}</td><td class="money-cell">${fmtFull(o.weightedValueSAR)}</td><td class="money-cell">${fmtFull(o.weightedMarginSAR)}</td><td>${escapeHtml(o.closeMonth)}</td><td>${escapeHtml(o.closeQuarter)}</td><td>${escapeHtml(o.closeYear??'—')}</td></tr>`).join(''):`<tr><td colspan="21"><div class="empty-state"><strong>No matching opportunities</strong><span>Try changing the filters or table search.</span></div></td></tr>`;
   const totals={actualOppValue:sum(rows,o=>o.actualOppValue),actualOppMargin:sum(rows,o=>o.actualOppMargin),weightedValueSAR:sum(rows,o=>o.weightedValueSAR),weightedMarginSAR:sum(rows,o=>o.weightedMarginSAR)};
   $('listOppTotals').innerHTML='';
   const totalsBar=$('listOppTotalsBar');
